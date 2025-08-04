@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, Rocket, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { GetDirection } from "@/lib/i18n";
 
 export default function CTASection() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const direction = GetDirection();
 
   const features = [
@@ -37,6 +39,14 @@ export default function CTASection() {
   const itemVariants = {
     offscreen: { opacity: 0, y: 20 },
     onscreen: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const handleFindPlanClick = () => {
+    navigate("/contact");
+  };
+
+  const handleContactClick = () => {
+    navigate("/contact");
   };
 
   return (
@@ -88,28 +98,30 @@ export default function CTASection() {
               >
                 <Button
                   size="lg"
-                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-lg px-8 py-4 h-auto font-semibold text-surface shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
+                  onClick={handleFindPlanClick}
+                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-lg px-8 py-4 h-auto font-semibold text-surface shadow-lg hover:shadow-blue-500/50 transition-all duration-300 cursor-pointer"
                 >
-                  <motion.a
+                  <motion.div
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     className="flex items-center gap-2"
                   >
                     {t("find_plan_button")}
                     <ArrowLeft className="w-5 h-5 ml-2" />
-                  </motion.a>
+                  </motion.div>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 text-lg px-8 py-4 h-auto shadow-sm hover:shadow-md transition-all duration-300"
+                  onClick={handleContactClick}
+                  className="w-full border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 text-lg px-8 py-4 h-auto shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
                 >
-                  <motion.a
+                  <motion.div
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     {t("contact_us")}
-                  </motion.a>
+                  </motion.div>
                 </Button>
               </motion.div>
             </div>

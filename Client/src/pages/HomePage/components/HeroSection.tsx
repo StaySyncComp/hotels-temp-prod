@@ -4,13 +4,19 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { GetDirection } from "@/lib/i18n";
 import Logo from "@/assets/logo.svg";
+import { useNavigate } from "react-router-dom";
+
 export default function HeroSection() {
   const { t } = useTranslation();
   const direction = GetDirection();
-
+  const navigate = useNavigate();
   const statItemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const handleContactClick = () => {
+    navigate("/contact");
   };
 
   return (
@@ -45,6 +51,7 @@ export default function HeroSection() {
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-lg px-8 py-4 h-auto"
+                onClick={handleContactClick}
               >
                 {t("find_plan_button")}
                 <ArrowLeft className="w-5 h-5 ml-2" />

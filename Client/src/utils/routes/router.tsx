@@ -24,6 +24,7 @@ import NotFoundPage from "@/pages/errors/NotFoundPage";
 import Homepage from "@/pages/HomePage";
 import AccessibilityLauncher from "@/components/accessibility/AccessibilityLauncher";
 import AccessibilityStatement from "@/pages/AccessibilityStatement/AccessibilityStatement";
+import Contact from "@/pages/Contact/Contact";
 import PublicLayout from "@/components/layouts/Public/Layout";
 
 export const router = createBrowserRouter([
@@ -60,6 +61,11 @@ export const router = createBrowserRouter([
         path: "/accessibility-statement",
         element: <AccessibilityStatement />,
         handle: { documentTitle: "accessibility_statement" },
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+        handle: { documentTitle: "contact" },
       },
       {
         path: "*",
