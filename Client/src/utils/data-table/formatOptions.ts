@@ -9,6 +9,6 @@ export const formatOptions = (
     value: item.id,
     label: typeof item.name === 'string' 
       ? item.name 
-      : (item.name as Name)[language] || (item.name as Name).en,
+      : (item.name[language] || item.name.en || item.name) as string,
   }));
 };

@@ -10,7 +10,7 @@ const PublicLayout = () => {
 
   // Get the last matched route with a title
   const title = currentRoute
-    ? `${t("website_titles." + currentRoute.handle.documentTitle)}`
+    ? `${t("website_titles." + (currentRoute.handle as any)?.documentTitle || "")}`
     : "Bloom";
 
   return (

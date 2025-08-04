@@ -120,7 +120,14 @@ const LocationsTable = ({ areaId }: LocationsTableProps) => {
                 //@ts-ignore
                 await handleSave({ ...data, areaId });
               else if (handleEdit && mode === "edit")
-                await handleEdit({ id: rowData?.id, ...data });
+                await handleEdit({ 
+                  id: rowData?.id, 
+                  ...data,
+                  name: {
+                    ...data.name,
+                    ar: data.name.ar || "",
+                  }
+                });
             }}
           />
         );

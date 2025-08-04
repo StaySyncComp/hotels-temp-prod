@@ -5,28 +5,44 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+interface CallEvent {
+  timestamp: string;
+  description: string;
+}
+
+interface AssignedUser {
+  name: string;
+  profilePicture: string;
+  timestamp: string;
+}
+
+interface CallProgressProps {
+  startedAt: string;
+  completeEstimation: number;
+  assignedTo: AssignedUser;
+  events?: CallEvent[];
+}
+
 export default function CallProgress({
   startedAt,
   completeEstimation,
   assignedTo,
   events = [],
-}: any) {
-  // Calculate time values
+}: CallProgressProps) {
+  const currentTime = new Date().getTime();
   const startTime = new Date(startedAt).getTime();
-  const currentTime = Date.now();
+  const endTime = startTime + completeEstimation * 60 * 1000;
   const assignmentTime = new Date(assignedTo.timestamp).getTime();
-  const totalDuration = completeEstimation * 60 * 1000; // Convert minutes to milliseconds
-  const endTime = startTime + totalDuration;
-  const elapsedSinceAssignment = currentTime - assignmentTime;
+  const totalDuration = endTime - startTime;
 
-  // Calculate assignment position as percentage of total timeline
+  // Calculate assignment position
   const assignmentPosition = Math.max(
     0,
     Math.min(100, ((assignmentTime - startTime) / totalDuration) * 100)
   );
 
   // Calculate event positions
-  const eventPositions = events.map((event) => {
+  const eventPositions = events.map((event: CallEvent) => {
     const eventTime = new Date(event.timestamp).getTime();
     const position = Math.max(
       0,
@@ -35,18 +51,9 @@ export default function CallProgress({
     return { ...event, position };
   });
 
-  const formatTime = (timestamp) => {
+  const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
-  };
-
-  const formatDuration = (minutes) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    if (hours > 0) {
-      return `${hours}h ${mins}m`;
-    }
-    return `${mins}m`;
   };
 
   return (
@@ -122,7 +129,7 @@ export default function CallProgress({
         >
           {/* {formatDuration(completeEstimation)} */}
           נותרו {Math.floor(
-            (totalDuration - elapsedSinceAssignment) / 60000
+            (totalDuration - (currentTime - assignmentTime)) / 60000
           )}{" "}
           דקות
         </span>

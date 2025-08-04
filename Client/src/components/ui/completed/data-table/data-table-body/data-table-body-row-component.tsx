@@ -85,7 +85,7 @@ export const RowComponent = React.memo(function RowComponent<T>({
           >
             <div className="flex items-center justify-end gap-2">
               {/* External Actions - Render custom components */}
-              {currentExternalActions.map((action, index) => (
+              {currentExternalActions.map((action: any, index: number) => (
                 <div key={index} onClick={(e) => e.stopPropagation()}>
                   {typeof action.component === "function"
                     ? action.component(row)
@@ -108,7 +108,7 @@ export const RowComponent = React.memo(function RowComponent<T>({
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>{t("actions.index")}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    {currentDropdownActions.map((action, index) => (
+                    {currentDropdownActions.map((action: any, index: number) => (
                       <DropdownMenuItem
                         key={index}
                         onClick={(e: React.MouseEvent) => {

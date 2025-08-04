@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Monitor, Smartphone, Bot, ArrowRight } from "lucide-react";
+import { Monitor, Smartphone, Bot } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { GetDirection } from "@/lib/i18n";

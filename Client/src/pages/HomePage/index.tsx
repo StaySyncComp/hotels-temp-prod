@@ -1,19 +1,18 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import StatsSection from "./components/StatsSection";
-import FeaturePillars from "./components/FeatureSection";
-import AICapabilities from "./components/AICapabilities";
-import CTASection from "./components/CTASection";
-import HeroSection from "./components/HeroSection";
-import LanguagePicker from "@/components/LanguagePicker";
 import { Link } from "react-router-dom";
+import LanguagePicker from "@/components/LanguagePicker";
 import logo from "@/assets/fullLogo.svg";
-import { useTranslation } from "react-i18next";
-import { GetDirection } from "@/lib/i18n";
+import HeroSection from "./components/HeroSection";
+import FeatureSection from "./components/FeatureSection";
+import CTASection from "./components/CTASection";
+import AICapabilities from "./components/AICapabilities";
 import VideoShowcaseSection from "./components/VideoShowcaseSection";
-export default function Homepage() {
+import StatsSection from "./components/StatsSection";
+
+export default function HomePage() {
   const { t } = useTranslation();
-  const direction = GetDirection();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-surface to-blue-50">
@@ -53,7 +52,7 @@ export default function Homepage() {
         <StatsSection />
 
         {/* Feature Pillars */}
-        <FeaturePillars />
+        <FeatureSection />
         <VideoShowcaseSection />
         {/* AI Capabilities */}
         <AICapabilities />

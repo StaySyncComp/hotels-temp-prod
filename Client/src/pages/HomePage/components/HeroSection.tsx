@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Building2, Users, Bot, ArrowLeft } from "lucide-react";
+import { Users, Bot, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { GetDirection } from "@/lib/i18n";

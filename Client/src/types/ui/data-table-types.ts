@@ -6,6 +6,10 @@ import {
   Table,
 } from "@tanstack/react-table";
 import { MutationResponse } from "@/types/api/auth";
+import { ReactNode } from "react";
+
+export type ActionType = "edit" | "delete" | "custom";
+export type ActionPlacement = "dropdown" | "external";
 
 export interface ApiQueryParams {
   page?: number;
@@ -18,8 +22,8 @@ export interface ApiQueryParams {
 
 export interface ApiResponse<TData> {
   data: TData[];
-  totalCount?: number;
-  totalPages?: number;
+  totalCount: number;
+  totalPages: number;
 }
 
 export interface ExpandedContentProps<TData> {
@@ -60,14 +64,13 @@ export interface DataTableProps<TData> {
 }
 
 export interface TableAction<TData> {
-  label: string;
+  type?: ActionType;
+  label?: string;
+  icon?: React.ComponentType<{ size?: number }> | React.ReactNode;
   onClick?: (row: Row<TData>) => void;
-  type?: "edit" | "delete" | string;
-  editData?: Partial<TData>;
-  render?: (row: Row<TData>) => React.ReactNode;
-  placement?: "external" | "dropdown";
-  component?: React.ReactNode | ((row: Row<TData>) => React.ReactNode);
-  icon?: React.ReactNode;
+  component?: ReactNode | ((row: Row<TData>) => ReactNode);
+  placement?: ActionPlacement;
+  [key: string]: any;
 }
 
 export interface DataTableContextProps {
@@ -79,18 +82,18 @@ export interface DataTableContextProps {
   sorting: SortingState;
   columns: ColumnDef<any>[];
   table: Table<any>;
-  enhancedActions: TableAction<any>[] | null;
-  dropdownActions?: TableAction<any>[];
-  externalActions?: TableAction<any>[];
+  enhancedActions: (TableAction<any> & { icon: React.ReactNode | React.ComponentType<{ size?: number }> })[] | null;
   renderExpandedContent?: (props: ExpandedContentProps<any>) => React.ReactNode;
   renderEditContent?: (props: ExpandedContentProps<any>) => React.ReactNode;
   specialRow: "add" | null;
   setSpecialRow: React.Dispatch<React.SetStateAction<"add" | null>>;
   handleAdd: (newData: any) => void;
   handleUpdateData: (newData: any) => void;
-  handleUpdate?: (data: any) => void;
   onRowClick?: (row: Row<any>) => void;
   isLoading: boolean;
   toggleEditMode: (rowId: string | number) => void;
   idField?: string;
+  dropdownActions?: TableAction<any>[];
+  externalActions?: TableAction<any>[];
+  handleUpdate?: (newData: any) => void;
 }

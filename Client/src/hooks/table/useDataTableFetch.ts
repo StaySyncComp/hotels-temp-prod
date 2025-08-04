@@ -64,7 +64,7 @@ export function useDataTableFetch<TData>({
         })) as TData[];
 
         setTableData(responseData);
-        setTotalCount(response.totalCount || 0);
+        setTotalCount('totalCount' in response ? response.totalCount || 0 : 0);
       } catch (error) {
         console.error("Failed to fetch table data:", error);
       } finally {
