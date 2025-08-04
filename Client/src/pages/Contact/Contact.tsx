@@ -58,12 +58,12 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50" dir={direction ? "rtl" : "ltr"}>
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100 py-4 px-6">
         <div className="flex justify-between max-w-7xl w-full m-auto items-center">
           <Link to="/" className="flex items-center gap-3">
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <ArrowLeft className={`w-5 h-5 text-gray-600 ${direction ? "rotate-180" : ""}`} />
             <span className="text-gray-600 font-medium">{t("back_to_home", "Back to Home")}</span>
           </Link>
           <div className="flex items-center gap-4">
@@ -96,13 +96,13 @@ export default function Contact() {
                   {t("contact.get_in_touch", "Get in Touch")}
                 </h2>
                 <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
+                  <div className={`flex items-start ${direction ? "flex-row-reverse" : "flex-row"} gap-4`}>
                     <div className="flex-shrink-0">
                       <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                         <Mail className="w-6 h-6 text-blue-600" />
                       </div>
                     </div>
-                    <div>
+                    <div className={direction ? "text-right" : "text-left"}>
                       <h3 className="text-lg font-medium text-gray-900">
                         {t("contact.email", "Email")}
                       </h3>
@@ -110,13 +110,13 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4">
+                  <div className={`flex items-start ${direction ? "flex-row-reverse" : "flex-row"} gap-4`}>
                     <div className="flex-shrink-0">
                       <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                         <Phone className="w-6 h-6 text-green-600" />
                       </div>
                     </div>
-                    <div>
+                    <div className={direction ? "text-right" : "text-left"}>
                       <h3 className="text-lg font-medium text-gray-900">
                         {t("contact.phone", "Phone")}
                       </h3>
@@ -126,13 +126,13 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4">
+                  <div className={`flex items-start ${direction ? "flex-row-reverse" : "flex-row"} gap-4`}>
                     <div className="flex-shrink-0">
                       <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                         <MapPin className="w-6 h-6 text-purple-600" />
                       </div>
                     </div>
-                    <div>
+                    <div className={direction ? "text-right" : "text-left"}>
                       <h3 className="text-lg font-medium text-gray-900">
                         {t("contact.address", "Address")}
                       </h3>
@@ -149,20 +149,20 @@ export default function Contact() {
                   {t("contact.why_choose_us", "Why Choose Us?")}
                 </h3>
                 <ul className="space-y-4">
-                  <li className="flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-3 text-green-300" />
+                  <li className={`flex items-center ${direction ? "flex-row-reverse" : "flex-row"}`}>
+                    <CheckCircle className={`w-5 h-5 text-green-300 ${direction ? "ml-3" : "mr-3"}`} />
                     {t("contact.feature_1", "24/7 Customer Support")}
                   </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-3 text-green-300" />
+                  <li className={`flex items-center ${direction ? "flex-row-reverse" : "flex-row"}`}>
+                    <CheckCircle className={`w-5 h-5 text-green-300 ${direction ? "ml-3" : "mr-3"}`} />
                     {t("contact.feature_2", "Advanced Hotel Management Solutions")}
                   </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-3 text-green-300" />
+                  <li className={`flex items-center ${direction ? "flex-row-reverse" : "flex-row"}`}>
+                    <CheckCircle className={`w-5 h-5 text-green-300 ${direction ? "ml-3" : "mr-3"}`} />
                     {t("contact.feature_3", "Secure and Reliable Platform")}
                   </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-3 text-green-300" />
+                  <li className={`flex items-center ${direction ? "flex-row-reverse" : "flex-row"}`}>
+                    <CheckCircle className={`w-5 h-5 text-green-300 ${direction ? "ml-3" : "mr-3"}`} />
                     {t("contact.feature_4", "Easy Integration and Setup")}
                   </li>
                 </ul>
@@ -206,7 +206,7 @@ export default function Contact() {
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                          <label htmlFor="name" className={`block text-sm font-medium text-gray-700 mb-2 ${direction ? "text-right" : "text-left"}`}>
                             {t("contact.name", "Name")}
                           </label>
                           <input
@@ -222,7 +222,7 @@ export default function Contact() {
                         </div>
 
                         <div>
-                          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                          <label htmlFor="email" className={`block text-sm font-medium text-gray-700 mb-2 ${direction ? "text-right" : "text-left"}`}>
                             {t("contact.email", "Email")}
                           </label>
                           <input
@@ -239,7 +239,7 @@ export default function Contact() {
                       </div>
 
                       <div>
-                        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="subject" className={`block text-sm font-medium text-gray-700 mb-2 ${direction ? "text-right" : "text-left"}`}>
                           {t("contact.subject", "Subject")}
                         </label>
                         <input
@@ -255,7 +255,7 @@ export default function Contact() {
                       </div>
 
                       <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="message" className={`block text-sm font-medium text-gray-700 mb-2 ${direction ? "text-right" : "text-left"}`}>
                           {t("contact.message", "Message")}
                         </label>
                         <textarea
