@@ -104,3 +104,12 @@
     @apply text-3xl font-bold bg-gradient-to-l from-foreground to-foreground/70 bg-clip-text text-transparent;
   }
 }
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

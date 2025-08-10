@@ -1,33 +1,36 @@
 import { useContext, useState } from "react";
 import DataTable from "@/components/ui/completed/data-table";
 import { useTranslation } from "react-i18next";
+import { TableAction } from "@/types/ui/data-table-types";
 import { fetchDepartmentsParams } from "@/api/departments";
 import { Department } from "@/types/api/departments";
 import i18n from "@/i18n";
-import DynamicForm from "../../../components/forms/DynamicForm";
+import DynamicForm, {
+  FieldConfig,
+} from "../../../components/forms/DynamicForm";
 import { z } from "zod";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
+import { handleImageChange } from "@/lib/formUtils";
 import { getDepartmentsColumns } from "@/components/forms/departments/departmentsColumns";
 import TableHeaderActions from "@/components/table-actions/TableHeaderActions";
-import { TableAction } from "@/types/ui/data-table-types";
 
 const DepartmentsTable = () => {
   const { t } = useTranslation();
   const {
+    organization,
     createNewDepartment,
     deleteDepartment,
     updateDepartment,
     departments,
   } = useContext(OrganizationsContext);
   const columns = getDepartmentsColumns(t, i18n);
-
   const [advancedFilters, setAdvancedFilters] = useState({});
 
   const actions: TableAction<Department>[] = [
     { label: "Edit", type: "edit" },
     { type: "delete", label: "Delete" },
   ];
-  const fields = [
+  const fields: FieldConfig[] = [
     { name: "logo", label: t("picture"), type: "image" },
     { name: "name", label: t("name"), type: "language" },
   ];
@@ -49,7 +52,7 @@ const DepartmentsTable = () => {
       name: f.name,
       label: f.label,
       type: f.type,
-      options: (f as any).options,
+      options: f.options,
       placeholder: f.label,
     }));
 
@@ -86,17 +89,21 @@ const DepartmentsTable = () => {
             mode={mode}
             defaultValues={rowData}
             headerKey="department"
-            fields={fields as any}
+            fields={fields}
             validationSchema={schema}
             onSubmit={async (data: z.infer<typeof schema>) => {
               const isCreateMode = mode === "create";
+              const logoPath = await handleImageChange({
+                newImage: data.logo,
+                oldImage: rowData?.logo,
+                isCreateMode,
+                path: `${organization?.id}/departments`,
+              });
+
+              // @ts-ignore
               const departmentData: Partial<Department> = {
-                logo: data.logo,
-                name: {
-                  en: data.name.en,
-                  he: data.name.he,
-                  ar: data.name.ar || "",
-                },
+                ...data,
+                logo: logoPath,
               };
 
               if (!isCreateMode) departmentData.id = rowData?.id;

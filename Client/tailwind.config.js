@@ -13,6 +13,10 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      screens: {
+        "3xl": "1920px",
+        "4xl": "2560px",
+      },
       zIndex: {
         chat: "9999",
         "above-all": "9998",

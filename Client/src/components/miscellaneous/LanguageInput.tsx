@@ -120,7 +120,13 @@ export default function LanguageInput({
         languages.length - 1 && (
         <Input
           className="border-dashed cursor-default"
-          icon={<LanguagePicker />}
+          icon={
+            <LanguagePicker
+              // @ts-ignore
+              selectedLanguages={usedLanguages}
+              setSelectedLanguages={setUsedLanguages}
+            />
+          }
           label={label + " - " + t("translated")}
           placeholder={t("add_language") + "..."}
         />

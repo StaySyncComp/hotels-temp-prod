@@ -26,6 +26,8 @@ export function DataTable<TData>({
   deleteData,
   columns = [],
   searchable = true,
+  // @ts-ignore
+  isPagination = true,
   showAddButton = false,
   actions = null,
   defaultPageSize = 10,
@@ -55,12 +57,15 @@ export function DataTable<TData>({
   const [specialRow, setSpecialRow] = useState<"add" | null>(null);
   const [now, setNow] = useState(Date.now());
 
-  useTableWebSocket(idField, setTableData, websocketUrl);
+  // @ts-ignore
+  useTableWebSocket(websocketUrl, idField, setTableData);
   const {
     handleAdd,
     handleUpdate,
     handleDelete,
     toggleEditMode,
+    // @ts-ignore
+    isLoading: crudLoading,
   } = useTableCRUD<TData>({
     idField,
     addData,
@@ -140,7 +145,8 @@ export function DataTable<TData>({
   const { enhancedActions, dropdownActions, externalActions } =
     useDataTableActions<TData>({
       idField,
-      actions: actions || [],
+      // @ts-ignore
+      actions,
       handleDelete,
       toggleEditMode,
     });
@@ -156,20 +162,21 @@ export function DataTable<TData>({
         sorting,
         columns,
         table,
-        enhancedActions: enhancedActions as any,
-        dropdownActions: dropdownActions as any,
-        externalActions: externalActions as any,
+        // @ts-ignore
+        enhancedActions,
+        dropdownActions,
+        externalActions,
         renderExpandedContent,
         specialRow,
         handleAdd,
         handleUpdate,
-        handleUpdateData: handleUpdate,
         onRowClick,
         isLoading,
         setSpecialRow,
         renderEditContent,
-        toggleEditMode,
-        idField: idField as string,
+        toggleEditMode, 
+        // @ts-ignore
+        idField,
       }}
     >
       <div className="space-y-4 ">

@@ -43,7 +43,9 @@ const LocationsTable = ({ areaId }: LocationsTableProps) => {
     { type: "edit", label: t("edit") },
     { type: "delete", label: t("delete") },
     {
+      // @ts-ignore
       placement: "external",
+      // @ts-ignore
       component: (row) => <ChatBotLinkButtons location={row.original} />,
     },
   ];
@@ -120,14 +122,8 @@ const LocationsTable = ({ areaId }: LocationsTableProps) => {
                 //@ts-ignore
                 await handleSave({ ...data, areaId });
               else if (handleEdit && mode === "edit")
-                await handleEdit({ 
-                  id: rowData?.id, 
-                  ...data,
-                  name: {
-                    ...data.name,
-                    ar: data.name.ar || "",
-                  }
-                });
+                //@ts-ignore
+                await handleEdit({ id: rowData?.id, ...data });
             }}
           />
         );

@@ -72,10 +72,11 @@ export function useTableCRUD<TData>({
       const response = await updateData(updatedData as TData);
       if (!response || !response.data) throw new Error("No response data");
 
+      // @ts-ignore
       setTableData((prev) =>
         prev.map((item) =>
           (item as any)[idField] === id ? response.data : item
-        ).filter((item): item is TData => item !== undefined)
+        )
       );
       toast.success(t("tost_alerts.update"));
     } catch (error) {

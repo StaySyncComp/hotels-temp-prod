@@ -4,24 +4,18 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { GetDirection } from "@/lib/i18n";
 import Logo from "@/assets/logo.svg";
-import { useNavigate } from "react-router-dom";
-
 export default function HeroSection() {
   const { t } = useTranslation();
   const direction = GetDirection();
-  const navigate = useNavigate();
+
   const statItemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
-  const handleContactClick = () => {
-    navigate("/contact");
-  };
-
   return (
     <section
-      className="pt-32 pb-20 px-6 overflow-hidden"
+      className="pt-48 pb-32 px-6 overflow-hidden"
       dir={direction ? "rtl" : "ltr"}
     >
       <div className="max-w-7xl mx-auto">
@@ -34,15 +28,15 @@ export default function HeroSection() {
             className="space-y-8"
           >
             <div className="space-y-6">
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-5xl lg:text-6xl font-bold text-foreground leading-tight">
                 {t("hero_title_part1")}{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                <span className="bg-accent bg-clip-text text-transparent">
                   {t("hero_title_highlight")}
                 </span>{" "}
                 {t("hero_title_part2")}
               </h1>
 
-              <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+              <p className="text-xl text-foreground/70 leading-relaxed max-w-2xl">
                 {t("hero_description")}
               </p>
             </div>
@@ -50,8 +44,13 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-lg px-8 py-4 h-auto"
-                onClick={handleContactClick}
+                className="bg-accent rounded-2xl shadow-lg shadow-primary/10 text-lg px-8 py-4 h-auto"
+                onClick={() =>
+                  window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: "smooth",
+                  })
+                }
               >
                 {t("find_plan_button")}
                 <ArrowLeft className="w-5 h-5 ml-2" />
@@ -65,14 +64,22 @@ export default function HeroSection() {
               animate="visible"
             >
               <motion.div className="text-center" variants={statItemVariants}>
-                <div className="text-2xl font-bold text-gray-900">100%</div>
-                <div className="text-sm text-gray-600">
+                <div className="text-2xl font-bold text-foreground">100%</div>
+                <div className="text-sm text-foreground/70">
                   {t("suitable_all_hotels")}
                 </div>
               </motion.div>
               <motion.div className="text-center" variants={statItemVariants}>
-                <div className="text-2xl font-bold text-gray-900">24/7</div>
-                <div className="text-sm text-gray-600">{t("ai_support")}</div>
+                <div className="text-2xl font-bold text-foreground">24/7</div>
+                <div className="text-sm text-foreground/70">
+                  {t("ai_support")}
+                </div>
+              </motion.div>
+              <motion.div className="text-center" variants={statItemVariants}>
+                <div className="text-2xl font-bold text-foreground rotate-90">
+                  8
+                </div>
+                <div className="text-sm text-foreground/70">סוגי פניות</div>
               </motion.div>
             </motion.div>
           </motion.div>
@@ -92,7 +99,7 @@ export default function HeroSection() {
             <div className="relative z-10">
               {/* Main Dashboard Mockup */}
               <motion.div
-                className="bg-surface rounded-2xl shadow-2xl p-8"
+                className="bg-surface rounded-2xl shadow-2xl shadow-primary/10 p-8"
                 whileHover={{ y: -10, scale: 1.02, rotate: 1 }}
               >
                 <div className="flex items-center gap-3 mb-6">
@@ -103,7 +110,7 @@ export default function HeroSection() {
                       className="border border-border/20 shadow-md shadow-primary/10 rounded-lg"
                     />
                   </div>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-foreground">
                     {t("admin_screen")}
                   </span>
                 </div>
@@ -149,7 +156,7 @@ export default function HeroSection() {
                   rotate: 0,
                   transition: { duration: 0.2, delay: 0 },
                 }}
-                className="absolute -bottom-8 -right-8 bg-surface rounded-xl shadow-xl p-4 w-48"
+                className="absolute -bottom-8 -right-8 bg-surface rounded-xl shadow-xl shadow-primary/10 p-4 w-48"
               >
                 <div className="flex items-center gap-2 mb-3">
                   <Users className="w-4 h-4 text-blue-600" />
@@ -179,7 +186,7 @@ export default function HeroSection() {
 
               {/* Chat Mockup */}
               <motion.div
-                className="absolute -top-8 -left-8 bg-surface rounded-xl shadow-xl p-4 w-56"
+                className="absolute -top-8 -left-8 bg-surface rounded-xl shadow-xl shadow-primary/10 p-4 w-56"
                 initial={{ opacity: 0, y: -20, rotate: 6 }}
                 animate={{
                   opacity: 1,

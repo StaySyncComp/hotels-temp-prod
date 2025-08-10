@@ -1,39 +1,53 @@
+import React from "react";
+import { GetDirection } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { GetDirection } from "@/lib/i18n";
-
+const stats = [
+  { label: "landing_page.stats_section.stat_1" },
+  { label: "landing_page.stats_section.stat_2" },
+  { label: "landing_page.stats_section.stat_3" },
+  { label: "landing_page.stats_section.stat_4" },
+  { label: "landing_page.stats_section.stat_5" },
+  { label: "landing_page.stats_section.stat_6" },
+];
 export default function StatsSection() {
-  const { t } = useTranslation();
   const direction = GetDirection();
-  
-  const stats = [
-    { label: t("operational_efficiency_increase"), value: "" },
-    { label: t("faster_issue_resolution"), value: "" },
-    { label: t("guest_satisfaction_score"), value: "" },
-    { label: t("operational_cost_reduction"), value: "" },
-  ];
 
   return (
-    <section className="py-16 bg-gradient-to-r from-blue-600 to-cyan-500" dir={direction ? "rtl" : "ltr"}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="text-center text-surface"
-            >
-              <div className="text-4xl lg:text-5xl font-bold mb-2">
-                {stat.value}
-              </div>
-              <div className="text-blue-100 font-semibold">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+    <section className="py-16 bg-foreground" dir={direction ? "rtl" : "ltr"}>
+      <InfiniteScrollingLogosAnimation />
     </section>
   );
 }
+const InfiniteScrollingLogosAnimation = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="container m-auto">
+      <div className="flex relative overflow-hidden before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-10 before:bg-gradient-to-r before:from-foreground before:to-transparent before:content-[''] after:absolute after:right-0 after:top-0 after:h-full after:w-10 after:bg-gradient-to-l after:from-foreground after:to-transparent after:content-['']">
+        <motion.div
+          transition={{
+            duration: 50,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+          initial={{ translateX: 0 }}
+          animate={{ translateX: "-50%" }}
+          className="flex flex-none gap-20 pr-16"
+        >
+          {[...new Array(2)].fill(0).map((_, index) => (
+            <React.Fragment key={index}>
+              {stats.map(({ label }) => (
+                <h1
+                  key={label}
+                  className="inline-block text-center text-white/80 text-lg font-semibold "
+                >
+                  {t(label)}
+                </h1>
+              ))}
+            </React.Fragment>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  );
+};

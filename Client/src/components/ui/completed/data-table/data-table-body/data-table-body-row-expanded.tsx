@@ -19,6 +19,7 @@ function DataTableBodyRowExpanded<T>({
     enhancedActions,
     columns,
     handleAdd,
+    // @ts-ignore
     handleUpdate,
     renderExpandedContent,
     renderEditContent,

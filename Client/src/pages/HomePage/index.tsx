@@ -1,18 +1,20 @@
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import LanguagePicker from "@/components/LanguagePicker";
-import logo from "@/assets/fullLogo.svg";
-import HeroSection from "./components/HeroSection";
-import FeatureSection from "./components/FeatureSection";
-import CTASection from "./components/CTASection";
-import AICapabilities from "./components/AICapabilities";
-import VideoShowcaseSection from "./components/VideoShowcaseSection";
 import StatsSection from "./components/StatsSection";
-
-export default function HomePage() {
+import FeaturePillars from "./components/FeatureSection";
+import AICapabilities from "./components/AICapabilities";
+import CTASection from "./components/CTASection";
+import HeroSection from "./components/HeroSection";
+import LanguagePicker from "@/components/LanguagePicker";
+import { Link } from "react-router-dom";
+import logo from "@/assets/fullLogo.svg";
+import { useTranslation } from "react-i18next";
+import { GetDirection } from "@/lib/i18n";
+import VideoShowcaseSection from "./components/VideoShowcaseSection";
+import MobileShowcase from "./components/MobileShowcase";
+export default function Homepage() {
   const { t } = useTranslation();
+  const direction = GetDirection();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-surface to-blue-50">
@@ -23,7 +25,7 @@ export default function HomePage() {
         className="relative"
       >
         {/* Navigation */}
-        <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-lg border-b border-gray-100 py-5 px-5">
+        <nav className="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-white/70 py-3 px-5">
           <div className="flex justify-between max-w-7xl w-full m-auto items-center">
             <div className="flex items-center gap-3">
               <div>
@@ -36,7 +38,7 @@ export default function HomePage() {
             </div>
             <div className="flex justify-start gap-2">
               <Link to="/login" className="sm:flex hidden">
-                <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 py-2 px-7">
+                <Button className="bg-accent py-2 px-7">
                   {t("website_titles.login")}
                 </Button>
               </Link>
@@ -52,8 +54,9 @@ export default function HomePage() {
         <StatsSection />
 
         {/* Feature Pillars */}
-        <FeatureSection />
+        <FeaturePillars />
         <VideoShowcaseSection />
+        <MobileShowcase />
         {/* AI Capabilities */}
         <AICapabilities />
 
@@ -74,6 +77,17 @@ export default function HomePage() {
           <p className="cursor-pointer">{t("privacy_policy")}</p>
           <p>|</p> <p className="cursor-pointer">{t("hotels")}</p>
         </footer> */}
+        <footer
+          className={`flex gap-6 w-full py-10 justify-center items-center text-sm ${
+            direction ? "flex-row-reverse" : "flex-row"
+          }`}
+          dir={direction ? "rtl" : "ltr"}
+        >
+          <p className="cursor-default text-foreground/50" dir="ltr">
+            {" "}
+            &copy; 2025 Bloom by StaySync. All rights reserved.
+          </p>
+        </footer>
       </motion.div>
     </div>
   );

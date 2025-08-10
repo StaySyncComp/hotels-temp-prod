@@ -8,7 +8,6 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    lng: "he", // Set Hebrew as the default language
     fallbackLng: "he",
     debug: true,
     load: "all",
@@ -17,9 +16,9 @@ i18n
         "https://qipcgolampmdkhplcnbk.supabase.co/storage/v1/object/public/Images/Translations/{{lng}}.json",
     },
     detection: {
+      // 👇 Add this block
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
-      lookupLocalStorage: "i18nextLng", // Specify the localStorage key
     },
     interpolation: {
       escapeValue: false,

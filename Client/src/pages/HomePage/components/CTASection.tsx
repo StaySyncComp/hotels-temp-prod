@@ -1,19 +1,58 @@
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, Rocket, ShieldCheck } from "lucide-react";
+import { CheckCircle, Rocket } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { GetDirection } from "@/lib/i18n";
+import { useRTL } from "@/hooks/useRtl";
+import { useCallback, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function CTASection() {
+  const { isRtl } = useRTL();
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const direction = GetDirection();
+
+  const [emailAddress, setEmailAddress] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const isEmailValid = useMemo(() => {
+    if (!emailAddress) return false;
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(emailAddress);
+  }, [emailAddress]);
+
+  const handleSubmitEmail = useCallback(async () => {
+    if (!isEmailValid || isSubmitting) return;
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+
+    try {
+      // Attempt to insert email into Supabase table `interested_people`
+      const normalizedEmail = emailAddress.trim().toLowerCase();
+      const { error } = await supabase
+        .from("interested_people")
+        .insert({ email: normalizedEmail });
+
+      if (error) {
+        // If duplicate (unique email) or table policy blocks, we still surface a generic error
+        setSubmitError(error.message || "Failed to save your email. Please try again.");
+      } else {
+        setSubmitSuccess(true);
+        setEmailAddress("");
+      }
+    } catch (err: any) {
+      setSubmitError(err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [emailAddress, isEmailValid, isSubmitting]);
 
   const features = [
     { text: t("custom_changes_per_hotel"), icon: Rocket },
     { text: t("no_setup_fees"), icon: CheckCircle },
-    { text: t("24_7_support"), icon: ShieldCheck },
     { text: t("cancel_anytime"), icon: CheckCircle },
   ];
 
@@ -41,89 +80,87 @@ export default function CTASection() {
     onscreen: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
-  const handleFindPlanClick = () => {
-    navigate("/contact");
-  };
-
-  const handleContactClick = () => {
-    navigate("/contact");
-  };
-
   return (
-    <section className="py-24 px-6 bg-slate-50" dir={direction ? "rtl" : "ltr"}>
-      <div className="max-w-5xl mx-auto">
+    <section className="py-24 bg-border/25" dir={direction ? "rtl" : "ltr"}>
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial="offscreen"
           whileInView="onscreen"
           viewport={{ once: true, amount: 0.3 }}
           variants={cardVariants}
-          className={`bg-surface rounded-3xl shadow-2xl p-8 md:p-12 overflow-hidden relative font-sans`}
+          className="bg-white/65 rounded-3xl shadow-2xl p-12 md:p-20 overflow-hidden relative"
         >
           {/* Decorative background elements */}
-          <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full opacity-10 blur-2xl"></div>
-          <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-r from-purple-500 to-pink-400 rounded-full opacity-10 blur-2xl"></div>
+          <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-gradient-to-r from-blue-400 to-blue-900 rounded-full opacity-5 blur-2xl"></div>
+          <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-r from-blue-900 to-blue-50 rounded-full opacity-10 blur-2xl"></div>
 
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center relative z-10">
+          <div className="flex flex-col gap-8 md:gap-12 items-center w-[44rem] m-auto">
             {/* Text Content */}
-            <div className={`space-y-6`}>
+            <div className={`flex flex-col gap-7`}>
               <motion.h2
                 variants={itemVariants}
-                className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
+                className="text-4xl  font-semibold text-foreground text-center"
               >
                 {t("ready_to_transform")}
               </motion.h2>
 
               <motion.p
                 variants={itemVariants}
-                className="text-lg text-gray-600 leading-relaxed"
+                className="text-lg font-medium text-foreground/70"
               >
                 {t("contact_team_description")}
               </motion.p>
-
-              <motion.ul variants={itemVariants} className="space-y-3 pt-2">
-                {features.map((feature) => (
-                  <li key={feature.text} className={`flex items-center gap-3`}>
-                    <feature.icon className="w-6 h-6 text-blue-600 flex-shrink-0" />
-                    <span className="text-gray-700">{feature.text}</span>
-                  </li>
-                ))}
-              </motion.ul>
             </div>
 
             {/* Buttons and Disclaimer */}
-            <div className={`space-y-6 flex flex-col items-start`}>
+            <div className={`w-full px-12`}>
               <motion.div
                 variants={itemVariants}
-                className={`w-full flex flex-col gap-4 sm:flex-row md:flex-col`}
+                className={`w-full flex flex-col gap-4 sm:flex-row md:flex-col justify-between relative`}
               >
-                <Button
-                  size="lg"
-                  onClick={handleFindPlanClick}
-                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-lg px-8 py-4 h-auto font-semibold text-surface shadow-lg hover:shadow-blue-500/50 transition-all duration-300 cursor-pointer"
+                <input
+                  type="email"
+                  placeholder={t("landing_page.cta_section.input_placeholder")}
+                  className={`border bg-background/20 rounded-3xl px-4 py-6 w-full focus:outline-none focus:ring ring-primary/20 ${
+                    isRtl ? "pr-44" : "pl-44"
+                  }`}
+                  value={emailAddress}
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                />
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`bg-accent text-white w-40 h-14 px-2 rounded-2xl absolute top-2 ${
+                    isRtl ? "right-2" : "left-2"
+                  } ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}`}
+                  onClick={handleSubmitEmail}
+                  disabled={!isEmailValid || isSubmitting}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center gap-2"
-                  >
-                    {t("find_plan_button")}
-                    <ArrowLeft className="w-5 h-5 ml-2" />
-                  </motion.div>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={handleContactClick}
-                  className="w-full border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 text-lg px-8 py-4 h-auto shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {t("contact_us")}
-                  </motion.div>
-                </Button>
+                  {isSubmitting
+                    ? t("landing_page.cta_section.submitting", "Submitting...")
+                    : t("landing_page.cta_section.submit_button")}
+                </motion.button>
               </motion.div>
+              {(submitError || submitSuccess) && (
+                <div className={`mt-2 text-sm ${submitError ? "text-red-600" : "text-green-700"}`}>
+                  {submitError
+                    ? submitError
+                    : t(
+                        "landing_page.cta_section.submit_success",
+                        "Thanks! We'll be in touch."
+                      )}
+                </div>
+              )}
+            </div>
+            <div>
+              <motion.ul variants={itemVariants} className="flex gap-10">
+                {features.map((feature) => (
+                  <li key={feature.text} className={`flex items-center gap-3`}>
+                    <feature.icon className="w-5 h-5 text-foreground/70 flex-shrink-0" />
+                    <span className="text-foreground/70">{feature.text}</span>
+                  </li>
+                ))}
+              </motion.ul>
             </div>
           </div>
         </motion.div>

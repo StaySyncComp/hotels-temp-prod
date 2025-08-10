@@ -1,4 +1,8 @@
 import { useTranslation } from "react-i18next";
+// import { useNavigate } from "react-router-dom";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Button } from "@/components/ui/button";
+// import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   PhoneCall,
   Clock,
@@ -17,11 +21,14 @@ const usersApi = createApiService("/users", { includeOrgId: true });
 
 export default function Home() {
   const { t } = useTranslation();
+  // const navigate = useNavigate();
 
   const [activeCalls, setActiveCalls] = useState<number>(0);
   const [recentCalls, setRecentCalls] = useState<Call[]>([]);
   const [urgentCalls, setUrgentCalls] = useState<number>(0);
   const [_, setEmployeesCount] = useState<number>(0);
+  // @ts-ignore
+  const [employees, setEmployees] = useState<any[]>([]);
   const [avgResponseTime, setAvgResponseTime] = useState<number>(0);
   const [slaComplianceRate, setSlaComplianceRate] = useState<number>(0);
 
@@ -48,6 +55,7 @@ export default function Home() {
         const response = await usersApi.fetchAll({});
         // @ts-ignore
         const employeesData = response.data?.data || [];
+        setEmployees(employeesData);
         setEmployeesCount(employeesData.length);
       } catch (err) {
         console.error("Error fetching employees", err);

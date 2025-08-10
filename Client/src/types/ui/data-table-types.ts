@@ -6,10 +6,6 @@ import {
   Table,
 } from "@tanstack/react-table";
 import { MutationResponse } from "@/types/api/auth";
-import { ReactNode } from "react";
-
-export type ActionType = "edit" | "delete" | "custom";
-export type ActionPlacement = "dropdown" | "external";
 
 export interface ApiQueryParams {
   page?: number;
@@ -64,13 +60,11 @@ export interface DataTableProps<TData> {
 }
 
 export interface TableAction<TData> {
-  type?: ActionType;
-  label?: string;
-  icon?: React.ComponentType<{ size?: number }> | React.ReactNode;
+  label: string;
   onClick?: (row: Row<TData>) => void;
-  component?: ReactNode | ((row: Row<TData>) => ReactNode);
-  placement?: ActionPlacement;
-  [key: string]: any;
+  type?: "edit" | "delete" | string;
+  editData?: Partial<TData>;
+  render?: (row: Row<TData>) => React.ReactNode;
 }
 
 export interface DataTableContextProps {
@@ -82,7 +76,7 @@ export interface DataTableContextProps {
   sorting: SortingState;
   columns: ColumnDef<any>[];
   table: Table<any>;
-  enhancedActions: (TableAction<any> & { icon: React.ReactNode | React.ComponentType<{ size?: number }> })[] | null;
+  enhancedActions: (TableAction<any> & { icon: React.ReactNode })[] | null;
   renderExpandedContent?: (props: ExpandedContentProps<any>) => React.ReactNode;
   renderEditContent?: (props: ExpandedContentProps<any>) => React.ReactNode;
   specialRow: "add" | null;
@@ -93,7 +87,4 @@ export interface DataTableContextProps {
   isLoading: boolean;
   toggleEditMode: (rowId: string | number) => void;
   idField?: string;
-  dropdownActions?: TableAction<any>[];
-  externalActions?: TableAction<any>[];
-  handleUpdate?: (newData: any) => void;
 }

@@ -4,6 +4,7 @@ import { Plus, X, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import LanguageInput from "@/components/miscellaneous/LanguageInput";
+// import { Area } from "@/types/api/areas.type";
 import AreYouSureDialog from "@/components/ui/completed/dialogs/AreYouSureDialog";
 
 interface AddAreaProps {

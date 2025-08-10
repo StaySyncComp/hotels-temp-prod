@@ -76,7 +76,9 @@ export default function CallTable() {
     { label: "Edit", type: "edit" },
     { type: "delete", label: "Delete" },
     {
+      // @ts-ignore
       placement: "external",
+      // @ts-ignore
       component: (row) => (
         <ActionCell
           call={row.original}

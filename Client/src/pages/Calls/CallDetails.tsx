@@ -1,24 +1,33 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, MapPin, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
-import { Call } from "@/types/api/calls";
-import { useEffect, useState } from "react";
 import { createApiService } from "@/api/utils/apiFactory";
-import { Separator } from "@/components/ui/separator";
+import { Call } from "@/types/api/calls";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Clock,
   Calendar,
+  MapPin,
+  User,
+  CheckCircle2,
+  AlertCircle,
   Timer,
   MessageSquare,
-  MapPin as MapPinIcon,
-  User as UserIcon,
-  CheckCircle2 as CheckCircle2Icon,
+  Building2,
 } from "lucide-react";
 import i18n from "@/i18n";
 import { CallChat } from "@/components/calls-table/CallChat/CallChat";
+// import CallProgress from "./CallProgress";
 
 const callsApi = createApiService<Call>("/calls", { includeOrgId: true });
 
@@ -207,7 +216,7 @@ export default function CallDetails() {
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <MapPinIcon className="h-4 w-4 text-primary" />
+                      <Building2 className="h-4 w-4 text-primary" />
                     </div>
                     <div>
                       <p className="font-medium">
@@ -236,7 +245,7 @@ export default function CallDetails() {
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <UserIcon className="h-4 w-4 text-primary" />
+                      <Building2 className="h-4 w-4 text-primary" />
                     </div>
                     <p className="font-medium">
                       {
@@ -364,7 +373,7 @@ export default function CallDetails() {
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                      <UserIcon className="h-4 w-4 text-primary-foreground" />
+                      <User className="h-4 w-4 text-primary-foreground" />
                     </div>
                     <div className="flex-1 w-[2px] bg-border mt-2" />
                   </div>
@@ -383,7 +392,7 @@ export default function CallDetails() {
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                      <CheckCircle2Icon className="h-4 w-4 text-primary-foreground" />
+                      <CheckCircle2 className="h-4 w-4 text-primary-foreground" />
                     </div>
                   </div>
                   <div>

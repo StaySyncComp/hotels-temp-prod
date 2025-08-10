@@ -14,7 +14,7 @@ import { GetDirection } from "@/lib/i18n";
 export default function AICapabilities() {
   const { t } = useTranslation();
   const direction = GetDirection();
-  
+
   const capabilities = [
     {
       icon: Brain,
@@ -49,21 +49,25 @@ export default function AICapabilities() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50 px-6" dir={direction ? "rtl" : "ltr"}>
+    <section
+      className="py-24 bg-gradient-to-b from-border/20 via-white via-30% to-white px-6"
+      dir={direction ? "rtl" : "ltr"}
+    >
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
+          viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
             {t("powered_by")}{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#2AC4AA] via-[#1E90FF] to-[#585CA8] bg-clip-text text-transparent">
               {t("artificial_intelligence")}
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
             {t("ai_engine_description")}
           </p>
         </motion.div>
@@ -75,16 +79,17 @@ export default function AICapabilities() {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, amount: 0.3 }}
             >
-              <Card className="h-full bg-surface/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+              <Card className="h-full bg-white/50 backdrop-blur-sm border border-white/90 rounded-[32px] shadow-[0px_1px_4.5px_rgba(0,0,0,0.1)] transition-all duration-300">
                 <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-[linear-gradient(135deg,_#4B9DA5_0%,_#487CC9_45%,_#585CA8_85%)] rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <capability.icon className="w-6 h-6 text-surface" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-xl font-semibold text-text mb-2">
                     {capability.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-foreground/70 font-medium">
                     {capability.description}
                   </p>
                 </CardContent>

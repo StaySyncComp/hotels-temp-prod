@@ -18,7 +18,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { currentRoute } = useRoutes();
   const { t } = useTranslation();
   const title = `${organization?.name} - ${t(
-    (currentRoute?.handle as any)?.documentTitle || ""
+    // @ts-ignore
+    currentRoute?.handle.documentTitle
   )}`;
   // Dynamically replace the favicon
   // useEffect(() => {

@@ -1,7 +1,19 @@
 import { Row } from "@tanstack/react-table";
 import { Edit, Trash2 } from "lucide-react";
-import { useMemo } from "react";
-import { TableAction, ActionPlacement } from "@/types/ui/data-table-types";
+import { ReactNode, useMemo } from "react";
+
+type ActionType = "edit" | "delete" | "custom";
+type ActionPlacement = "dropdown" | "external";
+
+export interface TableAction<TData> {
+  type?: ActionType;
+  label?: string;
+  icon?: React.ComponentType<{ size?: number }>;
+  onClick?: (row: Row<TData>) => void;
+  component?: ReactNode | ((row: Row<TData>) => ReactNode);
+  placement?: ActionPlacement; // New property to control placement
+  [key: string]: any;
+}
 
 interface UseDataTableActionsProps<TData> {
   idField?: keyof TData;

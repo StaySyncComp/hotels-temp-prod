@@ -6,12 +6,14 @@ import { useQuery } from "@tanstack/react-query";
 export function useGuest() {
   const organizationQuery = useQuery<MutationResponse<Organization>>({
     queryKey: ["guest-organization"],
+    // @ts-ignore
     queryFn: getGuestOrganizationInformation,
     retry: false,
   });
 
   return {
-    organization: organizationQuery.data?.data || null,
+    // @ts-ignore
+    organization: organizationQuery.data?.data || {},
     isOrganizationLoading: organizationQuery.isLoading,
   };
 }

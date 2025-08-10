@@ -50,19 +50,7 @@ export function DetailsPanel({ call }: DetailsPanelProps) {
             {getNameByLanguage(call.callCategory.name)}
           </h1>
         </div>
-        <CallProgress 
-          startedAt={new Date(sampleData.startedAt).toISOString()}
-          completeEstimation={sampleData.completeEstimation}
-          assignedTo={{
-            name: sampleData.assignedTo.name,
-            profilePicture: sampleData.assignedTo.profilePicture,
-            timestamp: new Date(sampleData.assignedTo.timestamp).toISOString(),
-          }}
-          events={sampleData.events.map(event => ({
-            timestamp: new Date(event.timestamp).toISOString(),
-            description: event.description
-          }))}
-        />
+        <CallProgress {...sampleData} />
         <CallBI
           startedAt={new Date(sampleData.startedAt)}
           assignedTo={{
