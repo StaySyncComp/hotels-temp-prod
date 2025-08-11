@@ -31,53 +31,6 @@ export default function FeaturePillars() {
       img: chatbotShowcase,
     },
   ];
-  // const pillars = [
-  //   {
-  //     icon: Monitor,
-  //     title: t("management_dashboard"),
-  //     description: t("management_dashboard_desc"),
-  //     features: [
-  //       t("employee_management"),
-  //       t("call_tracking"),
-  //       t("call_creation"),
-  //       t("performance_analytics"),
-  //     ],
-  //     gradient: "from-blue-500 to-indigo-600",
-  //     shadow: "blue-500",
-  //     bgGradient: "from-blue-50 to-indigo-50",
-  //     img: websiteShowcase,
-  //   },
-  //   {
-  //     icon: Smartphone,
-  //     title: t("employee_app_title"),
-  //     description: t("employee_app_desc"),
-  //     features: [
-  //       t("task_assignment"),
-  //       t("issue_resolution"),
-  //       t("team_communication"),
-  //       t("real_time_updates"),
-  //     ],
-  //     gradient: "from-purple-500 to-pink-600",
-  //     shadow: "shadow-purple-500/20",
-  //     bgGradient: "from-purple-50 to-pink-50",
-  //     img: appShowcase,
-  //   },
-  //   {
-  //     icon: Bot,
-  //     title: t("smart_guest_assistant"),
-  //     description: t("smart_guest_assistant_desc"),
-  //     features: [
-  //       t("hotel_data_lake"),
-  //       t("instant_response"),
-  //       t("multilingual_support"),
-  //       t("smart_routing"),
-  //     ],
-  //     gradient: "from-cyan-500 to-teal-600",
-  //     shadow: "cyan-500",
-  //     bgGradient: "from-cyan-50 to-teal-50",
-  //     img: chatbotShowcase,
-  //   },
-  // ];
 
   return (
     <section

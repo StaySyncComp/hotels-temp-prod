@@ -66,7 +66,7 @@ function VideoShowcaseSection() {
             </p>
           </div>
 
-          <div className="flex gap-8 flex-row-reverse">
+          <div className="flex gap-8 md:flex-row-reverse flex-col ">
             <Card
               animation={AppNotifications}
               title={t(
@@ -81,7 +81,7 @@ function VideoShowcaseSection() {
               }
             />
             <div
-              className={`flex-grow bg-gradient-to-t from-[#81C0F4] to-[#A3D6FF] rounded-[2rem] w-[66%] relative shadow-lg shadow-primary/20 flex flex-col justify-between overflow-hidden`}
+              className={`flex-grow w-full bg-gradient-to-t from-[#81C0F4] to-[#A3D6FF] rounded-[2rem] md:w-[66%] relative shadow-lg shadow-primary/20 flex flex-col justify-between overflow-hidden`}
             >
               <div className="rounded-lg my-10 relative flex justify-end">
                 <img

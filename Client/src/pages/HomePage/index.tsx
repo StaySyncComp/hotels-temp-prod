@@ -64,19 +64,7 @@ export default function Homepage() {
         <CTASection />
 
         {/* Footer */}
-        {/* <footer
-          className={`flex gap-6 w-full py-12 justify-center items-center text-sm ${
-            direction ? "flex-row-reverse" : "flex-row"
-          }`}
-          dir={direction ? "rtl" : "ltr"}
-        >
-          <p>{t("copyright_2025")}</p>
-          <p className="cursor-default">|</p>
-          <p className="cursor-pointer">{t("terms_and_conditions")}</p>
-          <p className="cursor-default">|</p>
-          <p className="cursor-pointer">{t("privacy_policy")}</p>
-          <p>|</p> <p className="cursor-pointer">{t("hotels")}</p>
-        </footer> */}
+
         <footer
           className={`flex gap-6 w-full py-10 justify-center items-center text-sm ${
             direction ? "flex-row-reverse" : "flex-row"

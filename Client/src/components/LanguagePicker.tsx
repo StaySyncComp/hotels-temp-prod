@@ -17,10 +17,17 @@ import { useRTL } from "@/hooks/useRtl";
 function LanguagePicker() {
   const { textAlign, flexDirection } = useRTL();
   const { i18n, t } = useTranslation();
+
+  const normalizeCode = (code?: string) => (code || "").split("-")[0];
+  const currentCode = normalizeCode(i18n.resolvedLanguage || i18n.language);
+
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    try {
+      localStorage.setItem("i18nextLng", lng);
+    } catch (_) {}
   };
-  const currentLanguage = languages.find((l) => l.code === i18n.language);
+  const currentLanguage = languages.find((l) => l.code === currentCode);
 
   return (
     <DropdownMenu modal={false}>
