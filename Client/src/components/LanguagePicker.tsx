@@ -25,7 +25,10 @@ function LanguagePicker() {
     i18n.changeLanguage(lng);
     try {
       localStorage.setItem("i18nextLng", lng);
-    } catch (_) {}
+    } catch (e) {
+      // ignore
+      console.log(e);
+    }
   };
   const currentLanguage = languages.find((l) => l.code === currentCode);
 
