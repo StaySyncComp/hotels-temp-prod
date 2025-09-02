@@ -94,8 +94,7 @@ export default function MobileShowcase() {
               <div className="absolute inset-0 h-[400px] sm:h-[600px] w-[15rem] sm:w-[23rem] shadow-2xl shadow-primary/80 top-1/2 -translate-y-1/2"></div>
               <LottieAnimation
                 animationData={AppShowcase}
-                height={500}
-                smHeight={800}
+                height={isMobile ? 500 : 700}
                 loop
               />
             </div>
@@ -127,7 +126,7 @@ export default function MobileShowcase() {
               <div className="absolute inset-0 h-[400px] sm:h-[600px] w-[15rem] sm:w-[23rem] shadow-2xl shadow-primary/80 top-1/2 -translate-y-1/2"></div>
               <LottieAnimation
                 animationData={Chatbot}
-                height={isMobile ? 500 : 800} // detect mobile in JS
+                height={isMobile ? 500 : 700} // detect mobile in JS
                 loop
               />
             </div>

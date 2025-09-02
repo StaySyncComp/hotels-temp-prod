@@ -22,7 +22,6 @@ i18n
         order: ["localStorage", "navigator"],
         caches: ["localStorage"],
         // Ensure detector respects supported languages
-        checkForSupportedLngs: true,
       },
       interpolation: {
         escapeValue: false,
@@ -30,12 +29,20 @@ i18n
     },
     () => {
       const supported = ["en", "he", "ar"] as const;
-      const resolved = (i18n.resolvedLanguage || i18n.language || "").split("-")[0];
-      if (!resolved || !supported.includes(resolved as (typeof supported)[number])) {
+      const resolved = (i18n.resolvedLanguage || i18n.language || "").split(
+        "-"
+      )[0];
+      if (
+        !resolved ||
+        !supported.includes(resolved as (typeof supported)[number])
+      ) {
         i18n.changeLanguage("he");
         try {
           localStorage.setItem("i18nextLng", "he");
-        } catch (_) {}
+        } catch (e) {
+          // ignore
+          console.log(e);
+        }
       }
     }
   );
