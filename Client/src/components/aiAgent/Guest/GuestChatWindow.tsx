@@ -118,7 +118,7 @@ export default function GuestChatWindow() {
     setInput("");
     setIsLoading(true);
 
-    const res = await fetch("http://localhost:5000/guest", {
+    const res = await fetch(`${import.meta.env.VITE_AI_BASE_URL}/guest`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
