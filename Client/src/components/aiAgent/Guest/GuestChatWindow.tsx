@@ -119,7 +119,7 @@ export default function GuestChatWindow() {
     setInput("");
     setIsLoading(true);
 
-    const res = await apiClient.post("/ai/guest", {
+    const res = await apiClient.post("/ai/request-guest", {
       prompt,
       guest_data: { organizationId: 1 },
       organizationId: 1,
