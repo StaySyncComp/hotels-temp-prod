@@ -1,5 +1,5 @@
 import { TFunction } from "i18next";
-import { FieldConfig } from "../DynamicForm";
+import { FieldConfig } from "../DynamicForm/DynamicForm";
 import { Role } from "@/types/api/roles";
 import { formatOptions } from "@/utils/data-table/formatOptions";
 import { Department } from "@/types/api/departments";

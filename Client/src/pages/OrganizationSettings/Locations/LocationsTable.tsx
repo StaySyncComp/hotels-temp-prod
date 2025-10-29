@@ -3,7 +3,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import { ApiQueryParams, TableAction } from "@/types/ui/data-table-types";
 import { z } from "zod";
-import DynamicForm, { FieldConfig } from "@/components/forms/DynamicForm";
+import DynamicForm, {
+  FieldConfig,
+} from "@/components/forms/DynamicForm/DynamicForm";
 import {
   deleteLocation,
   updateLocation,

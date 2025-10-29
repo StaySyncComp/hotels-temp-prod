@@ -11,7 +11,7 @@ import DataTable from "@/components/ui/completed/data-table";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
 import { useLocations } from "@/hooks/organization/useLocations";
 import { useLocalizedMap } from "@/hooks/useLocalizedMap";
-import DynamicForm from "@/components/forms/DynamicForm";
+import DynamicForm from "@/components/forms/DynamicForm/DynamicForm";
 import { RecurringCall } from "@/types/api/calls";
 import { TableAction } from "@/types/ui/data-table-types";
 import { useContext, useState } from "react";

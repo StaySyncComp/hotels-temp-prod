@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import DataTable from "@/components/ui/completed/data-table";
-import DynamicForm from "@/components/forms/DynamicForm";
+import DynamicForm from "@/components/forms/DynamicForm/DynamicForm";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
 import { TableAction } from "@/types/ui/data-table-types";
 import { User } from "@/types/api/user";
