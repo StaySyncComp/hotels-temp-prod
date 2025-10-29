@@ -1,6 +1,6 @@
 // components/forms/callFields.ts
 import React from "react";
-import { FieldConfig } from "@/components/forms/DynamicForm";
+import { FieldConfig } from "@/components/forms/DynamicForm/DynamicForm";
 import { Department } from "@/types/api/departments";
 import { formatOptions } from "@/utils/data-table/formatOptions";
 import { TFunction } from "i18next";
@@ -24,6 +24,7 @@ export function getCallSettingsFields(
     (key) => key
   );
   return [
+    // { name: "icon", label: t("icon"), type: "icon-select" },
     { name: "logo", label: t("picture"), type: "image" },
     { name: "name", label: t("name"), type: "language" },
     {

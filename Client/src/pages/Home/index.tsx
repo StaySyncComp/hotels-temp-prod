@@ -3,12 +3,7 @@ import { useTranslation } from "react-i18next";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Button } from "@/components/ui/button";
 // import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import {
-  PhoneCall,
-  Clock,
-  AlertCircle,
-  Timer,
-} from "lucide-react";
+import { PhoneCall, Clock, AlertCircle, Timer } from "lucide-react";
 import { createApiService } from "@/api/utils/apiFactory";
 import { Call } from "@/types/api/calls";
 import { useEffect, useState } from "react";

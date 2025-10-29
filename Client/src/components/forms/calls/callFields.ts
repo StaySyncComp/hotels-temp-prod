@@ -1,5 +1,5 @@
 // components/forms/callFields.ts
-import { FieldConfig } from "@/components/forms/DynamicForm";
+import { FieldConfig } from "@/components/forms/DynamicForm/DynamicForm";
 import { CallCategory } from "@/types/api/calls";
 import { Location } from "@/types/api/locations";
 import { User } from "@/types/api/user";

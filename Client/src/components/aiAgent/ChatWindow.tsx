@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { createLog } from "@/api/microservice";
+import { promptAdmin } from "@/api/microservice";
 import { motion } from "framer-motion";
 import { Textarea } from "../ui/textarea";
 import { z } from "zod";
@@ -80,7 +80,7 @@ export default function ChatWindow({ onClose }: ChatWindowProps) {
 
     try {
       setUploadedFiles([]);
-      const response = await createLog({
+      const response = await promptAdmin({
         prompt: userMsg,
         additionalContext: { files: form.files, resource: form.resource },
         conversationId: conversationId,

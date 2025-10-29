@@ -7,7 +7,7 @@ import { Department } from "@/types/api/departments";
 import i18n from "@/i18n";
 import DynamicForm, {
   FieldConfig,
-} from "../../../components/forms/DynamicForm";
+} from "../../../components/forms/DynamicForm/DynamicForm";
 import { z } from "zod";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
 import { handleImageChange } from "@/lib/formUtils";

@@ -18,7 +18,7 @@ import { deleteImage, getImage } from "@/lib/supabase";
 import DepartmentsSideMenu from "../DepartmentsSideMenu";
 import DynamicForm, {
   FieldConfig,
-} from "../../../../components/forms/DynamicForm";
+} from "../../../../components/forms/DynamicForm/DynamicForm";
 
 export default function DepartmentUsers() {
   const { t } = useTranslation();

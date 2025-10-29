@@ -14,7 +14,7 @@ import { getCallColumns } from "@/components/forms/calls/callColumns";
 import { useLocations } from "@/hooks/organization/useLocations";
 import { getCallFields } from "@/components/forms/calls/callFields";
 import { callFormSchema } from "@/components/forms/calls/callFormSchema";
-import DynamicForm from "@/components/forms/DynamicForm";
+import DynamicForm from "@/components/forms/DynamicForm/DynamicForm";
 import { z } from "zod";
 import { useUser } from "@/hooks/useUser";
 import { AdvancedSearchModal } from "@/components/advanced-search/AdvancedSearchModal";

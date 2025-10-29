@@ -4,7 +4,7 @@ import { Row } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import DynamicForm, {
   FieldConfig,
-} from "../../../components/forms/DynamicForm";
+} from "../../../components/forms/DynamicForm/DynamicForm";
 import { z } from "zod";
 import DataTable from "@/components/ui/completed/data-table";
 import { fetchRolesParams } from "@/api/roles/index";
