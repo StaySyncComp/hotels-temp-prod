@@ -8,6 +8,7 @@ import TypingBubble from "@/components/TypingBubble";
 import { useGuest } from "@/hooks/useGuest";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GuestChatSkeleton } from "./GuestChatSkeleton";
+import apiClient from "@/api/apiClient";
 
 interface ChatMessage {
   text: string;
@@ -118,21 +119,15 @@ export default function GuestChatWindow() {
     setInput("");
     setIsLoading(true);
 
-    const res = await fetch(`${import.meta.env.VITE_AI_BASE_URL}/guest`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        prompt,
-        guest_data: { organizationId: 1 },
-        organizationId: 1,
-        conversationId,
-      }),
+    const res = await apiClient.post("/ai/guest", {
+      prompt,
+      guest_data: { organizationId: 1 },
+      organizationId: 1,
+      conversationId,
     });
 
-    const data = await res.json();
     const botReply =
-      data?.gemini_response ?? "מצטערת, לא הצלחתי להבין. נסה שוב.";
+      res.data?.gemini_response ?? "מצטערת, לא הצלחתי להבין. נסה שוב.";
     console.log("Bot reply:", botReply);
 
     setMessages((prev) => [...prev, { text: botReply, sender: "bot" }]);
