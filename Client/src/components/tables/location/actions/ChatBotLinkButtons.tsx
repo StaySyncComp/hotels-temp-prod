@@ -3,6 +3,7 @@ import { ExternalLink, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Location } from "@/types/api/locations";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
+import { API_BASE_URL } from "@/api/apiClient";
 
 interface Props {
   location: Location;
@@ -11,11 +12,11 @@ interface Props {
 export default function ChatBotLinkButtons({ location }: Props) {
   const { organization } = useContext(OrganizationsContext);
   const [copied, setCopied] = useState(false);
-  const url = `http://localhost:3101/ai/guest?organizationId=${organization?.id}&locationId=${location.id}`;
+  const url =
+    API_BASE_URL +
+    `/ai/guest?organizationId=${organization?.id}&locationId=${location.id}`;
   const handleVisitPage = () => {
-    if (url) {
-      window.open(url, "_blank");
-    }
+    if (url) window.open(url, "_blank");
   };
 
   const handleCopyLink = async () => {
