@@ -35,7 +35,7 @@ export default function FeaturePillars() {
   return (
     <section
       id="features"
-      className="py-24 px-6"
+      className="py-24 pt-32 px-6 bg-[linear-gradient(180deg,_#c6e3ff_0%,_transparent_3.5%)]"
       dir={direction ? "rtl" : "ltr"}
     >
       <div className="max-w-7xl mx-auto">
@@ -47,14 +47,14 @@ export default function FeaturePillars() {
           className="text-center"
         >
           <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
-            {t("three_platforms_part1").slice(0, -1)} {""}
+            {t("three_platforms_part1").slice(0, -1)}{" "}
             <span className="block bg-accent bg-clip-text text-transparent">
               {t("three_platforms_highlight")}
             </span>
           </h2>
           {/* <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
-            {t("built_for_all_users")}
-          </p> */}
+        {t("built_for_all_users")}
+        </p> */}
         </motion.div>
 
         <Carousel pillars={pillars} />
