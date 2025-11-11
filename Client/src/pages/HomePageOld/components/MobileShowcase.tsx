@@ -4,6 +4,7 @@ import LottieAnimation from "@/components/miscellaneous/LottieAnimation";
 import AppShowcase from "@/assets/animations/lottie/AppShowcase.json";
 import Chatbot from "@/assets/animations/lottie/Chatbot.json";
 import { useTranslation } from "react-i18next";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Hook for media queries
 function useMediaQuery(query: string) {
@@ -19,21 +20,20 @@ function useMediaQuery(query: string) {
 }
 
 export default function MobileShowcase() {
-  const ref = useRef(null);
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
+  const ref = useRef(null);
 
-  // Fallback when viewport is extremely tall / zoomed-out
+  // Detect extreme zooms
   const isZoomedOut = useMediaQuery("(min-height: 1700px)");
   const isZoomedIn = useMediaQuery("(max-height: 700px)");
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const useFallback = isZoomedOut || isZoomedIn;
 
-  const useFallback = isZoomedOut || isZoomedIn || isMobile;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start center", "end center"],
   });
 
-  // Text transition range
   const textStart = 0.2;
   const textEnd = 0.6;
   const slideRange = [textStart, textEnd];
@@ -52,7 +52,6 @@ export default function MobileShowcase() {
     [0, 0, 1, 1]
   );
 
-  // Lottie crossfade timing inside text transition
   const crossStart = textStart + (textEnd - textStart) * 0.4;
   const crossEnd = crossStart + 0.1;
   const appOpacity = useTransform(
@@ -66,139 +65,120 @@ export default function MobileShowcase() {
     [0, 1]
   );
 
-  // Static fallback for zoomed-out
+  // 📱 Fallback layout — mobile-friendly now
   if (useFallback) {
     return (
-      <section className={`${isMobile ? "py-20" : "py-40"} bg-border/20`}>
-        <div className=" max-w-7xl m-auto">
+      <section className="py-20 sm:py-40 bg-border/20">
+        <div className="max-w-7xl m-auto px-4">
           {/* App Showcase */}
-          <div
-            className={`${
-              isMobile ? "flex-col-reverse" : "flex-row"
-            } flex justify-between w-full items-center`}
-          >
-            <div className={`${isMobile ? "mx-6" : "max-w-[50%] -mt-44"}`}>
-              <h1
-                className={`${
-                  isMobile ? "text-3xl mt-14 mb-8" : "text-5xl mb-10"
-                } font-semibold`}
-              >
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-10">
+            <div className="lg:max-w-[50%] text-center lg:text-left">
+              <h1 className="text-3xl sm:text-5xl font-semibold mb-6 sm:mb-10">
                 {t("landing_page.mobile_showcase_section.first_showcase.title")}
               </h1>
-              <p className="text-xl text-muted-foreground font-medium">
+              <p className="text-base sm:text-xl text-muted-foreground font-medium">
                 {t(
                   "landing_page.mobile_showcase_section.first_showcase.main_description"
-                )}{" "}
+                )}
                 <span className="text-foreground">
                   {t(
                     "landing_page.mobile_showcase_section.first_showcase.highlighted"
                   )}
-                </span>{" "}
+                </span>
                 {t(
                   "landing_page.mobile_showcase_section.first_showcase.continued_description"
                 )}
               </p>
             </div>
-            <div className="relative ">
-              <div
-                className={`${
-                  isMobile ? "h-[400px] w-[14rem]" : "h-[600px] w-[23rem]"
-                } absolute inset-0  shadow-2xl shadow-primary/80 top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2`}
-              ></div>
+            <div className="relative flex justify-center">
+              <div className="absolute inset-0 h-[400px] sm:h-[600px] w-[15rem] sm:w-[23rem] shadow-2xl shadow-primary/80 top-1/2 -translate-y-1/2"></div>
               <LottieAnimation
                 animationData={AppShowcase}
-                height={isMobile ? 500 : 800}
+                height={isMobile ? 500 : 700}
                 loop
               />
             </div>
           </div>
-          {/* End of App Showcase */}
+
           {/* Bot Showcase */}
-          <div
-            className={`${
-              isMobile ? "flex-col-reverse" : "flex-row"
-            } flex justify-between w-full items-center mt-40`}
-          >
-            <div className={`${isMobile ? "mx-6" : "max-w-[50%] -mt-44"}`}>
-              <h1
-                className={`${
-                  isMobile ? "text-3xl mt-14 mb-8" : "text-5xl mb-10"
-                } font-semibold`}
-              >
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-10 mt-20 sm:mt-40">
+            <div className="lg:max-w-[50%] text-center lg:text-left">
+              <h1 className="text-3xl sm:text-5xl font-semibold mb-6 sm:mb-10">
                 {t(
                   "landing_page.mobile_showcase_section.second_showcase.title"
                 )}
               </h1>
-              <p className="text-xl text-muted-foreground font-medium">
+              <p className="text-base sm:text-xl text-muted-foreground font-medium">
                 {t(
                   "landing_page.mobile_showcase_section.second_showcase.main_description"
-                )}{" "}
+                )}
                 <span className="text-foreground">
                   {t(
                     "landing_page.mobile_showcase_section.second_showcase.highlighted"
                   )}
-                </span>{" "}
+                </span>
                 {t(
                   "landing_page.mobile_showcase_section.second_showcase.continued_description"
                 )}
               </p>
             </div>
-            <div className="relative ">
-              <div
-                className={`${
-                  isMobile ? "h-[400px] w-[14rem]" : "h-[600px] w-[23rem]"
-                } absolute inset-0  shadow-2xl shadow-primary/80 top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2`}
-              ></div>
+            <div className="relative flex justify-center">
+              <div className="absolute inset-0 h-[400px] sm:h-[600px] w-[15rem] sm:w-[23rem] shadow-2xl shadow-primary/80 top-1/2 -translate-y-1/2"></div>
               <LottieAnimation
                 animationData={Chatbot}
-                height={isMobile ? 500 : 800}
+                height={isMobile ? 500 : 700} // detect mobile in JS
                 loop
               />
             </div>
           </div>
-          {/* End of Bot Showcase */}
         </div>
       </section>
     );
   }
 
-  // Parallax effect
+  // 🎯 Parallax version — responsive
   return (
-    <section ref={ref} className="relative h-[250vh] bg-border/20 pb-10">
-      {/* Sticky showcase container */}
-      <div className="sticky top-0 h-screen flex items-center justify-center">
-        <div className="flex flex-row-reverse w-full max-w-7xl gap-12">
-          {/* Lottie animations (left) */}
-          <div className="relative w-1/2 flex justify-end">
+    <section ref={ref} className="relative h-[250vh] bg-border/20">
+      <div className="sticky top-0 h-[150dvh] flex items-center justify-center px-4 overflow-hidden">
+        <div className="flex flex-col-reverse lg:flex-row-reverse w-full max-w-7xl gap-8 lg:gap-12">
+          {/* Animations */}
+          <div className="relative w-full lg:w-1/2 flex justify-center lg:justify-end">
             <motion.div className="absolute" style={{ opacity: appOpacity }}>
-              <div className="absolute h-[600px] w-full shadow-2xl shadow-primary/60 top-32 left-0"></div>
-              <LottieAnimation animationData={AppShowcase} height={800} loop />
+              <div className="absolute h-[400px] sm:h-[600px] w-full shadow-2xl shadow-primary/60 top-10 lg:top-32"></div>
+              <LottieAnimation
+                animationData={AppShowcase}
+                height={isMobile ? 500 : 800} // detect mobile in JS
+                loop
+              />
             </motion.div>
             <motion.div className="absolute" style={{ opacity: botOpacity }}>
-              <div className="absolute h-[600px] w-full shadow-2xl shadow-primary/60 top-32 left-0"></div>
-
-              <LottieAnimation animationData={Chatbot} height={800} loop />
+              <div className="absolute h-[400px] sm:h-[600px] w-full shadow-2xl shadow-primary/60 top-10 lg:top-32"></div>
+              <LottieAnimation
+                animationData={Chatbot}
+                height={isMobile ? 500 : 800} // detect mobile in JS
+                loop
+              />
             </motion.div>
           </div>
 
-          {/* Text container (right) */}
-          <div className="w-1/2 relative h-[600px] overflow-visible">
+          {/* Text */}
+          <div className="w-full lg:w-1/2 relative h-[400px] sm:h-[600px]">
             <motion.div
               style={{ y: oldY, opacity: oldOpacity }}
-              className="absolute top-0 left-0 w-full flex flex-col justify-center h-full"
+              className="absolute top-0 left-0 w-full flex flex-col justify-center h-full text-center lg:text-left"
             >
-              <h1 className="text-5xl font-semibold mb-4 -mt-24">
+              <h1 className="text-3xl sm:text-5xl font-semibold mb-4">
                 {t("landing_page.mobile_showcase_section.first_showcase.title")}
               </h1>
-              <p className="text-xl text-muted-foreground font-medium">
+              <p className="text-base sm:text-xl text-muted-foreground font-medium">
                 {t(
                   "landing_page.mobile_showcase_section.first_showcase.main_description"
-                )}{" "}
+                )}
                 <span className="text-foreground">
                   {t(
                     "landing_page.mobile_showcase_section.first_showcase.highlighted"
                   )}
-                </span>{" "}
+                </span>
                 {t(
                   "landing_page.mobile_showcase_section.first_showcase.continued_description"
                 )}
@@ -206,22 +186,22 @@ export default function MobileShowcase() {
             </motion.div>
             <motion.div
               style={{ y: newY, opacity: newOpacity }}
-              className="absolute top-0 left-0 w-full flex flex-col justify-center h-full"
+              className="absolute top-0 left-0 w-full flex flex-col justify-center h-full text-center lg:text-left"
             >
-              <h1 className="text-5xl font-semibold mb-4 -mt-24">
+              <h1 className="text-3xl sm:text-5xl font-semibold mb-4">
                 {t(
                   "landing_page.mobile_showcase_section.second_showcase.title"
                 )}
               </h1>
-              <p className="text-xl text-muted-foreground font-medium">
+              <p className="text-base sm:text-xl text-muted-foreground font-medium">
                 {t(
                   "landing_page.mobile_showcase_section.second_showcase.main_description"
-                )}{" "}
+                )}
                 <span className="text-foreground">
                   {t(
                     "landing_page.mobile_showcase_section.second_showcase.highlighted"
                   )}
-                </span>{" "}
+                </span>
                 {t(
                   "landing_page.mobile_showcase_section.second_showcase.continued_description"
                 )}
@@ -230,7 +210,6 @@ export default function MobileShowcase() {
           </div>
         </div>
       </div>
-      {/* Extra scroll space to extend parallax */}
       <div className="h-[200vh]" />
     </section>
   );

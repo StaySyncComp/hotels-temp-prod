@@ -12,11 +12,11 @@ function VideoShowcaseSection() {
   return (
     <section className="py-24 px-6 bg-gradient-to-b from-border/10 via-white/95 to-white">
       <div className="max-w-7xl mx-auto flex gap-4 flex-col">
-        <div className="mb-4">
+        <div className="text-center mb-4">
           <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
             {t("landing_page.videos_section.title")}
           </h1>
-          <p className="text-lg lg:text-xl text-foreground/70 font-semibold leading-relaxed">
+          <p className="text-lg lg:text-xl text-foreground/70 leading-relaxed">
             {t("landing_page.videos_section.subtitle")}
           </p>
         </div>
@@ -57,11 +57,11 @@ function VideoShowcaseSection() {
             />
           </div>
 
-          <div className="mb-4 mt-32">
+          <div className="text-center mb-4 mt-32">
             <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
               {t("landing_page.videos_section.mini_section.title")}
             </h1>
-            <p className="text-lg lg:text-xl font-semibold text-foreground/70 leading-relaxed">
+            <p className="text-lg lg:text-xl text-foreground/70 leading-relaxed">
               {t("landing_page.videos_section.mini_section.subtitle")}
             </p>
           </div>

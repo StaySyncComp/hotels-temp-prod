@@ -50,7 +50,7 @@ export default function AICapabilities() {
 
   return (
     <section
-      className="py-32 pt-52 bg-gradient-to-b from-border/20 via-white via-10% to-white px-6"
+      className="py-24 bg-gradient-to-b from-border/20 via-white via-30% to-white px-6"
       dir={direction ? "rtl" : "ltr"}
     >
       <div className="max-w-7xl mx-auto">
@@ -59,45 +59,20 @@ export default function AICapabilities() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="mb-16"
+          className="text-center mb-16"
         >
-          <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
             {t("powered_by")}{" "}
             <span className="bg-gradient-to-r from-[#2AC4AA] via-[#1E90FF] to-[#585CA8] bg-clip-text text-transparent">
               {t("artificial_intelligence")}
             </span>
           </h2>
-          <p className="text-xl text-foreground/70 font-semibold max-w-3xl">
+          <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
             {t("ai_engine_description")}
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {capabilities.map((capability, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true, amount: 0.3 }}
-            >
-              <Card className="h-full bg-white/70 border-none rounded-2xl shadow-none transition-all duration-300">
-                <CardContent className="p-6 py-16 text-right">
-                  <div className="rounded-2xl flex justify-start mx-auto mb-4">
-                    <capability.icon className="w-7 h-7 text-indigo-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-text mb-2">
-                    {capability.title}
-                  </h3>
-                  <p className="text-foreground/70 text-xl font-medium">
-                    {capability.description}
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-        {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {capabilities.map((capability, index) => (
             <motion.div
               key={index}
@@ -121,7 +96,7 @@ export default function AICapabilities() {
               </Card>
             </motion.div>
           ))}
-        </div> */}
+        </div>
 
         {/* AI Visualization - Add when more data */}
 

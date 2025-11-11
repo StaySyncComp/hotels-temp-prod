@@ -4,7 +4,7 @@ import StatsSection from "./components/StatsSection";
 import FeaturePillars from "./components/FeatureSection";
 import AICapabilities from "./components/AICapabilities";
 import CTASection from "./components/CTASection";
-import HeroSection from "./components/HeroSection";
+import HeroSection from "./components/HeroSectionNew";
 import LanguagePicker from "@/components/LanguagePicker";
 import { Link } from "react-router-dom";
 import logo from "@/assets/fullLogo.svg";
@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { GetDirection } from "@/lib/i18n";
 import VideoShowcaseSection from "./components/VideoShowcaseSection";
 import MobileShowcase from "./components/MobileShowcase";
-import ContactPage from "../ContactPage.tsx";
 export default function Homepage() {
   const { t } = useTranslation();
   const direction = GetDirection();
@@ -63,12 +62,11 @@ export default function Homepage() {
 
         {/* Final CTA */}
         <CTASection />
-        {/* <ContactPage /> */}
 
         {/* Footer */}
 
         <footer
-          className={`flex gap-6 w-full py-10 bg-white justify-center items-center text-sm ${
+          className={`flex gap-6 w-full py-10 justify-center items-center text-sm ${
             direction ? "flex-row-reverse" : "flex-row"
           }`}
           dir={direction ? "rtl" : "ltr"}

@@ -46,15 +46,15 @@ export default function FeaturePillars() {
           viewport={{ once: true, amount: 0.5 }}
           className="text-center"
         >
-          <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
-            {t("three_platforms_part1").slice(0, -1)} {""}
-            <span className="block bg-accent bg-clip-text text-transparent">
+          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
+            {t("three_platforms_part1")} {""}
+            <span className="bg-accent bg-clip-text text-transparent">
               {t("three_platforms_highlight")}
             </span>
           </h2>
-          {/* <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
+          <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
             {t("built_for_all_users")}
-          </p> */}
+          </p>
         </motion.div>
 
         <Carousel pillars={pillars} />
