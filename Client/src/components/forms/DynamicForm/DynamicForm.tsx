@@ -257,9 +257,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
       <div className="flex gap-6 flex-wrap">
         {/* Image Section */}
-        {fields.find((f) => f.type === "image") && (
+        {fields.find((f) => f.type === "image" || f.type === "icon-select") && (
           <div className="h-full">
-            {renderField(fields.find((f) => f.type === "image")!)}
+            {renderField(
+              fields.find(
+                (f) => f.type === "image" || f.type === "icon-select"
+              )!
+            )}
           </div>
         )}
         {fields.find((f) => f.type === "language") && (
@@ -271,7 +275,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         {/* Other Fields */}
         <div className="flex gap-6 flex-wrap flex-1">
           {fields
-            .filter((f) => f.type !== "image" && f.type !== "language")
+            .filter(
+              (f) =>
+                f.type !== "image" &&
+                f.type !== "language" &&
+                f.type !== "icon-select"
+            )
             .map(renderField)}
         </div>
       </div>

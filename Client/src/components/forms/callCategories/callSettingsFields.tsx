@@ -24,8 +24,7 @@ export function getCallSettingsFields(
     (key) => key
   );
   return [
-    // { name: "icon", label: t("icon"), type: "icon-select" },
-    { name: "logo", label: t("picture"), type: "image" },
+    { name: "logo", label: t("picture"), type: "icon-select" },
     { name: "name", label: t("name"), type: "language" },
     {
       name: "departmentId",

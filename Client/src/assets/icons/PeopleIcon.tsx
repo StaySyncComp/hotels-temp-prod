@@ -1,5 +1,7 @@
 function PeopleIcon({ isActive = false }) {
-  const fill = "oklch(var(--accent))";
+  const fill = isActive
+    ? "oklch(var(--accent))"
+    : "oklch(var(--muted-foreground))";
 
   if (isActive)
     return (

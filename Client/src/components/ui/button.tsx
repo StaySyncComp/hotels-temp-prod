@@ -80,6 +80,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       </Comp>
     );
 
+    if (asChild)
+      return (
+        <Comp
+          data-slot="button"
+          className={cn(buttonVariants({ variant, size, className }))}
+          {...props}
+        />
+      );
+
     return tooltip ? (
       <TooltipProvider>
         <Tooltip>

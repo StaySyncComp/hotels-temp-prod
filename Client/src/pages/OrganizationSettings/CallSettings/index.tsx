@@ -20,10 +20,10 @@ import { getCallSettingsColumns } from "@/components/forms/callCategories/callSe
 
 const CallSettingsTable = () => {
   const { t } = useTranslation();
-  const { organization, departments, callCategories } =
+  const { organization, departments, callCategories, icons } =
     useContext(OrganizationsContext);
 
-  const columns = getCallSettingsColumns<CallCategory>(t, i18n);
+  const columns = getCallSettingsColumns<CallCategory>(t, i18n, icons);
 
   const actions: TableAction<CallCategory>[] = [
     { label: t("edit"), type: "edit" },
@@ -65,15 +65,8 @@ const CallSettingsTable = () => {
             validationSchema={callSettingsFormSchema}
             onSubmit={async (formData) => {
               const isCreateMode = mode === "create";
-              const logoPath = await handleImageChange({
-                newImage: formData.logo,
-                oldImage: rowData?.logo,
-                isCreateMode,
-                path: `${organization?.id}/callCategories`,
-              });
               const payload: Partial<CallCategory> = {
                 ...formData,
-                logo: typeof logoPath === "string" ? logoPath : undefined,
                 organizationId: organization!.id,
                 id: rowData?.id,
               };

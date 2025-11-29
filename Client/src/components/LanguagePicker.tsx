@@ -9,12 +9,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
-import GlobeIcon from "@/assets/icons/GlobeIcon";
 import { languages } from "@/i18n/languages";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, GlobeIcon } from "lucide-react";
 import { useRTL } from "@/hooks/useRtl";
 
-function LanguagePicker() {
+interface LanguagePickerProps {
+  variant?: "normal" | "icon";
+}
+
+function LanguagePicker({ variant = "normal" }: LanguagePickerProps) {
   const { textAlign, flexDirection } = useRTL();
   const { i18n, t } = useTranslation();
 
@@ -26,7 +29,6 @@ function LanguagePicker() {
     try {
       localStorage.setItem("i18nextLng", lng);
     } catch (e) {
-      // ignore
       console.log(e);
     }
   };
@@ -35,32 +37,41 @@ function LanguagePicker() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button
-          size="default"
-          variant="outline"
-          className="w-fit flex items-center gap-2 rtl:flex-row-reverse ltr:flex-row hover:bg-muted transition-colors"
-        >
-          <div className="flex items-center gap-2">
-            {currentLanguage ? (
-              <>
-                <span className="text-lg leading-none">
-                  {currentLanguage.flag}
-                </span>
-                <span className="font-medium text-sm">
-                  {currentLanguage.name}
-                </span>
-              </>
-            ) : (
-              <>
-                <GlobeIcon />
-                <span className="font-medium text-sm">
-                  {t("Select language")}
-                </span>
-              </>
-            )}
-          </div>
-          <ChevronDown size={14} className="opacity-50" />
-        </Button>
+        {variant === "icon" ? (
+          <button
+            className="relative p-2 text-muted-foreground hover:text-foreground hover:bg-gray-100 rounded-lg transition-all"
+            aria-label={t("Select language")}
+          >
+            <GlobeIcon className="size-5" />
+          </button>
+        ) : (
+          <Button
+            size="default"
+            variant="outline"
+            className="w-fit flex items-center gap-2 rtl:flex-row-reverse ltr:flex-row hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              {currentLanguage ? (
+                <>
+                  <span className="text-lg leading-none">
+                    {currentLanguage.flag}
+                  </span>
+                  <span className="font-medium text-sm">
+                    {currentLanguage.name}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <GlobeIcon />
+                  <span className="font-medium text-sm">
+                    {t("Select language")}
+                  </span>
+                </>
+              )}
+            </div>
+            <ChevronDown size={14} className="opacity-50" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-56 rounded-lg shadow-lg border"
