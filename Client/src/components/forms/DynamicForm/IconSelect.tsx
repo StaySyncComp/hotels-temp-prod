@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
 
