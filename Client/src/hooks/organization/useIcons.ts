@@ -9,7 +9,7 @@ export function useIcons(enable = true) {
   });
 
   return {
-    icons: iconsQuery.data || [],
+    icons: iconsQuery.data?.data || [],
     isIconsLoading: iconsQuery.isLoading,
   };
 }

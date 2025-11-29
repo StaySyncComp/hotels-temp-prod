@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Hotel, Loader2, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Organization } from "@/types/api/organization";
@@ -88,6 +88,8 @@ function Organizations({
   organizations: Organization[];
   handleOrganizationClick: (organizationId: string) => void;
 }) {
+  console.log(organizations[0], "logo");
+
   return (
     <>
       {organizations.map((organization: Organization) => (
@@ -100,6 +102,10 @@ function Organizations({
           onClick={() => handleOrganizationClick(String(organization.id))}
         >
           <Avatar className="rounded-md mb-5 w-14 h-14">
+            <AvatarImage
+              className="rounded-full bg-accent text-surface"
+              src={organization.logo}
+            />
             <AvatarFallback className="rounded-full bg-accent text-surface">
               <Hotel />
             </AvatarFallback>

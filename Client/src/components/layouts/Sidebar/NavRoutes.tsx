@@ -1,4 +1,4 @@
-import { ChevronRight, Plus } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -20,11 +20,11 @@ import { Link, RouteObject, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { isRouteActive } from "@/utils/routes/routesUtils";
 import { matchPath } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function NavRoutes() {
   return (
-    <SidebarGroup className="gap-4">
-      <NewCallButton />
+    <SidebarGroup className="gap-2 pt-6">
       {router.routes.map((route) => {
         if (!route.handle?.showInSidebar) return null;
         return (
@@ -44,10 +44,11 @@ function SideBarMenuRoute({ route }: { route: RouteObject }) {
   const { t } = useTranslation();
   const location = useLocation();
   const currentPath = location.pathname;
-  const { state, isMobile } = useSidebar();
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   return (
-    <SidebarMenu className="gap-5">
+    <SidebarMenu className="gap-2">
       {route.children?.map((childRoute) => {
         if (!childRoute.handle?.showInSidebar) return null;
 
@@ -78,34 +79,43 @@ function SideBarMenuRoute({ route }: { route: RouteObject }) {
               {!childRoute.children && childRoute.path && (
                 <Link to={childRoute.path}>
                   <SidebarMenuButton
-                    className={`ease duration-150 text-sidebar-primary-foreground rounded-none px-2 relative ${
-                      isActive && "text-sidebar-accent"
+                    className={`hover:bg-muted transition-all rounded-md ease duration-200 gap-0 text-sidebar-primary-foreground w-60  relative mx-2 ${
+                      isActive &&
+                      "text-sidebar-accent bg-accent/10 ring-1 hover:bg-accent/20 "
+                    } ${
+                      isCollapsed &&
+                      " bg-transparent ring-transparent !max-w-fit"
                     }`}
                     tooltip={t(childRoute.handle.title)}
                   >
-                    {isActive && (
-                      <div className="absolute h-full rtl:left-0 ltr:right-0 w-1 rtl:rounded-tr-md ltr:rounded-tl-md ltr:rounded-bl-md rtl:rounded-br-md bg-sidebar-accent" />
-                    )}
                     <span
-                      className={`mx-4 bg-black${
+                      className={`mx-2 ${
                         isActive
-                          ? "!text-sidebar-accent"
-                          : "!text-sidebar-primary-foreground"
+                          ? "text-accent fill-accent stroke-white"
+                          : "!text-muted-foreground hover:!text-foreground "
                       }`}
-                      style={{ color: isActive ? "var(--accent)" : "black" }}
                     >
                       {childRoute.handle.icon && (
                         <childRoute.handle.icon isActive={isActive} />
                       )}
                     </span>
 
-                    <span
-                      className={`transition-colors font-semibold ${
-                        state === "collapsed" && !isMobile ? "hidden" : ""
-                      } ${isActive ? "text-accent" : "text-foreground"}`}
-                    >
-                      {t(childRoute.handle.title)}
-                    </span>
+                    {/* Animated text */}
+                    <AnimatePresence initial={false}>
+                      {!isCollapsed && (
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2, ease: "easeInOut" }}
+                          className={`font-medium  ${
+                            isActive ? "text-accent" : "text-muted-foreground"
+                          }`}
+                        >
+                          {t(childRoute.handle.title)}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
                   </SidebarMenuButton>
                 </Link>
               )}
@@ -121,6 +131,8 @@ function CollapsibleChildren({ childRoute }: { childRoute: RouteObject }) {
   const location = useLocation();
   const currentPath = location.pathname;
   const isActive = isRouteActive(childRoute, currentPath);
+  const { state, isMobile } = useSidebar();
+  const isCollapsed = state === "collapsed" && !isMobile;
 
   return (
     <>
@@ -130,8 +142,33 @@ function CollapsibleChildren({ childRoute }: { childRoute: RouteObject }) {
           tooltip={childRoute.handle.title}
         >
           {childRoute.handle.icon && <childRoute.handle.icon />}
-          <span>{childRoute.handle.title}</span>
-          <ChevronRight className="ltr:ml-auto rtl:mr-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180" />
+
+          {/* Animated text */}
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                {childRoute.handle.title}
+              </motion.span>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                <ChevronRight className="ltr:ml-auto rtl:mr-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </SidebarMenuButton>
       </CollapsibleTrigger>
       <CollapsibleContent>
@@ -156,33 +193,5 @@ function CollapsibleChildren({ childRoute }: { childRoute: RouteObject }) {
         </SidebarMenuSub>
       </CollapsibleContent>
     </>
-  );
-}
-
-function NewCallButton() {
-  const { t } = useTranslation();
-  const { state, isMobile } = useSidebar();
-
-  return (
-    <SidebarMenu>
-      <SidebarMenuItem className="m-[2.5px] mt-5">
-        <Link to="/calls/add">
-          <SidebarMenuButton className="text-sidebar-primary-foreground active:bg-none group">
-            <span className="flex items-center gap-2 font-bold whitespace-nowrap">
-              <div className="rounded-full bg-sidebar-accent p-2 mx-1">
-                <Plus className="text-surface rounded-full w-5 h-5" />
-              </div>
-              <span
-                className={`${
-                  state === "collapsed" && !isMobile ? "hidden" : ""
-                } transition-colors text-accent`}
-              >
-                {t("add_x", { x: t("call") })}
-              </span>
-            </span>
-          </SidebarMenuButton>
-        </Link>
-      </SidebarMenuItem>
-    </SidebarMenu>
   );
 }
