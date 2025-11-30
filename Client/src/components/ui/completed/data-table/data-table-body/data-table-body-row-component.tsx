@@ -25,6 +25,8 @@ export const RowComponent = React.memo(function RowComponent<T>({
   row,
 }: RowComponentProps<T>) {
   const isExpanded = row.getIsExpanded();
+  const isSelected = row.getIsSelected();
+
   const { t } = useTranslation();
   const {
     // @ts-ignore
@@ -38,7 +40,7 @@ export const RowComponent = React.memo(function RowComponent<T>({
   const direction = GetDirection();
   const firstColumnRounding = direction
     ? "rounded-r-lg px-8"
-    : "rounded-l-lg px-8";
+    : "rounded-l-lg px-8 ";
   const lastColumnRounding = direction ? "rounded-l-lg" : "rounded-r-lg";
 
   const handleRowClick = () => {
@@ -55,9 +57,9 @@ export const RowComponent = React.memo(function RowComponent<T>({
       <motion.tr
         key={row.id}
         id={row.id}
-        className={`${
-          isExpanded ? "relative z-[50] pointer-events-none" : ""
-        } border-b-4 border-background group cursor-pointer transition-colors h-[3.75rem]`}
+        className={` ${
+          isExpanded ? "relative z-[50] " : ""
+        }  group cursor-pointer transition-colors h-[3.75rem]`}
         onClick={handleRowClick}
         data-state={row.getIsSelected() ? "selected" : undefined}
         initial={{ opacity: 0, y: 10 }}
@@ -67,8 +69,8 @@ export const RowComponent = React.memo(function RowComponent<T>({
       >
         {row.getVisibleCells().map((cell, index) => (
           <TableCell
-            className={`bg-surface text-primary text-base font-normal border-b-4 border-background w-auto whitespace-nowrap transition-colors group-hover:bg-muted ${
-              index === 0 ? firstColumnRounding : "rounded-b-[1px]"
+            className={`bg-surface  text-primary text-base font-normal  w-auto whitespace-nowrap transition-colors group-hover:bg-muted ${
+              index === 0 ? firstColumnRounding : "rounded-b-[1px] border-y-2"
             }`}
             key={cell.id}
           >

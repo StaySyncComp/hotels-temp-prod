@@ -79,13 +79,10 @@ function SideBarMenuRoute({ route }: { route: RouteObject }) {
               {!childRoute.children && childRoute.path && (
                 <Link to={childRoute.path}>
                   <SidebarMenuButton
-                    className={`hover:bg-muted transition-all rounded-md ease duration-200 gap-0 text-sidebar-primary-foreground w-60  relative mx-2 ${
+                    className={`hover:bg-muted transition-all py-2 px-1 rounded-md ease duration-200 gap-0 text-sidebar-primary-foreground w-60  relative mx-3 ${
                       isActive &&
-                      "text-sidebar-accent bg-accent/10 ring-1 hover:bg-accent/20 "
-                    } ${
-                      isCollapsed &&
-                      " bg-transparent ring-transparent !max-w-fit"
-                    }`}
+                      "text-sidebar-accent bg-accent/10  ring-1 hover:bg-accent/20 "
+                    } ${isCollapsed && "!max-w-fit"}`}
                     tooltip={t(childRoute.handle.title)}
                   >
                     <span

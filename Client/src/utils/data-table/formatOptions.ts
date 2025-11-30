@@ -6,7 +6,7 @@ export const formatOptions = (
   language: "he" | "en" | "ar" = "en"
 ) => {
   return items.map((item) => ({
-    value: item.id,
+    value: String(item.id),
     // @ts-ignore
     label: item.name[language] || item.name.en || item.name,
   }));

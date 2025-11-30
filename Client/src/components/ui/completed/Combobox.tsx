@@ -17,13 +17,9 @@ import {
 } from "@/components/ui/popover";
 import { useRTL } from "@/hooks/useRtl";
 
-export interface ComboboxOption {
+interface ComboboxOption {
   value: string;
   label: string;
-  /** Optional icon URL (e.g., SVG) */
-  iconUrl?: string;
-  /** Optional custom icon element (overrides iconUrl if provided) */
-  icon?: React.ReactNode;
 }
 
 interface ComboboxProps {
@@ -37,12 +33,6 @@ interface ComboboxProps {
   multiple?: boolean;
   maxSelectedDisplay?: number;
   disabled?: boolean;
-
-  /** Show icons inside options / trigger / tags if available */
-  showIcons?: boolean;
-
-  /** Shape of the trigger button */
-  shape?: "default" | "square";
 }
 
 export function Combobox({
@@ -56,8 +46,6 @@ export function Combobox({
   multiple = false,
   maxSelectedDisplay = 2,
   disabled = false,
-  showIcons = false,
-  shape = "default",
 }: ComboboxProps) {
   const { textAlign, isRtl } = useRTL();
   const [open, setOpen] = React.useState(false);
@@ -65,8 +53,6 @@ export function Combobox({
   const handleOpenChange = (isOpen: boolean) => {
     if (!disabled) setOpen(isOpen);
   };
-
-  const isSquare = shape === "square";
 
   // Ensure value is always array if multiple
   const selectedValues = React.useMemo(() => {
@@ -123,53 +109,6 @@ export function Combobox({
   const isSelected = (optionValue: string) =>
     selectedValues.includes(optionValue);
 
-  const renderOptionIcon = (option: ComboboxOption) => {
-    if (!showIcons) return null;
-
-    if (option.icon) {
-      return (
-        <span className="flex h-5 w-5 items-center justify-center flex-shrink-0">
-          {option.icon}
-        </span>
-      );
-    }
-
-    if (option.iconUrl) {
-      return (
-        <img
-          src={option.iconUrl}
-          alt={option.label}
-          className="h-5 w-5 object-contain flex-shrink-0"
-          loading="lazy"
-        />
-      );
-    }
-
-    return null;
-  };
-
-  const renderSelectedIcon = () => {
-    if (!showIcons || selectedOptions.length === 0) return null;
-    const opt = selectedOptions[0];
-    if (opt.icon) {
-      return (
-        <span className="flex h-5 w-5 items-center justify-center flex-shrink-0 mr-1">
-          {opt.icon}
-        </span>
-      );
-    }
-    if (opt.iconUrl) {
-      return (
-        <img
-          src={opt.iconUrl}
-          alt={opt.label}
-          className="h-5 w-5 object-contain flex-shrink-0 mr-1"
-        />
-      );
-    }
-    return null;
-  };
-
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
@@ -179,13 +118,7 @@ export function Combobox({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            // base
-            "justify-between text-sm font-medium rounded-xl bg-white/80 backdrop-blur-sm transition-all duration-200 ease-in-out",
-            // shape
-            isSquare
-              ? "w-16 h-16 min-w-0 px-0 py-0 items-center"
-              : "w-full min-w-[200px] h-auto min-height-[48px] px-4 py-3",
-            // states
+            "w-full min-w-[200px] justify-between h-auto min-h-[48px] px-4 py-3 text-sm font-medium rounded-xl bg-white/80 backdrop-blur-sm transition-all duration-200 ease-in-out",
             open
               ? "border-blue-500 ring-2 ring-blue-500/20 shadow-lg"
               : "hover:border-blue-300 hover:bg-blue-50/50",
@@ -195,21 +128,8 @@ export function Combobox({
             className
           )}
         >
-          <div
-            className={cn(
-              "flex items-center justify-between w-full gap-2",
-              isSquare && "px-2"
-            )}
-          >
-            <div
-              className={cn(
-                "flex-1 min-w-0 overflow-hidden flex items-center gap-2",
-                textAlign
-              )}
-            >
-              {/* Selected icon (single mode, or representative for multiple) */}
-              {!multiple && showIcons && renderSelectedIcon()}
-
+          <div className="flex items-center justify-between w-full gap-2">
+            <div className={`flex-1 min-w-0 overflow-hidden ${textAlign}`}>
               {multiple && selectedOptions.length > 0 ? (
                 <div className="flex flex-wrap gap-1 justify-start">
                   {selectedOptions
@@ -219,7 +139,6 @@ export function Combobox({
                         key={option.value}
                         className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-md max-w-[200px]"
                       >
-                        {showIcons && renderOptionIcon(option)}
                         <span className="truncate">{option.label}</span>
                         {!disabled && (
                           <button
@@ -289,16 +208,6 @@ export function Combobox({
                     className="relative px-4 py-3 text-sm font-medium cursor-pointer rounded-lg mb-1 last:mb-0 transition-all duration-150 ease-in-out"
                   >
                     <div className="flex items-center justify-between w-full gap-3 min-w-0">
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        {showIcons && renderOptionIcon(option)}
-                        <span
-                          className={`flex-1 min-w-0 break-words ${textAlign}`}
-                          title={option.label}
-                        >
-                          {option.label}
-                        </span>
-                      </div>
-
                       <Check
                         className={cn(
                           "h-4 w-4 flex-shrink-0 transition-all duration-200",
@@ -307,6 +216,12 @@ export function Combobox({
                             : "opacity-0 scale-75"
                         )}
                       />
+                      <span
+                        className={`flex-1 min-w-0 break-words ${textAlign}`}
+                        title={option.label}
+                      >
+                        {option.label}
+                      </span>
                     </div>
                     {isSelected(option.value) && (
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-600/10 rounded-lg -z-10" />
