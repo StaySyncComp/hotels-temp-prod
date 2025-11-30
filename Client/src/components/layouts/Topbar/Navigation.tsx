@@ -42,13 +42,13 @@ function Navigation() {
             placeholder={tCommon("search")}
           />
         </div>
-        <Button
+        {/* <Button
           variant="ghost"
           className="flex gap-2 items-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg px-3 py-2 transition-all"
         >
           <Zap className="w-4 h-4" />
           <span className="text-sm font-medium">{t("quickActions")}</span>
-        </Button>
+        </Button> */}
       </div>
 
       <div className="flex gap-4 items-center">

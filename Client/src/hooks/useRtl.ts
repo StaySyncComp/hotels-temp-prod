@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 export function useRTL() {
   const { i18n } = useTranslation();
-  const isRtl = i18n.language === "he";
+  const isRtl = i18n.language === "he" || i18n.language === "ar";
   const textAlign = isRtl ? "text-right" : "text-left";
   const flexDirection = isRtl ? "flex-row-reverse" : "flex-row";
   const rtlStyles = isRtl

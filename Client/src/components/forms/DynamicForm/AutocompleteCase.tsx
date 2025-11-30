@@ -1,4 +1,4 @@
-import { Combobox } from "@/components/ui/combobox";
+import { Combobox } from "@/components/ui/completed/Combobox";
 import React from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -35,9 +35,13 @@ function AutocompleteCase({
         render={({ field: controllerField }) => (
           <Combobox
             value={controllerField.value}
-            onChange={controllerField.onChange}
+            onChange={(val) => {
+              console.log(val, "asd");
+
+              controllerField.onChange(val);
+            }}
             options={field.options ?? []}
-            label={t("select_option")}
+            placeholder={t("select_option")}
             className="h-[38px]"
           />
         )}

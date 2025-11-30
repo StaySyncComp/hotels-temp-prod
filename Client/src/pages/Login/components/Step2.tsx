@@ -36,14 +36,14 @@ function Step2() {
     !organizations.data
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="w-full h-96 flex justify-center items-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   return (
-    <Card className="w-full h-full border-0 shadow-none">
+    <Card className="w-full border-0 shadow-none h-96">
       <CardHeader className="text-center pb-2 justify-center items-center">
         <img
           src={logo}
