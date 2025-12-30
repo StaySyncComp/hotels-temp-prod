@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Save, Filter } from "lucide-react";
+import { OrganizationsContext } from "@/contexts/OrganizationsContext";
+import { toast } from "@/hooks/use-toast";
 
 interface ReportField {
   id: string;
@@ -30,6 +32,7 @@ interface ReportField {
 
 export default function CustomReportBuilder() {
   const { t, i18n } = useTranslation();
+  const { departments, callCategories } = useContext(OrganizationsContext);
   const dir = i18n.language === "he" ? "rtl" : "ltr";
   const [reportName, setReportName] = useState("");
   const [reportDescription, setReportDescription] = useState("");
@@ -64,15 +67,33 @@ export default function CustomReportBuilder() {
     { id: "assigned_to", name: t("reports.fields.assigned_to"), type: "text" },
     {
       id: "department",
-      name: t("reports.fields.department"),
+      name: t("reports.fields.department") === "reports.fields.department" ? "מחלקה" : t("reports.fields.department"),
       type: "select",
-      options: [],
+      options: departments.map((dept) => ({
+        label:
+          typeof dept.name === "object"
+            ? dept.name[i18n.language as "he" | "en" | "ar"] ||
+              dept.name.en ||
+              dept.name.he ||
+              ""
+            : dept.name || "",
+        value: String(dept.id),
+      })),
     },
     {
       id: "category",
-      name: t("reports.fields.category"),
+      name: t("reports.fields.category") === "reports.fields.category" ? "קטגוריה" : t("reports.fields.category"),
       type: "select",
-      options: [],
+      options: callCategories.map((cat) => ({
+        label:
+          typeof cat.name === "object"
+            ? cat.name[i18n.language as "he" | "en" | "ar"] ||
+              cat.name.en ||
+              cat.name.he ||
+              ""
+            : cat.name || "",
+        value: String(cat.id),
+      })),
     },
     {
       id: "priority",
@@ -93,13 +114,51 @@ export default function CustomReportBuilder() {
   ];
 
   const handleExport = (format: "pdf" | "excel" | "csv") => {
-    // TODO: Implement export functionality
-    console.log(`Exporting to ${format}`);
+    if (selectedFields.length === 0) {
+      toast({
+        title: t("error") === "error" ? "שגיאה" : t("error"),
+        description: t("reports.select_fields_first") === "reports.select_fields_first" 
+          ? "אנא בחר שדות לייצוא" 
+          : t("reports.select_fields_first"),
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({
+      title: t("info") === "info" ? "מידע" : t("info"),
+      description: t("reports.export_coming_soon") === "reports.export_coming_soon"
+        ? `ייצוא ל-${format.toUpperCase()} יגיע בקרוב`
+        : t("reports.export_coming_soon"),
+    });
   };
 
   const handleSaveReport = () => {
-    // TODO: Implement save functionality
-    console.log("Saving report");
+    if (!reportName.trim()) {
+      toast({
+        title: t("error") === "error" ? "שגיאה" : t("error"),
+        description: t("reports.name_required") === "reports.name_required"
+          ? "שם הדוח נדרש"
+          : t("reports.name_required"),
+        variant: "destructive",
+      });
+      return;
+    }
+    if (selectedFields.length === 0) {
+      toast({
+        title: t("error") === "error" ? "שגיאה" : t("error"),
+        description: t("reports.select_fields_first") === "reports.select_fields_first"
+          ? "אנא בחר שדות"
+          : t("reports.select_fields_first"),
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({
+      title: t("success") === "success" ? "הצלחה" : t("success"),
+      description: t("reports.save_coming_soon") === "reports.save_coming_soon"
+        ? "שמירת דוחות תגיע בקרוב"
+        : t("reports.save_coming_soon"),
+    });
   };
 
   return (

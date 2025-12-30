@@ -64,15 +64,30 @@ const CallSettingsTable = () => {
             defaultValues={rowData}
             validationSchema={callSettingsFormSchema}
             onSubmit={async (formData) => {
-              const isCreateMode = mode === "create";
-              const payload: Partial<CallCategory> = {
-                ...formData,
-                organizationId: organization!.id,
-                id: rowData?.id,
-              };
+              try {
+                const isCreateMode = mode === "create";
+                
+                // Ensure logo is a string (icon ID or empty string)
+                const logoValue = formData.logo 
+                  ? String(formData.logo) 
+                  : "";
 
-              if (isCreateMode && handleSave) await handleSave(payload);
-              else if (!isCreateMode && handleEdit) await handleEdit(payload);
+                const payload: Partial<CallCategory> = {
+                  ...formData,
+                  logo: logoValue,
+                  organizationId: organization!.id,
+                  id: rowData?.id,
+                };
+
+                if (isCreateMode && handleSave) {
+                  await handleSave(payload);
+                } else if (!isCreateMode && handleEdit) {
+                  await handleEdit(payload);
+                }
+              } catch (error: any) {
+                console.error("Error submitting call category form:", error);
+                // Error will be shown by form validation
+              }
             }}
           />
         );

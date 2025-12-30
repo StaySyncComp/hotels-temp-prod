@@ -44,9 +44,9 @@ function RoleList({ setSearchParams }: Props) {
   ];
   const schema = z.object({
     name: z.object({
-      he: z.string().min(2),
-      en: z.string().min(2),
-      ar: z.string().min(2),
+      he: z.string().min(2, t("name_required") || "Name is required"),
+      en: z.string().optional(),
+      ar: z.string().optional(),
     }),
   });
 
@@ -93,13 +93,37 @@ function RoleList({ setSearchParams }: Props) {
           <DynamicForm
             mode={mode}
             defaultValues={rowData}
-            headerKey="department"
+            headerKey="role"
             fields={FormFields}
             validationSchema={schema}
             onSubmit={async (data: z.infer<typeof schema>) => {
-              if (handleSave && mode === "create") await handleSave(data);
-              else if (handleEdit && mode === "edit")
-                await handleEdit({ id: rowData?.id, ...data });
+              try {
+                // Ensure name object has at least Hebrew, and include other languages if provided
+                const nameData: Record<string, string> = {
+                  he: data.name.he.trim(),
+                };
+                // Only include en/ar if they have meaningful content (at least 2 chars)
+                if (data.name.en && data.name.en.trim().length >= 2) {
+                  nameData.en = data.name.en.trim();
+                }
+                if (data.name.ar && data.name.ar.trim().length >= 2) {
+                  nameData.ar = data.name.ar.trim();
+                }
+
+                const roleData = {
+                  ...data,
+                  name: nameData,
+                };
+
+                if (handleSave && mode === "create") {
+                  await handleSave(roleData);
+                } else if (handleEdit && mode === "edit") {
+                  await handleEdit({ id: rowData?.id, ...roleData });
+                }
+              } catch (error: any) {
+                console.error("Error submitting role form:", error);
+                // Error will be shown by form validation
+              }
             }}
           />
         );

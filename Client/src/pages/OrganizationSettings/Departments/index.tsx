@@ -37,9 +37,9 @@ const DepartmentsTable = () => {
 
   const schema = z.object({
     name: z.object({
-      he: z.string().min(2),
-      en: z.string().min(2),
-      ar: z.string().min(2).optional(),
+      he: z.string().min(2, t("name_required") || "Name is required"),
+      en: z.string().optional(),
+      ar: z.string().optional(),
     }),
     logo: z.any().optional(),
   });
@@ -92,26 +92,54 @@ const DepartmentsTable = () => {
             fields={fields}
             validationSchema={schema}
             onSubmit={async (data: z.infer<typeof schema>) => {
-              const isCreateMode = mode === "create";
-              const logoPath = await handleImageChange({
-                newImage: data.logo,
-                oldImage: rowData?.logo,
-                isCreateMode,
-                path: `${organization?.id}/departments`,
-              });
+              try {
+                const isCreateMode = mode === "create";
+                const logoPath = await handleImageChange({
+                  newImage: data.logo,
+                  oldImage: rowData?.logo,
+                  isCreateMode,
+                  path: `${organization?.id}/departments`,
+                });
 
-              // @ts-ignore
-              const departmentData: Partial<Department> = {
-                ...data,
-                logo: logoPath,
-              };
+                // Ensure name object has at least Hebrew, and include other languages if provided
+                const nameData: Record<string, string> = {
+                  he: data.name.he.trim(),
+                };
+                // Only include en/ar if they have meaningful content (at least 2 chars)
+                if (data.name.en && data.name.en.trim().length >= 2) {
+                  nameData.en = data.name.en.trim();
+                }
+                if (data.name.ar && data.name.ar.trim().length >= 2) {
+                  nameData.ar = data.name.ar.trim();
+                }
 
-              if (!isCreateMode) departmentData.id = rowData?.id;
+                // @ts-ignore
+                const departmentData: Partial<Department> = {
+                  ...data,
+                  name: nameData,
+                  logo: logoPath || "",
+                };
 
-              if (isCreateMode && handleSave) {
-                await handleSave(departmentData);
-              } else if (!isCreateMode && handleEdit) {
-                await handleEdit(departmentData);
+                if (!isCreateMode) departmentData.id = rowData?.id;
+
+                if (isCreateMode && handleSave) {
+                  try {
+                    await handleSave(departmentData);
+                    // Form will close automatically via handleSave in DataTable
+                  } catch (error: any) {
+                    console.error("Department creation error:", error);
+                    // Don't rethrow - let the form stay open so user can fix errors
+                  }
+                } else if (!isCreateMode && handleEdit) {
+                  try {
+                    await handleEdit(departmentData);
+                  } catch (error: any) {
+                    console.error("Department update error:", error);
+                  }
+                }
+              } catch (error: any) {
+                console.error("Error submitting department form:", error);
+                // Error will be shown by the form validation
               }
             }}
           />

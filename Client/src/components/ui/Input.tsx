@@ -33,53 +33,56 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </div>
         )}
 
-        {/* Start Icon */}
-        {icon && (
-          <div
-            className={`absolute rtl:right-3 ltr:left-3 bottom-0 h-full flex items-center justify-center ${iconSize}`}
-          >
-            {icon}
-          </div>
-        )}
-
-        {/* End Icon */}
-        {iconEnd && (
-          <div className="absolute ltr:right-3 rtl:left-3 bottom-0 flex items-center justify-center h-full child:size-5">
-            {iconEnd}
-          </div>
-        )}
-
-        <input
-          ref={ref}
-          type={type}
-          id={String(label)}
-          {...props}
-          className={cn(
-            // Core layout
-            "w-full px-4 py-3 rounded-lg transition-all",
-
-            // Base colors
-            "bg-surface border border-gray-300 text-foreground placeholder:text-muted-foreground",
-
-            // Focus ring
-            "focus:outline-none focus:ring-[1.5px] focus:ring-blue-500",
-
-            // Disabled state
-            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-
-            // Error state via aria-invalid
-            "aria-invalid:border-red-500 aria-invalid:ring-red-500/20",
-
-            // RTL input alignment
-            "rtl:text-right ltr:text-left",
-
-            // Icon spacing adjustments
-            icon && "rtl:pr-10 ltr:pl-10",
-            iconEnd && "ltr:pr-10 rtl:pl-10",
-
-            className
+        {/* Input wrapper with relative positioning for icons */}
+        <div className="relative">
+          {/* Start Icon */}
+          {icon && (
+            <div
+              className={`absolute rtl:right-3 ltr:left-3 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none ${iconSize}`}
+            >
+              {icon}
+            </div>
           )}
-        />
+
+          {/* End Icon */}
+          {iconEnd && (
+            <div className="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none child:size-5">
+              {iconEnd}
+            </div>
+          )}
+
+          <input
+            ref={ref}
+            type={type}
+            id={String(label)}
+            {...props}
+            className={cn(
+              // Core layout
+              "w-full px-4 py-3 rounded-lg transition-all",
+
+              // Base colors
+              "bg-surface border border-gray-300 text-foreground placeholder:text-muted-foreground",
+
+              // Focus ring
+              "focus:outline-none focus:ring-[1.5px] focus:ring-blue-500",
+
+              // Disabled state
+              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+
+              // Error state via aria-invalid
+              "aria-invalid:border-red-500 aria-invalid:ring-red-500/20",
+
+              // RTL input alignment
+              "rtl:text-right ltr:text-left",
+
+              // Icon spacing adjustments
+              icon && "rtl:pr-10 ltr:pl-10",
+              iconEnd && "ltr:pr-10 rtl:pl-10",
+
+              className
+            )}
+          />
+        </div>
       </div>
     );
   }
