@@ -37,10 +37,10 @@ function Employees() {
     email: z.string().email(),
     username: z.string().min(2),
     name: z.string().min(2),
-    role: z.number(),
+    role: z.coerce.number().min(1, "Role is required"),
     logo: z.any().optional(),
     password: z.string().min(6).optional(),
-    departmentId: z.number().optional(),
+    departmentId: z.coerce.number().optional(),
   });
 
   const [advancedFilters, setAdvancedFilters] = useState({});
@@ -97,8 +97,9 @@ function Employees() {
           const department = rowData?.organizationRoles?.[0]?.departmentId;
           const defaultValues = {
             ...rowData,
-            role: role,
-            departmentId: department,
+            // Convert to strings for Combobox (which expects string values)
+            role: role ? String(role) : "",
+            departmentId: department ? String(department) : "",
           };
           const fields = getUserFormFields(
             mode,

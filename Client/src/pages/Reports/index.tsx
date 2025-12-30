@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -39,6 +39,93 @@ export default function Reports() {
   const [activeTab, setActiveTab] = useState("overview");
   const dir = i18n.language === "he" || i18n.language === "ar" ? "rtl" : "ltr";
   const { organization } = useContext(OrganizationsContext);
+  const scrollPositionRef = useRef<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isTabChangingRef = useRef<boolean>(false);
+
+  // Disable browser scroll restoration
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    return () => {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'auto';
+      }
+    };
+  }, []);
+
+  // Store scroll position before tab change
+  const handleTabChange = (newTab: string) => {
+    // Store current scroll position immediately
+    const currentScroll = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    scrollPositionRef.current = currentScroll;
+    isTabChangingRef.current = true;
+    
+    // Lock scroll position
+    const lockScroll = () => {
+      if (isTabChangingRef.current && scrollPositionRef.current > 0) {
+        window.scrollTo(0, scrollPositionRef.current);
+        document.documentElement.scrollTop = scrollPositionRef.current;
+        if (document.body) {
+          document.body.scrollTop = scrollPositionRef.current;
+        }
+      }
+    };
+    
+    // Lock scroll immediately
+    lockScroll();
+    
+    setActiveTab(newTab);
+    
+    // Keep locking for a short period
+    const lockInterval = setInterval(lockScroll, 10);
+    setTimeout(() => {
+      clearInterval(lockInterval);
+      isTabChangingRef.current = false;
+    }, 500);
+  };
+
+  // Restore scroll position after tab change
+  useEffect(() => {
+    if (!isTabChangingRef.current) return;
+    
+    const savedPosition = scrollPositionRef.current;
+    if (savedPosition === 0) return;
+    
+    // Restore scroll position
+    const restoreScroll = () => {
+      const currentScroll = window.scrollY || document.documentElement.scrollTop;
+      if (Math.abs(currentScroll - savedPosition) > 5) {
+        window.scrollTo({
+          top: savedPosition,
+          left: 0,
+          behavior: 'instant' as ScrollBehavior,
+        });
+        document.documentElement.scrollTop = savedPosition;
+        if (document.body) {
+          document.body.scrollTop = savedPosition;
+        }
+      }
+    };
+
+    // Restore multiple times to ensure it sticks
+    restoreScroll();
+    const timers: NodeJS.Timeout[] = [];
+    for (let i = 0; i < 30; i++) {
+      timers.push(setTimeout(restoreScroll, i * 16));
+    }
+    
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        restoreScroll();
+      });
+    });
+
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, [activeTab]);
 
   const {
     dashboardStats,
@@ -55,7 +142,7 @@ export default function Reports() {
       !urgentIssues.length &&
       !departmentPerformance.length
     ) {
-      alert(t("no_data_to_export") || "No data available to export");
+      alert(t("no_data_to_export") === "no_data_to_export" ? "אין נתונים לייצוא" : t("no_data_to_export"));
       return;
     }
 
@@ -72,7 +159,7 @@ export default function Reports() {
       }
     } catch (error) {
       console.error(`Error exporting to ${format}:`, error);
-      alert(t("export_error") || `Error exporting to ${format.toUpperCase()}`);
+      alert(t("export_error") === "export_error" ? `שגיאה בייצוא ל-${format.toUpperCase()}` : t("export_error"));
     }
   };
 
@@ -482,6 +569,7 @@ export default function Reports() {
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -738,7 +826,7 @@ export default function Reports() {
                       <div>
                         <p className="font-medium">{dept.name}</p>
                         <p className="text-sm text-gray-500">
-                          {dept.completionRate}% {t("completion_rate")}
+                          {dept.completionRate}% {t("completion_rate") === "completion_rate" ? "שיעור השלמה" : t("completion_rate")}
                         </p>
                       </div>
                     </div>
@@ -758,7 +846,7 @@ export default function Reports() {
               ) : (
                 <div className="text-center py-8 text-gray-500">
                   <Building2 className="w-12 h-12 mb-2" />
-                  <p>{t("no_department_data")}</p>
+                  <p>{t("no_department_data") === "no_department_data" ? "אין נתוני מחלקות" : t("no_department_data")}</p>
                 </div>
               )}
             </CardContent>
@@ -833,7 +921,11 @@ export default function Reports() {
         >
           <Tabs
             value={activeTab}
-            onValueChange={setActiveTab}
+            onValueChange={(value) => {
+              // Prevent any scroll reset
+              scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+              handleTabChange(value);
+            }}
             className="space-y-6"
           >
             {/* Custom Tab Navigation */}
@@ -842,10 +934,30 @@ export default function Reports() {
                 {tabsConfig.map((tab) => {
                   const isActive = activeTab === tab.value;
                   return (
-                    <motion.button
+                    <motion.div
                       key={tab.value}
-                      onClick={() => setActiveTab(tab.value)}
-                      className={`relative p-4 rounded-xl transition-all duration-300 group ${
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Store scroll position immediately before state change
+                        scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+                        handleTabChange(tab.value);
+                      }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        // Store scroll position on mouse down as well
+                        scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+                          handleTabChange(tab.value);
+                        }
+                      }}
+                      className={`relative p-4 rounded-xl transition-all duration-300 group cursor-pointer ${
                         dir === "rtl" ? "text-right" : "text-left"
                       } ${
                         isActive
@@ -906,43 +1018,51 @@ export default function Reports() {
                           }}
                         />
                       )}
-                    </motion.button>
+                    </motion.div>
                   );
                 })}
               </div>
             </div>
 
             {/* Tab Content */}
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: dir === "rtl" ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
+            <div 
               className="bg-surface/90 backdrop-blur-sm rounded-2xl shadow-lg border-0 p-6"
+              style={{ scrollMarginTop: '0px' }}
             >
               <TabsContent value="overview" className="mt-0 space-y-6">
-                <GeneralData />
+                <div style={{ scrollMarginTop: '0px' }}>
+                  <GeneralData />
+                </div>
               </TabsContent>
 
               <TabsContent value="custom" className="mt-0">
-                <CustomReportBuilder />
+                <div style={{ scrollMarginTop: '0px' }}>
+                  <CustomReportBuilder />
+                </div>
               </TabsContent>
 
               <TabsContent value="ai" className="mt-0">
-                <AIReccomendations />
+                <div style={{ scrollMarginTop: '0px' }}>
+                  <AIReccomendations />
+                </div>
               </TabsContent>
 
               <TabsContent value="by_day" className="mt-0">
-                <ByDayReport />
+                <div style={{ scrollMarginTop: '0px' }}>
+                  <ByDayReport />
+                </div>
               </TabsContent>
 
               <TabsContent value="by_department" className="mt-0">
-                <ByDepartmentReport />
+                <div style={{ scrollMarginTop: '0px' }}>
+                  <ByDepartmentReport />
+                </div>
               </TabsContent>
-            </motion.div>
+            </div>
           </Tabs>
         </motion.div>
       </div>
     </motion.div>
   );
 }
+

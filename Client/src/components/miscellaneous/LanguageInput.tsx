@@ -3,7 +3,7 @@ import { Input } from "../ui/Input";
 import IsraelFlag from "@/assets/icons/Flags/IsraelFlag";
 import { languages } from "@/i18n/languages";
 import { useEffect, useState } from "react";
-import LanguagePicker from "../LanguagePicker";
+import LanguageSelector from "./LanguageSelector";
 import { MinusCircleIcon } from "lucide-react";
 
 // interface Language {
@@ -115,20 +115,21 @@ export default function LanguageInput({
 
       {/* Add language button */}
       {languages.filter(
-        (lang) => usedLanguages.includes(lang.code) && lang.code !== "he"
-      ).length <
-        languages.length - 1 && (
+        (lang) => !usedLanguages.includes(lang.code) && lang.code !== "he"
+      ).length > 0 && (
         <Input
-          className="border-dashed cursor-default"
+          className="border-dashed cursor-pointer"
           icon={
-            <LanguagePicker
-              // @ts-ignore
-              selectedLanguages={usedLanguages}
-              setSelectedLanguages={setUsedLanguages}
-            />
+            <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <LanguageSelector
+                selectedLanguages={usedLanguages}
+                setSelectedLanguages={setUsedLanguages}
+              />
+            </div>
           }
           label={label + " - " + t("translated")}
           placeholder={t("add_language") + "..."}
+          readOnly
         />
       )}
     </div>

@@ -10,7 +10,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { fetchCalls } from "@/api/calls"; // Adjust path if needed
+import { fetchCalls } from "@/api/calls";
+import { Loader2 } from "lucide-react";
 
 // Modern color palette (same as GeneralData)
 const COLORS = {
@@ -41,12 +42,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function ByDepartmentReport() {
   const { t, i18n } = useTranslation();
   const [data, setData] = useState<{ department: string; calls: number }[]>([]);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
-      // setLoading(true);
       try {
+        setLoading(true);
+        setError(null);
         const response = await fetchCalls();
         // @ts-ignore
         const calls = response.data.data || [];
@@ -54,31 +57,89 @@ export default function ByDepartmentReport() {
         const counts: Record<string, number> = {};
         calls.forEach((call: any) => {
           const dep =
-            call.Department?.name?.[i18n.language] ||
+            call.Department?.name?.[i18n.language as "he" | "en" | "ar"] ||
             call.Department?.name?.en ||
             call.Department?.name?.he ||
-            "Unknown";
+            t("unknown") === "unknown" ? "לא ידוע" : t("unknown");
           counts[dep] = (counts[dep] || 0) + 1;
         });
         setData(
-          Object.entries(counts).map(([department, calls]) => ({
-            department,
-            calls,
-          }))
+          Object.entries(counts)
+            .map(([department, calls]) => ({
+              department,
+              calls,
+            }))
+            .sort((a, b) => b.calls - a.calls)
         );
       } catch (e) {
+        console.error("Error fetching calls for ByDepartmentReport:", e);
+        setError(t("error_loading_data") === "error_loading_data" ? "שגיאה בטעינת נתונים" : t("error_loading_data"));
         setData([]);
+      } finally {
+        setLoading(false);
       }
-      // setLoading(false);
     };
     getData();
-  }, [i18n.language]);
+  }, [i18n.language, t]);
+
+  if (loading) {
+    return (
+      <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-800">
+            {t("calls_by_department") === "calls_by_department" ? "פניות לפי מחלקה" : t("calls_by_department")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[350px]">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-800">
+            {t("calls_by_department") === "calls_by_department" ? "פניות לפי מחלקה" : t("calls_by_department")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[350px]">
+            <p className="text-muted-foreground">{error}</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-800">
+            {t("calls_by_department") === "calls_by_department" ? "פניות לפי מחלקה" : t("calls_by_department")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[350px]">
+            <p className="text-muted-foreground">
+              {t("no_data_available") === "no_data_available" ? "אין נתונים זמינים" : t("no_data_available")}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-gray-800">
-          {t("calls_by_department")}
+          {t("calls_by_department") === "calls_by_department" ? "פניות לפי מחלקה" : t("calls_by_department")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -86,11 +147,14 @@ export default function ByDepartmentReport() {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 40 }}
+              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis
                 dataKey="department"
+                angle={-45}
+                textAnchor="end"
+                height={60}
                 tick={{ fill: COLORS.text, fontSize: 12 }}
               />
               <YAxis tick={{ fill: COLORS.text, fontSize: 12 }} />

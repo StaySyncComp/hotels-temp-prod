@@ -156,9 +156,18 @@ export default function GeneralData() {
     const failed = calls.filter((call) => call.status === "FAILED").length;
 
     return [
-      { name: t("completed"), value: completed },
-      { name: t("in_progress"), value: inProgress },
-      { name: t("failed"), value: failed },
+      { 
+        name: t("completed") === "completed" ? "הושלם" : t("completed"), 
+        value: completed 
+      },
+      { 
+        name: t("in_progress") === "in_progress" ? "בתהליך" : t("in_progress"), 
+        value: inProgress 
+      },
+      { 
+        name: t("failed") === "failed" ? "נכשל" : t("failed"), 
+        value: failed 
+      },
     ];
   };
 
@@ -219,8 +228,21 @@ export default function GeneralData() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex items-center justify-center h-full min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (calls.length === 0 && categories.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center">
+        <p className="text-lg text-muted-foreground mb-2">
+          {t("no_data_available") === "no_data_available" ? "אין נתונים זמינים" : t("no_data_available")}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {t("no_calls_found") === "no_calls_found" ? "לא נמצאו פניות" : t("no_calls_found")}
+        </p>
       </div>
     );
   }
@@ -231,7 +253,7 @@ export default function GeneralData() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-800">
-              {t("sla_compliance")}
+              {t("sla_compliance") === "sla_compliance" ? "עמידה ב-SLA" : t("sla_compliance")}
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
@@ -278,7 +300,7 @@ export default function GeneralData() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-800">
-              {t("call_volumes")}
+              {t("call_volumes") === "call_volumes" ? "נפח פניות" : t("call_volumes")}
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
@@ -320,7 +342,7 @@ export default function GeneralData() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-800">
-              {t("response_times")}
+              {t("response_times") === "response_times" ? "זמני תגובה" : t("response_times")}
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
@@ -360,49 +382,52 @@ export default function GeneralData() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>
             <CardTitle className="text-xl font-bold text-gray-800">
-              {t("efficiency_metrics")}
+              {t("efficiency_metrics") === "efficiency_metrics" ? "מדדי יעילות" : t("efficiency_metrics")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-lg font-medium text-gray-700">
-                  {t("completion_rate")}
+                  {t("completion_rate") === "completion_rate" ? "שיעור השלמה" : t("completion_rate")}
                 </h3>
                 <p className="text-4xl font-bold text-primary mt-2">
-                  {Math.round(
-                    (calls.filter((c) => c.status === "COMPLETED").length /
-                      calls.length) *
-                      100
-                  )}
+                  {calls.length > 0
+                    ? Math.round(
+                        (calls.filter((c) => c.status === "COMPLETED").length /
+                          calls.length) *
+                          100
+                      )
+                    : 0}
                   <span className="text-2xl text-gray-500">%</span>
                 </p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-lg font-medium text-gray-700">
-                  {t("avg_resolution_time")}
+                  {t("avg_resolution_time") === "avg_resolution_time" ? "זמן פתרון ממוצע" : t("avg_resolution_time")}
                 </h3>
                 <p className="text-4xl font-bold text-muted-foreground mt-2">
-                  {Math.round(
-                    calls.reduce((acc, call) => {
+                  {(() => {
+                    const closedCalls = calls.filter((c) => {
                       // @ts-ignore
-                      if (call.createdAt && call.closedAt) {
-                        return (
-                          acc +
+                      return c.createdAt && c.closedAt;
+                    });
+                    if (closedCalls.length === 0) return 0;
+                    const totalTime = closedCalls.reduce((acc, call) => {
+                      // @ts-ignore
+                      return (
+                        acc +
+                        // @ts-ignore
+                        (new Date(call.closedAt).getTime() -
                           // @ts-ignore
-                          (new Date(call.closedAt).getTime() -
-                            new Date(call.createdAt).getTime())
-                        );
-                      }
-                      return acc;
-                      // @ts-ignore
-                    }, 0) /
-                      // @ts-ignore
-                      (calls.filter((c) => c.closedAt).length * 60000)
-                  )}
+                          new Date(call.createdAt).getTime())
+                      );
+                    }, 0);
+                    return Math.round(totalTime / (closedCalls.length * 60000));
+                  })()}
                   <span className="text-2xl text-gray-500">
                     {" "}
-                    {t("minutes")}
+                    {t("minutes") === "minutes" ? "דקות" : t("minutes")}
                   </span>
                 </p>
               </div>

@@ -1,34 +1,88 @@
-// import React from "react";
+import { useEffect, useState, useContext } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
-// import { ArrowRight } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { OrganizationsContext } from "@/contexts/OrganizationsContext";
+import { createApiService } from "@/api/utils/apiFactory";
+import { Call } from "@/types/api/calls";
+import i18n from "@/i18n";
+
+const callsApi = createApiService<Call>("/calls", { includeOrgId: true });
 
 export default function CallsHeatmap() {
-  // const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { departments, areas } = useContext(OrganizationsContext);
+  const [heatmapData, setHeatmapData] = useState<Record<string, Record<string, number>>>({});
+  const [loading, setLoading] = useState(true);
 
-  const departments = [
-    "משק בית",
-    "מכירות",
-    "קבלה",
-    "משאבי אנוש",
-    "פיננסים",
-    "תפעול",
-  ];
-  const areas = ["אגף צפון", "אגף דרום", "חוף", "חדר כושר"];
+  useEffect(() => {
+    const fetchCallsData = async () => {
+      try {
+        setLoading(true);
+        const response = await callsApi.fetchAll({});
+        
+        // @ts-ignore
+        const calls: Call[] = response.data?.data || [];
 
-  const generateHeatmapData = () => {
-    const data: Record<string, Record<string, number>> = {};
-    departments.forEach((dept) => {
-      data[dept] = {};
-      areas.forEach((area) => {
-        data[dept][area] = Math.floor(Math.random() * 100);
-      });
-    });
-    return data;
-  };
+        // Initialize data structure with all departments and areas
+        const data: Record<string, Record<string, number>> = {};
+        
+        // Get department names in current language
+        const departmentMap = new Map<number, string>();
+        departments.forEach((dept) => {
+          const deptName = dept.name[i18n.language as "he" | "en" | "ar"] || dept.name.he || dept.name.en || "";
+          departmentMap.set(dept.id, deptName);
+          data[deptName] = {};
+        });
 
-  const heatmapData = generateHeatmapData();
+        // Get area names in current language
+        const areaMap = new Map<number, string>();
+        areas.forEach((area) => {
+          const areaName = area.name[i18n.language as "he" | "en" | "ar"] || area.name.he || area.name.en || "";
+          areaMap.set(area.id, areaName);
+          // Initialize all department-area combinations to 0
+          Object.keys(data).forEach((deptName) => {
+            data[deptName][areaName] = 0;
+          });
+        });
+
+        // Count calls by department and area
+        calls.forEach((call) => {
+          if (call.Department && call.location?.area) {
+            const deptName = departmentMap.get(call.Department.id);
+            const areaName = areaMap.get(call.location.area.id);
+            
+            if (deptName && areaName) {
+              if (!data[deptName]) {
+                data[deptName] = {};
+              }
+              if (!data[deptName][areaName]) {
+                data[deptName][areaName] = 0;
+              }
+              data[deptName][areaName]++;
+            }
+          }
+        });
+
+        setHeatmapData(data);
+      } catch (error) {
+        console.error("Error fetching calls for heatmap:", error);
+        setHeatmapData({});
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (departments.length > 0 && areas.length > 0) {
+      fetchCallsData();
+    }
+  }, [departments, areas, i18n.language]);
+
+  // Get unique department and area names from the data
+  const departmentNames = Object.keys(heatmapData).sort();
+  const areaNames = areas
+    .map((area) => area.name[i18n.language as "he" | "en" | "ar"] || area.name.he || area.name.en || "")
+    .filter((name) => name)
+    .sort();
 
   const getHeatmapColor = (value: number) => {
     if (value >= 80) return "bg-blue-800";
@@ -42,21 +96,67 @@ export default function CallsHeatmap() {
     return value >= 40 ? "text-white" : "text-gray-800";
   };
 
+  if (loading) {
+    return (
+      <Card className="bg-surface/90 backdrop-blur-sm shadow-lg w-full">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <CardTitle className="flex items-center gap-4 text-lg">
+            {t("inquiries_by_department_and_area") === "inquiries_by_department_and_area" 
+            ? "פניות לפי מחלקה ואיזור" 
+            : t("inquiries_by_department_and_area")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-sm text-muted-foreground">
+              {t("loading") === "loading" ? "טוען..." : t("loading")}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (departmentNames.length === 0 || areaNames.length === 0) {
+    return (
+      <Card className="bg-surface/90 backdrop-blur-sm shadow-lg w-full">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <CardTitle className="flex items-center gap-4 text-lg">
+            {t("inquiries_by_department_and_area") === "inquiries_by_department_and_area" 
+            ? "פניות לפי מחלקה ואיזור" 
+            : t("inquiries_by_department_and_area")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-sm text-muted-foreground">
+              {t("no_data_available") === "no_data_available" 
+                ? "אין נתונים זמינים" 
+                : t("no_data_available")}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="bg-surface/90 backdrop-blur-sm shadow-lg w-full">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <CardTitle className="flex items-center gap-4 text-lg">
-          פניות לפי מחלקה ואיזור
+          {t("inquiries_by_department_and_area") === "inquiries_by_department_and_area" 
+            ? "פניות לפי מחלקה ואיזור" 
+            : t("inquiries_by_department_and_area")}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="w-full">
-          <div className="flex flex-col w-full">
+        <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="flex flex-col w-full min-w-max">
             {/* Column Headers */}
             <div className="flex mb-2 w-full">
               <div className="flex-shrink-0 w-32"></div>
-              {areas.map((area, index) => (
-                <div key={index} className="flex-1 text-center">
+              {areaNames.map((area, index) => (
+                <div key={index} className="flex-1 text-center min-w-[100px]">
                   <div className="text-sm font-medium text-gray-700">
                     {area}
                   </div>
@@ -64,23 +164,23 @@ export default function CallsHeatmap() {
               ))}
             </div>
             {/* Data Rows */}
-            {departments.map((dept, deptIndex) => (
+            {departmentNames.map((dept, deptIndex) => (
               <div key={deptIndex} className="flex mb-1 w-full">
                 <div className="flex-shrink-0 w-32 flex items-center">
                   <div className="text-sm font-medium text-gray-700 pr-2">
                     {dept}
                   </div>
                 </div>
-                {areas.map((area, areaIndex) => {
-                  const value = heatmapData[dept][area];
+                {areaNames.map((area, areaIndex) => {
+                  const value = heatmapData[dept]?.[area] || 0;
                   return (
                     <div
                       key={areaIndex}
-                      className={`flex-1 h-12 flex items-center justify-center mx-0.5 rounded ${getHeatmapColor(
+                      className={`flex-1 h-14 flex items-center justify-center mx-0.5 rounded ${getHeatmapColor(
                         value
                       )} ${getTextColor(
                         value
-                      )} transition-all duration-200 hover:scale-105 cursor-pointer h-14S`}
+                      )} transition-all duration-200 hover:scale-105 cursor-pointer`}
                       title={`${dept} - ${area}: ${value}`}
                     >
                       <span className="text-sm font-medium">{value}</span>

@@ -26,6 +26,7 @@ function DataTableBodyRowExpanded<T>({
     toggleEditMode,
     idField,
     specialRow,
+    setSpecialRow,
   } = useContext(DataTableContext);
 
   const colSpan = columns.length + (enhancedActions ? 1 : 0);
@@ -42,15 +43,52 @@ function DataTableBodyRowExpanded<T>({
   };
 
   const handleSave = async (newData: Partial<T>) => {
-    if (handleAdd) await handleAdd(newData);
-    if (rowId) toggleEditMode(rowId);
+    try {
+      if (handleAdd) await handleAdd(newData);
+      
+      // Close the form after successful creation
+      if (specialRow === "add" && setSpecialRow) {
+        // Close the add form after successful creation
+        setSpecialRow(null);
+      } else if (rowId) {
+        // Close edit mode for existing row
+        toggleEditMode(rowId);
+      }
+      
+      // Also close the expanded row if it's open
+      if (row && isExpanded) {
+        row.toggleExpanded();
+      }
+    } catch (error) {
+      // If there's an error, don't close the form
+      console.error("Error saving:", error);
+    }
+  };
+
+  const handleEdit = async (newData: Partial<T>) => {
+    try {
+      if (handleUpdate) await handleUpdate(newData);
+      
+      // Close the expanded row after successful update
+      if (row && isExpanded) {
+        row.toggleExpanded();
+      }
+      
+      // Close edit mode if it was in edit mode
+      if (rowId && isEditMode) {
+        toggleEditMode(rowId);
+      }
+    } catch (error) {
+      // If there's an error, don't close the form
+      console.error("Error updating:", error);
+    }
   };
 
   const renderContent = () => {
     const sharedProps = {
       rowData,
       handleSave,
-      handleEdit: handleUpdate,
+      handleEdit,
     };
 
     if (specialRow) {

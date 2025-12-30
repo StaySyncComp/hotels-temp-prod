@@ -33,7 +33,9 @@ export default function AIReccomendations() {
             />
           </svg>
           <p className="text-xl font-medium text-gray-600">
-            {t("ai_recommendations.placeholder")}
+            {t("ai_recommendations.placeholder") === "ai_recommendations.placeholder"
+              ? "המלצות בינה מלאכותית יגיעו בקרוב"
+              : t("ai_recommendations.placeholder")}
           </p>
         </div>
       </div>
