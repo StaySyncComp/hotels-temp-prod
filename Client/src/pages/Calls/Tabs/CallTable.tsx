@@ -1,14 +1,9 @@
-import {
-  createCall,
-  deleteCall,
-  updateCall,
-  fetchCallsParams,
-} from "@/api/calls";
+import { useTranslation } from "react-i18next";
+import { Call } from "@/types/api/calls";
+import { updateCall, createCall, deleteCall, fetchCallsParams } from "@/api/calls";
 import DataTable from "@/components/ui/completed/data-table";
 import { useContext, useState } from "react";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
-import { useTranslation } from "react-i18next";
-import { Call } from "@/types/api/calls";
 import { TableAction } from "@/types/ui/data-table-types";
 import { getCallColumns } from "@/components/forms/calls/callColumns";
 import { useLocations } from "@/hooks/organization/useLocations";
@@ -21,11 +16,15 @@ import { AdvancedSearchModal } from "@/components/advanced-search/AdvancedSearch
 import { AdvancedSearchFieldConfig } from "@/types/advanced-search";
 import { ExportButtonWrapper } from "@/components/table-actions/ExportButtonWrapper";
 import { ColumnVisibilityButton } from "@/components/table-actions/ColumnVisibilityButton";
-import CallsExpanded from "@/components/calls-table/CallsExpanded";
 import { User } from "@/types/api/user";
 import { ActionCell } from "@/components/calls-table/Actions/ActionCell";
 
-export default function CallTable() {
+interface CallTableProps {
+  selectedCall: Call | null;
+  onSelect: (call: Call | null) => void;
+}
+
+export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
   const { departments, callCategories } = useContext(OrganizationsContext);
   const { locations } = useLocations();
   const { allUsers } = useUser();
@@ -176,7 +175,7 @@ export default function CallTable() {
   };
 
   return (
-    <>
+    <div className="flex-1 overflow-hidden flex flex-col">
       <DataTable<Call>
         columns={columns}
         websocketUrl="/ws/calls"
@@ -193,6 +192,8 @@ export default function CallTable() {
         onSortingChange={setSorting}
         advancedFilters={advancedFilters}
         setAdvancedFilters={setAdvancedFilters}
+        onRowClick={(row) => onSelect(row.original)}
+        selectedRowId={selectedCall?.id}
         rightHeaderContent={
           <div className="flex items-center gap-2">
             <ColumnVisibilityButton />
@@ -203,9 +204,7 @@ export default function CallTable() {
             />
           </div>
         }
-        renderExpandedContent={({ rowData }) => {
-          return <CallsExpanded call={rowData} />;
-        }}
+        // Remove renderExpandedContent to disable expansion and use the side card instead
         renderEditContent={({ rowData, handleSave, handleEdit }) => {
           const mode = rowData?.id ? "edit" : "create";
           const filteredFields = fields.filter((f) => f.name !== "status");
@@ -218,7 +217,7 @@ export default function CallTable() {
               defaultValues={rowData}
               onSubmit={async (data: z.infer<typeof callFormSchema>) => {
                 const department = callCategories.find(
-                  (category) => Number(category.id) === data.callCategoryId
+                  (category) => Number(category.id) === Number(data.callCategoryId)
                 )?.departmentId;
                 const status = data.assignedToId ? "IN_PROGRESS" : "OPENED";
                 const payload = {
@@ -226,14 +225,18 @@ export default function CallTable() {
                   departmentId: department,
                   status,
                   id: rowData?.id,
-                } as Partial<Call>;
+                  locationId: Number(data.locationId),
+                  callCategoryId: Number(data.callCategoryId),
+                  assignedToId: data.assignedToId ? Number(data.assignedToId) : undefined,
+                } as unknown as Partial<Call>;
                 if (handleSave && mode === "create") await handleSave(payload);
                 if (handleEdit && mode === "edit") await handleEdit(payload);
+                if (mode === "create") setRefreshKey((k) => k + 1);
               }}
             />
           );
         }}
       />
-    </>
+    </div>
   );
 }
