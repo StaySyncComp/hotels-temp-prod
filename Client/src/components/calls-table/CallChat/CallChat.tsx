@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { cn } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
 import { Hash } from "lucide-react";
 import { api } from "@/api";
@@ -13,9 +14,14 @@ import { useAuth } from "@/hooks/useAuth";
 interface CallChatProps {
   callId: number;
   callStatusHistory: CallStatusHistory[];
+  className?: string;
 }
 
-export const CallChat = ({ callId, callStatusHistory }: CallChatProps) => {
+export const CallChat = ({
+  callId,
+  callStatusHistory,
+  className,
+}: CallChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
@@ -39,7 +45,12 @@ export const CallChat = ({ callId, callStatusHistory }: CallChatProps) => {
   }, [combinedItems]);
 
   return (
-    <div className="flex flex-col h-[700px] bg-surface rounded-xl shadow-lg overflow-hidden border border-gray-200">
+    <div
+      className={cn(
+        "flex flex-col h-[700px] bg-surface rounded-xl shadow-lg overflow-hidden border border-gray-200",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-slate-50 to-gray-50">
         <div className="flex items-center gap-3">

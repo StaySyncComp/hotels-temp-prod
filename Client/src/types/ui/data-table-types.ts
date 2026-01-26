@@ -52,6 +52,7 @@ export interface DataTableProps<TData> {
   showAddButton?: boolean;
   idField?: keyof TData;
   onRowClick?: (row: Row<TData>) => void;
+  selectedRowId?: string | number | null;
   sorting?: SortingState;
   onSortingChange?: React.Dispatch<React.SetStateAction<SortingState>>;
   rightHeaderContent?: React.ReactNode;
@@ -84,6 +85,7 @@ export interface DataTableContextProps {
   handleAdd: (newData: any) => void;
   handleUpdateData: (newData: any) => void;
   onRowClick?: (row: Row<any>) => void;
+  selectedRowId?: string | number | null;
   isLoading: boolean;
   toggleEditMode: (rowId: string | number) => void;
   idField?: string;

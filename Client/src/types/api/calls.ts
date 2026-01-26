@@ -8,6 +8,7 @@ export interface CallCategory extends BaseEntity {
   logo: string;
   departmentId: number;
   organizationId: number;
+  expectedTime?: number;
 }
 
 export interface NewCallCategoryPayload {
