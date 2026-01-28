@@ -6,7 +6,7 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { CleaningRoom, CleaningStatus } from "../../types";
+import { CleaningRoom, CleaningStatus } from "../types";
 import { User } from "@/types/api/user";
 import {
   Select,
@@ -78,22 +78,32 @@ export const CleaningDetailsDrawer = ({
               >
                 <SelectTrigger
                   className={
-                    task.status === "clean"
+                    task.status === "vacant_clean"
                       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
-                      : task.status === "dirty"
+                      : task.status === "vacant_dirty"
                         ? "bg-red-500/10 border-red-500/20 text-red-700"
-                        : "bg-background"
+                        : task.status === "occupied_clean"
+                          ? "bg-blue-500/10 border-blue-500/20 text-blue-700"
+                          : task.status === "occupied_dirty"
+                            ? "bg-orange-500/10 border-orange-500/20 text-orange-700"
+                            : "bg-background"
                   }
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dirty">{t("dirty")}</SelectItem>
-                  <SelectItem value="in_progress">
-                    {t("in_progress")}
+                  <SelectItem value="vacant_dirty">
+                    {t("vacant_dirty")}
                   </SelectItem>
-                  <SelectItem value="clean">{t("clean")}</SelectItem>
-                  <SelectItem value="inspected">{t("inspected")}</SelectItem>
+                  <SelectItem value="vacant_clean">
+                    {t("vacant_clean")}
+                  </SelectItem>
+                  <SelectItem value="occupied_clean">
+                    {t("occupied_clean")}
+                  </SelectItem>
+                  <SelectItem value="occupied_dirty">
+                    {t("occupied_dirty")}
+                  </SelectItem>
                   <SelectItem value="do_not_disturb">
                     {t("do_not_disturb")}
                   </SelectItem>
@@ -147,7 +157,7 @@ export const CleaningDetailsDrawer = ({
 
             {task.history && task.history.length > 0 ? (
               <div className="relative pl-6 space-y-6 before:absolute before:left-[9px] before:top-2 before:h-full before:w-[2px] before:bg-muted">
-                {task.history.map((item, index) => (
+                {task.history.map((item: any, index: number) => (
                   <div key={index} className="relative">
                     <div className="absolute -left-6 bg-primary h-5 w-5 rounded-full border-4 border-background flex items-center justify-center">
                       <i className="w-2 h-2 rounded-full bg-white" />
