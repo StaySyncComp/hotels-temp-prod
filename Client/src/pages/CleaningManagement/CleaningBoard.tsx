@@ -119,6 +119,7 @@ export const CleaningBoard = ({
               "vacant_clean",
               "occupied_clean",
               "occupied_dirty",
+              "vacant_inspected",
               "do_not_disturb",
             ] as const
           ).map((status) => (
