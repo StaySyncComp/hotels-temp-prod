@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { CleaningRoom, CleaningStatus } from "../types";
 import { User } from "@/types/api/user";
+import { RoomChat } from "@/components/room-card/RoomChat/RoomChat";
 import {
   Select,
   SelectContent,
@@ -17,18 +18,10 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
-import {
-  MapPin,
-  Clock,
-  MessageSquare,
-  Trash2,
-  Camera,
-  Phone,
-} from "lucide-react";
+import { MapPin, Clock, Phone } from "lucide-react";
 
 interface CleaningDetailsDrawerProps {
   isOpen: boolean;
@@ -57,7 +50,7 @@ export const CleaningDetailsDrawer = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="sm:max-w-md md:max-w-lg overflow-y-auto w-full">
+      <SheetContent className="sm:max-w-md md:max-w-lg overflow-y-auto w-full flex flex-col">
         <SheetHeader className="space-y-4 pb-6">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
@@ -161,7 +154,7 @@ export const CleaningDetailsDrawer = ({
 
         <Separator />
 
-        <div className="py-6 space-y-6">
+        <div className="flex-1 overflow-y-auto py-6 space-y-6">
           {/* Timeline / History Mock */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold flex items-center gap-2">
@@ -198,40 +191,38 @@ export const CleaningDetailsDrawer = ({
           <Separator className="my-6" />
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button
-              variant="outline"
-              className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed"
-            >
-              <Camera className="w-5 h-5 text-muted-foreground" />
-              <span className="text-xs font-semibold">{t("add_photo")}</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed"
-            >
-              <MessageSquare className="w-5 h-5 text-muted-foreground" />
-              <span className="text-xs font-semibold">{t("add_comment")}</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed hover:bg-primary/5 hover:border-primary/50"
-              onClick={() => {
-                if (room) {
-                  onCreateCall(room);
-                  onClose();
-                }
-              }}
-            >
-              <Phone className="w-5 h-5 text-primary" />
-              <span className="text-xs font-semibold text-primary">
-                {t("create_call_for_room")}
-              </span>
-            </Button>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-2">
+              <Button
+                variant="outline"
+                className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed hover:bg-primary/5 hover:border-primary/50"
+                onClick={() => {
+                  if (room) {
+                    onCreateCall(room);
+                    onClose();
+                  }
+                }}
+              >
+                <Phone className="w-5 h-5 text-primary" />
+                <span className="text-xs font-semibold text-primary">
+                  {t("create_call_for_room")}
+                </span>
+              </Button>
+            </div>
+
+            {/* Room Chat */}
+            {room && (
+              <div className="mt-4">
+                <RoomChat
+                  locationId={room.id}
+                  roomName={room.name[i18n.language as "en" | "he" | "ar"]}
+                />
+              </div>
+            )}
           </div>
         </div>
 
-        <SheetFooter className="absolute bottom-0 left-0 w-full p-6 bg-background border-t">
+        <SheetFooter className="pt-6 border-t">
           <Button className="w-full" size="lg" onClick={onClose}>
             {t("done")}
           </Button>
