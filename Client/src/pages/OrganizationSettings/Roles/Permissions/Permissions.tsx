@@ -30,6 +30,18 @@ const scopeOptionsMap: Partial<
   },
 };
 
+const allResources: Resource[] = [
+  "users",
+  "calls",
+  "callCategories",
+  "site",
+  "app",
+  "roles",
+  "departments",
+  "reports",
+  "cleaning",
+];
+
 function Permissions({ id }: { id: string | null }) {
   const { t } = useTranslation();
   const {
@@ -42,19 +54,41 @@ function Permissions({ id }: { id: string | null }) {
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
   useEffect(() => {
-    if (permissions.length === 0 && originalPermissions.length > 0)
-      setPermissions(originalPermissions);
-  }, [originalPermissions]);
+    if (originalPermissions.length > 0) {
+      const merged = [...originalPermissions];
+
+      allResources.forEach((res) => {
+        // Check if resource exists in original
+        const hasResource = originalPermissions.some((p) => p.resource === res);
+        if (!hasResource) {
+          // Add defaults
+          actions.forEach((action) => {
+            // @ts-ignore
+            merged.push({
+              resource: res,
+              action,
+              scope: "none",
+              roleId: Number(id),
+            });
+          });
+        }
+      });
+      setPermissions(merged);
+    }
+  }, [originalPermissions, id]);
 
   // Group permissions by resource
   const grouped = useMemo(
     () =>
-      permissions.reduce<Record<Resource, Permission[]>>((acc, curr) => {
-        if (!acc[curr.resource]) acc[curr.resource] = [];
-        acc[curr.resource].push(curr);
-        return acc;
-      }, {} as Record<Resource, Permission[]>),
-    [permissions]
+      permissions.reduce<Record<Resource, Permission[]>>(
+        (acc, curr) => {
+          if (!acc[curr.resource]) acc[curr.resource] = [];
+          acc[curr.resource].push(curr);
+          return acc;
+        },
+        {} as Record<Resource, Permission[]>,
+      ),
+    [permissions],
   );
 
   // Get allowed scopes for a resource/action
@@ -73,14 +107,14 @@ function Permissions({ id }: { id: string | null }) {
   const handleScopeChange = (
     resource: Resource,
     action: Action,
-    newScope: Scope
+    newScope: Scope,
   ) => {
     setPermissions((prev) =>
       prev.map((perm) =>
         perm.resource === resource && perm.action === action
           ? { ...perm, scope: newScope }
-          : perm
-      )
+          : perm,
+      ),
     );
   };
 
@@ -106,16 +140,16 @@ function Permissions({ id }: { id: string | null }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {Object.entries(grouped).map(([resource, perms]) => (
+      {allResources.map((resource) => (
         <PermissionsCard
           key={resource}
-          resource={resource as Resource}
-          perms={perms}
+          resource={resource}
+          perms={grouped[resource] || []}
           actions={actions}
           scopes={scopes}
           t={t}
           isSaving={isSaving}
-          resourceChanged={hasResourceChanged(resource as Resource)}
+          resourceChanged={hasResourceChanged(resource)}
           handleResourceSave={handleResourceSave}
           handleScopeChange={handleScopeChange}
           getAllowedScopes={getAllowedScopes}

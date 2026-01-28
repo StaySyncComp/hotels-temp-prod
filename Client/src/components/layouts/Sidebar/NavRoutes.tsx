@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import { isRouteActive } from "@/utils/routes/routesUtils";
 import { matchPath } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+import { User } from "@/types/api/user";
 
 export function NavRoutes() {
   return (
@@ -46,11 +48,19 @@ function SideBarMenuRoute({ route }: { route: RouteObject }) {
   const currentPath = location.pathname;
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const { user } = useAuth();
 
   return (
     <SidebarMenu className="gap-2">
       {route.children?.map((childRoute) => {
         if (!childRoute.handle?.showInSidebar) return null;
+
+        if (
+          childRoute.path?.includes("cleaning-management") &&
+          !canAccessCleaningModule(user)
+        ) {
+          return null;
+        }
 
         const routePath = childRoute.path?.startsWith("/")
           ? childRoute.path
@@ -58,7 +68,7 @@ function SideBarMenuRoute({ route }: { route: RouteObject }) {
 
         const isActive = !!matchPath(
           { path: routePath, end: true },
-          currentPath
+          currentPath,
         );
 
         return (
@@ -192,3 +202,14 @@ function CollapsibleChildren({ childRoute }: { childRoute: RouteObject }) {
     </>
   );
 }
+
+const canAccessCleaningModule = (user: User | null) => {
+  if (!user) return false;
+  // Check based on role permissions
+  return user.organizationRoles.some((r) => {
+    return r.role?.permissions?.some(
+      (p) =>
+        p.resource === "cleaning" && p.action === "view" && p.scope !== "none",
+    );
+  });
+};

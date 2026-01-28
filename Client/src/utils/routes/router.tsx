@@ -25,6 +25,8 @@ import Homepage from "@/pages/HomePage";
 import AccessibilityLauncher from "@/components/accessibility/AccessibilityLauncher";
 import AccessibilityStatement from "@/pages/AccessibilityStatement/AccessibilityStatement";
 import PublicLayout from "@/components/layouts/Public/Layout";
+import RoomsIcon from "@/assets/icons/RoomsIcon";
+import CleaningManagement from "@/pages/CleaningManagement";
 
 export const router = createBrowserRouter([
   {
@@ -148,6 +150,16 @@ export const router = createBrowserRouter([
           title: "organization_settings",
           showInSidebar: true,
           icon: SettingsIcon,
+        },
+      },
+      {
+        path: "/cleaning-management",
+        element: <CleaningManagement />,
+        handle: {
+          title: "cleaning_management",
+          documentTitle: "cleaning_management",
+          showInSidebar: true,
+          icon: RoomsIcon,
         },
       },
     ],
