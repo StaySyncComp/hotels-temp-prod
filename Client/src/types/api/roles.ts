@@ -17,9 +17,12 @@ export type Resource =
   | "app"
   | "roles"
   | "departments"
-  | "reports";
+  | "reports"
+  | "cleaning";
 
 export interface Permission {
+  id?: number;
+  roleId?: number;
   resource: Resource;
   action: Action;
   scope: Scope;
