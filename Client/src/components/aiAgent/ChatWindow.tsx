@@ -201,7 +201,7 @@ export default function ChatWindow({ onClose }: ChatWindowProps) {
           key={uploadedFiles.length}
           onKeyDown={handleKeyDown}
           placeholder="שאל כל דבר..."
-          className={`w-full px-3 pb-8 text-sm border rounded-lg focus:outline-none ${
+          className={`w-full px-3 pb-8 max-h-[120px] overflow-y-auto text-sm border rounded-lg focus:outline-none ${
             uploadedFiles.length > 0 ? "pt-20" : "pt-4"
           } duration-150 ease-in-out`}
           autoExpand
