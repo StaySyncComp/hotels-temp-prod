@@ -136,6 +136,16 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: "/cleaning-management",
+        element: <CleaningManagement />,
+        handle: {
+          title: "cleaning_management",
+          documentTitle: "cleaning_management",
+          showInSidebar: true,
+          icon: RoomsIcon,
+        },
+      },
+      {
         path: "/settings",
         handle: {
           documentTitle: "settings",
@@ -150,16 +160,6 @@ export const router = createBrowserRouter([
           title: "organization_settings",
           showInSidebar: true,
           icon: SettingsIcon,
-        },
-      },
-      {
-        path: "/cleaning-management",
-        element: <CleaningManagement />,
-        handle: {
-          title: "cleaning_management",
-          documentTitle: "cleaning_management",
-          showInSidebar: true,
-          icon: RoomsIcon,
         },
       },
     ],

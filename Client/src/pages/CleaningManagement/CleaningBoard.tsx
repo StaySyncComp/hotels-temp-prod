@@ -157,7 +157,6 @@ export const CleaningBoard = ({
               (u: User) => u.id === room.cleaningStatus?.assignedToId,
             )}
             onClick={setSelectedRoom}
-            onCreateCall={handleCreateCall}
           />
         ))}
 
@@ -176,6 +175,7 @@ export const CleaningBoard = ({
         users={allUsers}
         onStatusChange={handleStatusChange}
         onAssignUser={handleAssignUser}
+        onCreateCall={handleCreateCall}
       />
 
       {/* Add Call Dialog/Sheet */}

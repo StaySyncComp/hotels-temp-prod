@@ -21,6 +21,7 @@ type LanguageValue = { [lang: string]: string };
 type FieldType =
   | "text"
   | "email"
+  | "textarea"
   | "language"
   | "image"
   | "select"
@@ -107,6 +108,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     switch (field.type) {
       case "text":
       case "email":
+      case "textarea":
         return (
           <TextCase
             error={error}
@@ -234,7 +236,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   const handleDynamicSubmit = (
-    callback: (data: any) => void | Promise<void>
+    callback: (data: any) => void | Promise<void>,
   ) => {
     return async (data: any) => {
       const result = callback(data);
@@ -261,8 +263,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           <div className="h-full">
             {renderField(
               fields.find(
-                (f) => f.type === "image" || f.type === "icon-select"
-              )!
+                (f) => f.type === "image" || f.type === "icon-select",
+              )!,
             )}
           </div>
         )}
@@ -279,7 +281,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               (f) =>
                 f.type !== "image" &&
                 f.type !== "language" &&
-                f.type !== "icon-select"
+                f.type !== "icon-select",
             )
             .map(renderField)}
         </div>

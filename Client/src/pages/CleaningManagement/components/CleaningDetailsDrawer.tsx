@@ -21,7 +21,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
-import { MapPin, Clock, MessageSquare, Trash2, Camera } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  MessageSquare,
+  Trash2,
+  Camera,
+  Phone,
+} from "lucide-react";
 
 interface CleaningDetailsDrawerProps {
   isOpen: boolean;
@@ -30,6 +37,7 @@ interface CleaningDetailsDrawerProps {
   users: User[];
   onStatusChange: (roomId: number, status: CleaningStatus) => void;
   onAssignUser: (roomId: number, userId: number) => void;
+  onCreateCall: (room: CleaningRoom) => void;
 }
 
 export const CleaningDetailsDrawer = ({
@@ -39,6 +47,7 @@ export const CleaningDetailsDrawer = ({
   users,
   onStatusChange,
   onAssignUser,
+  onCreateCall,
 }: CleaningDetailsDrawerProps) => {
   const { t } = useTranslation();
 
@@ -189,7 +198,7 @@ export const CleaningDetailsDrawer = ({
           <Separator className="my-6" />
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <Button
               variant="outline"
               className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed"
@@ -203,6 +212,21 @@ export const CleaningDetailsDrawer = ({
             >
               <MessageSquare className="w-5 h-5 text-muted-foreground" />
               <span className="text-xs font-semibold">{t("add_comment")}</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed hover:bg-primary/5 hover:border-primary/50"
+              onClick={() => {
+                if (room) {
+                  onCreateCall(room);
+                  onClose();
+                }
+              }}
+            >
+              <Phone className="w-5 h-5 text-primary" />
+              <span className="text-xs font-semibold text-primary">
+                {t("create_call_for_room")}
+              </span>
             </Button>
           </div>
         </div>
