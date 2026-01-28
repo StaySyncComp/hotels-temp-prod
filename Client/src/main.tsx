@@ -18,5 +18,7 @@ createRoot(document.getElementById("root")!).render(
         </OrganizationsProvider>
       </AuthProvider>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );
+
+//change
