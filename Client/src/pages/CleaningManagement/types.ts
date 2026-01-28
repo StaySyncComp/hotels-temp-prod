@@ -1,7 +1,7 @@
 import { Location } from "@/types/api/locations";
 import { User } from "@/types/api/user";
 
-export type CleaningStatus = "dirty" | "in_progress" | "clean" | "inspected" | "do_not_disturb";
+export type CleaningStatus = "vacant_dirty" | "vacant_clean" | "occupied_clean" | "occupied_dirty" | "do_not_disturb";
 
 export interface CleaningTask {
   id: number;

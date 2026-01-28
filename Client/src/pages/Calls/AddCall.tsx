@@ -10,8 +10,19 @@ import { callFormSchema } from "@/components/forms/calls/callFormSchema";
 import DynamicForm from "@/components/forms/DynamicForm/DynamicForm";
 import { createCall } from "@/api/calls";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
 
-export default function AddCall() {
+interface AddCallProps {
+  defaultLocationId?: number;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+}
+
+export default function AddCall({
+  defaultLocationId,
+  onSuccess,
+  onCancel,
+}: AddCallProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { callCategories } = useContext(OrganizationsContext);
@@ -36,7 +47,7 @@ export default function AddCall() {
     locations,
     callCategories,
     allUsers,
-    statusOptions
+    statusOptions,
   );
 
   // Handle form submit
@@ -46,37 +57,73 @@ export default function AddCall() {
       // Find departmentId from callCategoryId
       const category = callCategories.find(
         //@ts-ignore
-        (cat) => cat.id === data.callCategoryId
+        (cat) => cat.id === data.callCategoryId,
       );
       const departmentId = category?.departmentId;
       if (!departmentId) throw new Error(t("missing_department"));
 
-      const payload = { ...data, departmentId, status: "OPENED" as const };
+      const payload = {
+        ...data,
+        departmentId,
+        status: "OPENED" as const,
+        locationId: parseInt(data.locationId.toString()),
+        callCategoryId: parseInt(data.callCategoryId.toString()),
+        assignedToId: data.assignedToId
+          ? parseInt(data.assignedToId.toString())
+          : undefined,
+      };
       await createCall(payload);
       setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        navigate("/calls");
-      }, 1500);
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        setTimeout(() => {
+          setSuccess(false);
+          navigate("/calls");
+        }, 1500);
+      }
     } catch (e: any) {
       setError(e?.message || "Unknown error");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[80vh] bg-muted/50">
-      <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            {t("add_call")}
-          </CardTitle>
-        </CardHeader>
+    <div
+      className={
+        onSuccess
+          ? ""
+          : "flex justify-center items-center min-h-[80vh] bg-muted/50"
+      }
+    >
+      <Card
+        className={
+          onSuccess ? "border-0 shadow-none" : "w-full max-w-2xl shadow-lg"
+        }
+      >
+        {!onSuccess && (
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-center">
+              {t("add_call")}
+            </CardTitle>
+          </CardHeader>
+        )}
         <CardContent>
           <DynamicForm
             mode="create"
             fields={fields}
             validationSchema={callFormSchema}
             onSubmit={handleSubmit}
+            defaultValues={
+              defaultLocationId ? { locationId: defaultLocationId } : undefined
+            }
+            extraButtons={
+              onCancel && (
+                <Button type="button" variant="outline" onClick={onCancel}>
+                  {t("cancel")}
+                </Button>
+              )
+            }
           />
           {success && (
             <div className="text-success text-center mt-2">{t("success")}</div>

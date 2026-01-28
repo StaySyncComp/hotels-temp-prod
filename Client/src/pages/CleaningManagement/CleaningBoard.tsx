@@ -7,10 +7,11 @@ import { updateCleaningTaskStatus, assignWorkerToTask } from "@/api/cleaning";
 import { User } from "@/types/api/user";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
+import AddCall from "@/pages/Calls/AddCall";
 
 interface CleaningBoardProps {
   rooms: CleaningRoom[];
@@ -30,6 +31,8 @@ export const CleaningBoard = ({
   const [statusFilter, setStatusFilter] = useState<CleaningStatus | "all">(
     "all",
   );
+  const [isAddCallOpen, setIsAddCallOpen] = useState(false);
+  const [roomForCall, setRoomForCall] = useState<CleaningRoom | null>(null);
 
   // Derived state for filtered rooms
   const filteredRooms = useMemo(() => {
@@ -47,9 +50,8 @@ export const CleaningBoard = ({
   const handleStatusChange = async (roomId: number, status: CleaningStatus) => {
     const room = rooms.find((r) => r.id === roomId);
     if (room && room.cleaningStatus) {
-      // Optimistic update would require lifting state up more, but for now we refresh or mock
       await updateCleaningTaskStatus(room.cleaningStatus.id, status);
-      onRefresh(); // Refresh parent data
+      onRefresh();
       setSelectedRoom((prev) =>
         prev
           ? { ...prev, cleaningStatus: { ...prev.cleaningStatus!, status } }
@@ -74,8 +76,16 @@ export const CleaningBoard = ({
     }
   };
 
-  // Sort by status for better visual grouping?
-  // Ideally we might group by Floor or Area, but let's keep it simple grid for now.
+  const handleCreateCall = (room: CleaningRoom) => {
+    setRoomForCall(room);
+    setIsAddCallOpen(true);
+  };
+
+  const handleCallCreated = () => {
+    setIsAddCallOpen(false);
+    setRoomForCall(null);
+    // Ideally refresh calls or show success, but this board focuses on room status
+  };
 
   if (isLoading) {
     return (
@@ -102,30 +112,37 @@ export const CleaningBoard = ({
         </div>
 
         <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-          {(["all", "dirty", "in_progress", "clean", "inspected"] as const).map(
-            (status) => (
-              <Button
-                key={status}
-                variant={statusFilter === status ? "default" : "outline"}
-                size="sm"
-                onClick={() => setStatusFilter(status)}
-                className="rounded-full capitalize whitespace-nowrap"
-              >
-                {status === "all" ? t("all_rooms") : t(status)}
-                {status !== "all" && (
-                  <Badge
-                    variant="secondary"
-                    className="ml-2 h-5 min-w-[1.25rem] px-1 pointer-events-none bg-background/50 text-foreground"
-                  >
-                    {
-                      rooms.filter((r) => r.cleaningStatus?.status === status)
-                        .length
-                    }
-                  </Badge>
-                )}
-              </Button>
-            ),
-          )}
+          {(
+            [
+              "all",
+              "vacant_dirty",
+              "vacant_clean",
+              "occupied_clean",
+              "occupied_dirty",
+              "do_not_disturb",
+            ] as const
+          ).map((status) => (
+            <Button
+              key={status}
+              variant={statusFilter === status ? "default" : "outline"}
+              size="sm"
+              onClick={() => setStatusFilter(status)}
+              className="rounded-full capitalize whitespace-nowrap"
+            >
+              {status === "all" ? t("all_rooms") : t(status)}
+              {status !== "all" && (
+                <Badge
+                  variant="secondary"
+                  className="ml-2 h-5 min-w-[1.25rem] px-1 pointer-events-none bg-background/50 text-foreground"
+                >
+                  {
+                    rooms.filter((r) => r.cleaningStatus?.status === status)
+                      .length
+                  }
+                </Badge>
+              )}
+            </Button>
+          ))}
         </div>
       </div>
 
@@ -139,6 +156,7 @@ export const CleaningBoard = ({
               (u: User) => u.id === room.cleaningStatus?.assignedToId,
             )}
             onClick={setSelectedRoom}
+            onCreateCall={handleCreateCall}
           />
         ))}
 
@@ -158,6 +176,33 @@ export const CleaningBoard = ({
         onStatusChange={handleStatusChange}
         onAssignUser={handleAssignUser}
       />
+
+      {/* Add Call Dialog/Sheet */}
+      {isAddCallOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          {/* Wrapper to control close */}
+          <div className="bg-background rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-2 z-10"
+              onClick={() => setIsAddCallOpen(false)}
+            >
+              <Plus className="rotate-45" />
+            </Button>
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-4">
+                {t("create_call_for_room")} {roomForCall?.roomNumber}
+              </h2>
+              <AddCall
+                defaultLocationId={roomForCall?.id}
+                onSuccess={handleCallCreated}
+                onCancel={() => setIsAddCallOpen(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
