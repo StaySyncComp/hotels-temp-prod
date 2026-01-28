@@ -1,4 +1,4 @@
-import GuestChatWindow from "@/components/aiAgent/Guest/GuestChatWindow";
+import GuestChatWindow from "@/features/guest/components/Guest/GuestChatWindow";
 
 export default function GuestChatPage() {
   return (

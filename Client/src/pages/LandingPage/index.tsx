@@ -1,12 +1,12 @@
-import Header from "@/components/landing/Header";
-import Hero from "@/components/landing/Hero";
-import Features from "@/components/landing/Features";
-import Statistics from "@/components/landing/Statistics";
-import AiFeatures from "@/components/landing/AiFeatures";
-import EfficiencyBenefits from "@/components/landing/EfficiencyBenefits";
-import WorkerManagement from "@/components/landing/WorkerManagement";
-import Cta from "@/components/landing/Cta";
-import Footer from "@/components/landing/Footer";
+import Header from "@/features/landing/components/Header";
+import Hero from "@/features/landing/components/Hero";
+import Features from "@/features/landing/components/Features";
+import Statistics from "@/features/landing/components/Statistics";
+import AiFeatures from "@/features/landing/components/AiFeatures";
+import EfficiencyBenefits from "@/features/landing/components/EfficiencyBenefits";
+import WorkerManagement from "@/features/landing/components/WorkerManagement";
+import Cta from "@/features/landing/components/Cta";
+import Footer from "@/features/landing/components/Footer";
 
 export default function LandingPage() {
   return (

@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GetTextDirection } from "@/lib/i18n";
-import CallTable from "./Tabs/CallTable";
-import RecurringCallTable from "./Tabs/RecurringCallTable";
+import CallTable from "@/features/calls/components/Tabs/CallTable";
+import RecurringCallTable from "@/features/calls/components/Tabs/RecurringCallTable";
 import { useState } from "react";
 import { Call } from "@/types/api/calls";
-import { SideStatsCard } from "./SideStatsCard";
-import { useUser } from "@/hooks/useUser";
+import { SideStatsCard } from "@/features/calls/components/SideStatsCard";
+import { useUser } from "@/features/auth/hooks/useUser";
 
 export default function CallsPage() {
   const { t } = useTranslation();

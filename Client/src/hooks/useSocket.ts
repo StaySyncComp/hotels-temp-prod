@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useContext } from "react";
 import { io, Socket } from "socket.io-client";
-import { OrganizationsContext } from "@/contexts/OrganizationsContext";
-import { useAuth } from "./useAuth";
+import { OrganizationsContext } from "@/features/organization/context/organization-context";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { CallMessageAttachment } from "@/types/api/calls";
 interface UseSocketReturn {
   joinCallRoom: (callId: number) => void;
@@ -9,7 +9,7 @@ interface UseSocketReturn {
   sendMessage: (
     callId: number,
     content: string,
-    attachments?: CallMessageAttachment[]
+    attachments?: CallMessageAttachment[],
   ) => void;
   onMessage: (callback: (message: any) => void) => void;
 }
@@ -28,7 +28,7 @@ export const useSocket = (): UseSocketReturn => {
         auth: {
           organizationId: String(organization?.id),
         },
-      }
+      },
     );
 
     // Cleanup on unmount
@@ -49,7 +49,7 @@ export const useSocket = (): UseSocketReturn => {
     (
       callId: number,
       content: string,
-      attachments?: CallMessageAttachment[]
+      attachments?: CallMessageAttachment[],
     ) => {
       console.log(attachments, "attachments");
 
@@ -63,7 +63,7 @@ export const useSocket = (): UseSocketReturn => {
         });
       }
     },
-    [user]
+    [user],
   );
 
   const onMessage = useCallback((callback: (message: any) => void) => {
@@ -121,7 +121,7 @@ export const useDynamicSocket = ({
           ...auth,
         },
         ...options,
-      }
+      },
     );
 
     return () => {

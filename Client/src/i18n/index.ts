@@ -30,7 +30,7 @@ i18n
     () => {
       const supported = ["en", "he", "ar"] as const;
       const resolved = (i18n.resolvedLanguage || i18n.language || "").split(
-        "-"
+        "-",
       )[0];
       if (
         !resolved ||
@@ -44,7 +44,13 @@ i18n
           console.log(e);
         }
       }
-    }
+    },
   );
+
+i18n.on("languageChanged", (lng) => {
+  const isRtl = lng === "he" || lng === "ar";
+  document.documentElement.dir = isRtl ? "rtl" : "ltr";
+  document.documentElement.lang = lng;
+});
 
 export default i18n;

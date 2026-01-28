@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CleaningBoard } from "./CleaningBoard";
+import { CleaningBoard } from "@/features/cleaning/components/CleaningBoard";
 import { CleaningRoom } from "./types";
-import { fetchLocations } from "@/api/locations";
-import { fetchAllCleaningStates, initializeMockData } from "@/api/cleaning";
+import { fetchLocations } from "@/features/organization/api/locations";
+import {
+  fetchAllCleaningStates,
+  initializeMockData,
+} from "@/features/cleaning/api";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 
