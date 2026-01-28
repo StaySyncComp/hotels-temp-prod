@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "react-i18next";
 import { FieldConfig } from "./DynamicForm";
 
@@ -12,14 +13,21 @@ interface Props {
 function TextCase({ field, error, register, requiredFields }: Props) {
   const { t } = useTranslation();
   return (
-    <div key={field.name} className="flex flex-col gap-1 w-56">
+    <div
+      key={field.name}
+      className={`flex flex-col gap-1 ${field.type === "textarea" ? "w-full" : "w-56"}`}
+    >
       <label>
         {t(field.label)}
         {requiredFields.includes(field.name) && (
           <span className="text-red-500 ml-1">{t("form.required_field")}</span>
         )}
       </label>
-      <Input type={field.type} {...register(field.name)} />
+      {field.type === "textarea" ? (
+        <Textarea {...register(field.name)} className="h-24 resize-none" />
+      ) : (
+        <Input type={field.type} {...register(field.name)} />
+      )}
       {error && (
         <span className="text-red-500 text-sm">
           {t("form.error_message")}: {error.message as string}

@@ -8,22 +8,18 @@ import {
   Circle,
   AlertCircle,
   User as UserIcon,
-  Phone,
   BedDouble,
   DoorOpen,
   Ban,
-  Plus,
   CheckCheck,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 
 interface RoomCardProps {
   room: CleaningRoom;
   assignedUser?: User;
   onClick: (room: CleaningRoom) => void;
-  onCreateCall: (room: CleaningRoom) => void;
 }
 
 const statusColors: Record<CleaningStatus, string> = {
@@ -50,12 +46,7 @@ const statusIcons: Record<CleaningStatus, any> = {
   do_not_disturb: Ban,
 };
 
-export const RoomCard = ({
-  room,
-  assignedUser,
-  onClick,
-  onCreateCall,
-}: RoomCardProps) => {
+export const RoomCard = ({ room, assignedUser, onClick }: RoomCardProps) => {
   const { t } = useTranslation();
   const task = room.cleaningStatus!;
   const StatusIcon = statusIcons[task.status] || Circle;
@@ -135,22 +126,6 @@ export const RoomCard = ({
             />
           )}
         </div>
-      </div>
-
-      {/* Footer for Actions */}
-      <div className="bg-muted/30 px-4 py-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 text-xs gap-1 hover:bg-primary/10 hover:text-primary"
-          onClick={(e) => {
-            e.stopPropagation();
-            onCreateCall(room);
-          }}
-        >
-          <Plus className="w-3 h-3" />
-          {t("create_call")}
-        </Button>
       </div>
     </Card>
   );
