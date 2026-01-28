@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/ui/completed/StatusBadge";
 export const getCallColumns = (
   t: TFunction,
   i18n: i18n,
-  statusOptions: { label: string; value: string }[]
+  statusOptions: { label: string; value: string }[],
 ): ColumnDef<Call>[] => [
   {
     accessorKey: "callCategoryId",
@@ -21,6 +21,11 @@ export const getCallColumns = (
   {
     accessorKey: "description",
     header: t("description"),
+    cell: ({ row }) => (
+      //@ts-ignore
+
+      <div className="w-32 truncate">{row.original.description || "-"}</div>
+    ),
   },
   {
     accessorKey: "locationId",
@@ -51,7 +56,7 @@ export const getCallColumns = (
     header: t("status"),
     cell: ({ row }) => {
       const option = statusOptions.find(
-        (s) => s.value === row.original.status
+        (s) => s.value === row.original.status,
       ) || { label: "-", value: "" };
       return <StatusBadge option={option} />;
     },
@@ -79,11 +84,11 @@ export const getCallColumns = (
         elapsed = Math.floor(
           // @ts-ignore
           (new Date(call.closedAt).getTime() - createdAt.getTime()) /
-            (1000 * 60)
+            (1000 * 60),
         );
       } else {
         elapsed = Math.floor(
-          (now.getTime() - createdAt.getTime()) / (1000 * 60)
+          (now.getTime() - createdAt.getTime()) / (1000 * 60),
         );
       }
 

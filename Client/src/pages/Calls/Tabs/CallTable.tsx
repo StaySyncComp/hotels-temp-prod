@@ -1,6 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Call } from "@/types/api/calls";
-import { updateCall, createCall, deleteCall, fetchCallsParams } from "@/api/calls";
+import {
+  updateCall,
+  createCall,
+  deleteCall,
+  fetchCallsParams,
+} from "@/api/calls";
 import DataTable from "@/components/ui/completed/data-table";
 import { useContext, useState } from "react";
 import { OrganizationsContext } from "@/contexts/OrganizationsContext";
@@ -51,7 +56,7 @@ export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
 
   const handleAssignWorker = async (
     callId: string | number,
-    workerId: string
+    workerId: string,
   ) => {
     await updateCall({
       id: String(callId),
@@ -68,28 +73,28 @@ export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
     locations,
     callCategories,
     allUsers,
-    statusOptions
+    statusOptions,
   );
 
   const actions: TableAction<Call>[] = [
     { label: "Edit", type: "edit" },
     { type: "delete", label: "Delete" },
-    {
-      // @ts-ignore
-      placement: "external",
-      // @ts-ignore
-      component: (row) => (
-        <ActionCell
-          call={row.original}
-          onCloseCall={handleCloseCall}
-          onAssignWorker={handleAssignWorker}
-          users={allUsers.map((user: User) => ({
-            value: user.id,
-            label: user.name || user.email || user.id,
-          }))}
-        />
-      ),
-    },
+    // {
+    //   // @ts-ignore
+    //   placement: "external",
+    //   // @ts-ignore
+    //   component: (row) => (
+    //     <ActionCell
+    //       call={row.original}
+    //       onCloseCall={handleCloseCall}
+    //       onAssignWorker={handleAssignWorker}
+    //       users={allUsers.map((user: User) => ({
+    //         value: user.id,
+    //         label: user.name || user.email || user.id,
+    //       }))}
+    //     />
+    //   ),
+    // },
   ];
 
   // Advanced search config for Calls
@@ -164,7 +169,7 @@ export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
     Object.keys(mergedParams).forEach(
       (key) =>
         (mergedParams[key] === "" || mergedParams[key] == null) &&
-        delete mergedParams[key]
+        delete mergedParams[key],
     );
 
     const response = await fetchCallsParams(mergedParams);
@@ -175,7 +180,7 @@ export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
   };
 
   return (
-    <div className="flex-1 overflow-hidden flex flex-col">
+    <div className="flex-1 flex flex-col">
       <DataTable<Call>
         columns={columns}
         websocketUrl="/ws/calls"
@@ -217,7 +222,8 @@ export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
               defaultValues={rowData}
               onSubmit={async (data: z.infer<typeof callFormSchema>) => {
                 const department = callCategories.find(
-                  (category) => Number(category.id) === Number(data.callCategoryId)
+                  (category) =>
+                    Number(category.id) === Number(data.callCategoryId),
                 )?.departmentId;
                 const status = data.assignedToId ? "IN_PROGRESS" : "OPENED";
                 const payload = {
@@ -227,7 +233,9 @@ export default function CallTable({ selectedCall, onSelect }: CallTableProps) {
                   id: rowData?.id,
                   locationId: Number(data.locationId),
                   callCategoryId: Number(data.callCategoryId),
-                  assignedToId: data.assignedToId ? Number(data.assignedToId) : undefined,
+                  assignedToId: data.assignedToId
+                    ? Number(data.assignedToId)
+                    : undefined,
                 } as unknown as Partial<Call>;
                 if (handleSave && mode === "create") await handleSave(payload);
                 if (handleEdit && mode === "edit") await handleEdit(payload);

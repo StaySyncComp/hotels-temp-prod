@@ -33,19 +33,22 @@ export default function CallsPage() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="active" className="mt-6 flex-1 overflow-hidden flex flex-col">
+          <TabsContent value="active" className="mt-6 flex-1 flex flex-col">
             <CallTable selectedCall={selectedCall} onSelect={setSelectedCall} />
           </TabsContent>
-          <TabsContent value="recurring" className="mt-6 flex-1 overflow-hidden flex flex-col">
+          <TabsContent
+            value="recurring"
+            className="mt-6 flex-1 overflow-hidden flex flex-col"
+          >
             <RecurringCallTable />
           </TabsContent>
         </Tabs>
       </div>
 
-      <SideStatsCard 
-        call={selectedCall} 
-        users={allUsers} 
-        className="w-[350px] flex-shrink-0 h-full overflow-hidden" 
+      <SideStatsCard
+        call={selectedCall}
+        users={allUsers}
+        className="w-[350px] flex-shrink-0 h-full overflow-hidden"
       />
     </div>
   );

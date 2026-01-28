@@ -125,7 +125,7 @@ export function Combobox({
             disabled
               ? "opacity-60 cursor-not-allowed bg-gray-100 border-gray-200"
               : "",
-            className
+            className,
           )}
         >
           <div className="flex items-center justify-between w-full gap-2">
@@ -163,7 +163,7 @@ export function Combobox({
                     "block truncate",
                     selectedOptions.length > 0
                       ? "text-gray-900"
-                      : "text-gray-500"
+                      : "text-gray-500",
                   )}
                   title={displayText}
                 >
@@ -178,7 +178,7 @@ export function Combobox({
                 open ? " text-blue-500" : "text-gray-400",
                 open && isRtl && "-rotate-90",
                 open && !isRtl && "rotate-270",
-                disabled ? "text-gray-300" : ""
+                disabled ? "text-gray-300" : "",
               )}
             />
           </div>
@@ -189,7 +189,7 @@ export function Combobox({
         <PopoverContent
           className={cn(
             "w-[var(--radix-popover-trigger-width)] p-0 border-2 border-gray-200 rounded-xl shadow-2xl bg-white/95 backdrop-blur-md animate-in fade-in-0 zoom-in-95 slide-in-from-top-2",
-            popoverClassName
+            popoverClassName,
           )}
           align="start"
         >
@@ -213,7 +213,7 @@ export function Combobox({
                           "h-4 w-4 flex-shrink-0 transition-all duration-200",
                           isSelected(option.value)
                             ? "opacity-100 text-blue-600 scale-100"
-                            : "opacity-0 scale-75"
+                            : "opacity-0 scale-75",
                         )}
                       />
                       <span

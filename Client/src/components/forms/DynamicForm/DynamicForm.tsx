@@ -73,6 +73,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     watch,
     control,
     reset,
+    getValues,
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(validationSchema),
@@ -80,6 +81,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     mode: "onChange",
     shouldUnregister: false,
   });
+  console.log(getValues(), "getValues");
+  console.log(defaultValues, "defaultValues");
+
   const imageField = fields.find((f) => f.type === "image");
   const imageFieldName = imageField?.name;
   const watchedImageFile = watch(imageFieldName || "");
@@ -234,7 +238,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   const handleDynamicSubmit = (
-    callback: (data: any) => void | Promise<void>
+    callback: (data: any) => void | Promise<void>,
   ) => {
     return async (data: any) => {
       const result = callback(data);
@@ -261,8 +265,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           <div className="h-full">
             {renderField(
               fields.find(
-                (f) => f.type === "image" || f.type === "icon-select"
-              )!
+                (f) => f.type === "image" || f.type === "icon-select",
+              )!,
             )}
           </div>
         )}
@@ -279,7 +283,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               (f) =>
                 f.type !== "image" &&
                 f.type !== "language" &&
-                f.type !== "icon-select"
+                f.type !== "icon-select",
             )
             .map(renderField)}
         </div>

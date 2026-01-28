@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { CallChat } from "@/components/calls-table/CallChat/CallChat";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { formatDateTime } from "@/lib/dateUtils";
 
 interface SideStatsCardProps {
   call: Call | null;
@@ -112,24 +113,14 @@ function CallStatsContent({
         "p-5 space-y-5 flex-1 flex flex-col overflow-y-auto",
         isExpanded && "p-6", // Slightly more padding in expanded mode if desired
       )}
-      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
-      <style>
-        {`
-            .scrollbar-hide::-webkit-scrollbar {
-                display: none;
-            }
-          `}
-      </style>
       {/* Header - Matches Figma layout */}
-      <div className="flex justify-between items-start gap-4">
+      <div className="flex justify-between items-center gap-4">
         <h3
           className="font-bold text-xl leading-tight"
           style={{ color: "#203C87" }}
         >
-          {call.description ||
-            getNameByLanguage(call.callCategory?.name) ||
-            t("call_details")}
+          {getNameByLanguage(call.callCategory?.name) || t("call_details")}
         </h3>
 
         {headerAction}
@@ -151,7 +142,7 @@ function CallStatsContent({
         <div className="py-3">
           <StatRow
             label={t("opened_time")}
-            value={formatDate(new Date(call.createdAt))}
+            value={formatDateTime(new Date(call.createdAt))}
           />
         </div>
         <div className="py-3">
@@ -166,23 +157,22 @@ function CallStatsContent({
             value={getNameByLanguage(call.location?.name) || "-"}
           />
         </div>
-        <div className="py-3">
-          <StatRow label={t("description")} value={call.description || "-"} />
-        </div>
-        <div className="py-3">
-          <StatRow
-            label={t("type")}
-            value={getNameByLanguage(call.callCategory?.name) || "-"}
-          />
+        <div className="flex flex-col py-2 gap-2">
+          <span className="text-sm text-[#203C87] font-semibold w-40 flex-shrink-0">
+            {t("description")}
+          </span>
+          <span className="text-sm text-slate-800">
+            {call.description || "-"}
+          </span>
         </div>
       </div>
 
       {/* Divider as BR */}
-      <div className="border-t border-slate-50 my-1" />
+      <div className="border-t-2 border-slate-100 my-1" />
 
       {/* Assigned Workers or Smart Share Button */}
       {users && users.length > 0 ? (
-        <div className="flex flex-col min-h-0">
+        <div className="flex flex-col min-h-fit">
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm font-bold text-slate-800">
               {t("assign_workers")}
@@ -204,7 +194,7 @@ function CallStatsContent({
             {users.slice(0, 3).map((user) => (
               <div
                 key={user.id}
-                className="flex-shrink-0 w-28 bg-white border border-slate-50 rounded-2xl p-4 flex flex-col items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] relative group cursor-pointer hover:border-blue-100 transition-all active:scale-95"
+                className="w-28 h-28 bg-white border border-slate-50 rounded-2xl p-4 flex flex-col items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] relative group cursor-pointer hover:border-blue-100 transition-all active:scale-95"
               >
                 <div className="relative mb-3">
                   <Avatar className="h-12 w-12 border-2 border-white shadow-sm ring-1 ring-slate-50">
@@ -372,7 +362,7 @@ function CircularTimer({ call }: { call: Call }) {
     : Math.max(0, expectedMinutes - elapsedMinutes);
   const percentage = isOverdue ? 1 : elapsedMinutes / expectedMinutes;
 
-  const radius = 70; // Increased radius to push the line closer to the edge
+  const radius = 75; // Increased radius to push the line closer to the edge
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffsetReverse = isOverdue
     ? 0
@@ -426,18 +416,4 @@ function CircularTimer({ call }: { call: Call }) {
       </div>
     </div>
   );
-}
-
-function formatDate(date: Date) {
-  const time = date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear().toString().slice(-2);
-
-  return `${time} ${day}\\${month}\\${year}`;
 }

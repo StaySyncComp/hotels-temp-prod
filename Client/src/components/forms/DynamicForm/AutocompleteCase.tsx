@@ -1,5 +1,4 @@
 import { Combobox } from "@/components/ui/completed/Combobox";
-import React from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FieldConfig } from "./DynamicForm";
@@ -20,6 +19,7 @@ function AutocompleteCase({
   defaultValues,
 }: Props) {
   const { t } = useTranslation();
+
   return (
     <div key={field.name} className="flex flex-col gap-1 w-56">
       <label>
@@ -31,20 +31,20 @@ function AutocompleteCase({
       <Controller
         name={field.name}
         control={control}
-        defaultValue={defaultValues?.[field.name] || ""}
-        render={({ field: controllerField }) => (
-          <Combobox
-            value={controllerField.value}
-            onChange={(val) => {
-              console.log(val, "asd");
-
-              controllerField.onChange(val);
-            }}
-            options={field.options ?? []}
-            placeholder={t("select_option")}
-            className="h-[38px]"
-          />
-        )}
+        defaultValue={defaultValues?.[field.name]?.toString() || ""}
+        render={({ field: controllerField }) => {
+          return (
+            <Combobox
+              value={String(controllerField.value)}
+              onChange={(val) => {
+                controllerField.onChange(String(val));
+              }}
+              options={field.options ?? []}
+              placeholder={t("select_option")}
+              className="h-[38px]"
+            />
+          );
+        }}
       />
       {error && (
         <span className="text-red-500 text-sm">
