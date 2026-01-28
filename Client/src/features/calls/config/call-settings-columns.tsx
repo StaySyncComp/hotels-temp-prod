@@ -29,7 +29,7 @@ export const getCallSettingsColumns = <T,>(
             <div className="size-10 bg-background border rounded-xl p-1 flex justify-center items-center">
               <ColoredIcon
                 file={icon.file}
-                className="size-2 !text-transparent" // fill = yellow-400
+                className="size-7 !text-transparent" // fill = yellow-400
                 stroke="#203C87" // stroke = primary
               />
             </div>

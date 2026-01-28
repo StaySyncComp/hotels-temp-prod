@@ -58,7 +58,7 @@ export function useDepartments(enable = true) {
   return {
     // Queries
     departmentsQueryFunction: fetchDepartments,
-    departments: fetchDepartmentsQuery.data?.data || [],
+    departments: fetchDepartmentsQuery.data || [],
     departmentsStatus: fetchDepartmentsQuery.status,
 
     // Mutations
