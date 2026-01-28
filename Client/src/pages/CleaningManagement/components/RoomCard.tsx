@@ -13,6 +13,7 @@ import {
   DoorOpen,
   Ban,
   Plus,
+  CheckCheck,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -34,6 +35,8 @@ const statusColors: Record<CleaningStatus, string> = {
     "bg-blue-500/15 border-blue-500/30 text-blue-700 dark:text-blue-400",
   occupied_dirty:
     "bg-orange-500/15 border-orange-500/30 text-orange-700 dark:text-orange-400",
+  vacant_inspected:
+    "bg-purple-500/15 border-purple-500/30 text-purple-700 dark:text-purple-400",
   do_not_disturb:
     "bg-gray-500/15 border-gray-500/30 text-gray-700 dark:text-gray-400",
 };
@@ -42,7 +45,8 @@ const statusIcons: Record<CleaningStatus, any> = {
   vacant_clean: CheckCircle2,
   vacant_dirty: AlertCircle,
   occupied_clean: BedDouble,
-  occupied_dirty: DoorOpen, // Or any appropriate icon
+  occupied_dirty: DoorOpen,
+  vacant_inspected: CheckCheck,
   do_not_disturb: Ban,
 };
 
@@ -66,7 +70,9 @@ export const RoomCard = ({
           ? "border-l-blue-500"
           : task.status === "occupied_dirty"
             ? "border-l-orange-500"
-            : "border-l-gray-400"; // DND
+            : task.status === "vacant_inspected"
+              ? "border-l-purple-500"
+              : "border-l-gray-400"; // DND
 
   return (
     <Card

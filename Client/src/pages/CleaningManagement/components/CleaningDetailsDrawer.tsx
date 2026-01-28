@@ -86,7 +86,9 @@ export const CleaningDetailsDrawer = ({
                           ? "bg-blue-500/10 border-blue-500/20 text-blue-700"
                           : task.status === "occupied_dirty"
                             ? "bg-orange-500/10 border-orange-500/20 text-orange-700"
-                            : "bg-background"
+                            : task.status === "vacant_inspected"
+                              ? "bg-purple-500/10 border-purple-500/20 text-purple-700"
+                              : "bg-background"
                   }
                 >
                   <SelectValue />
@@ -97,6 +99,9 @@ export const CleaningDetailsDrawer = ({
                   </SelectItem>
                   <SelectItem value="vacant_clean">
                     {t("vacant_clean")}
+                  </SelectItem>
+                  <SelectItem value="vacant_inspected">
+                    {t("vacant_inspected")}
                   </SelectItem>
                   <SelectItem value="occupied_clean">
                     {t("occupied_clean")}
