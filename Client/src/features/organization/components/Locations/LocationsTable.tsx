@@ -43,6 +43,12 @@ const LocationsTable = ({ areaId }: LocationsTableProps) => {
   const actions: TableAction<Location>[] = [
     { type: "edit", label: t("edit") },
     { type: "delete", label: t("delete") },
+    {
+      // @ts-ignore
+      placement: "external",
+      // @ts-ignore
+      component: (row) => <ChatBotLinkButtons location={row.original} />,
+    },
   ];
 
   const locationFormFields: FieldConfig[] = [
