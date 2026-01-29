@@ -1,11 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { BaseDialog } from "@/components/common/BaseDialog";
 import { Button } from "@/components/ui/button";
 import { ReactNode, useState } from "react";
 import { Loader } from "lucide-react";
@@ -45,13 +38,13 @@ const AreYouSureDialog: React.FC<AreYouSureDialogProps> = ({
   return (
     <>
       <div onClick={() => setOpen(true)}>{children}</div>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>{description}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="p-2">
+      <BaseDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={title}
+        description={description}
+        footer={
+          <>
             <Button
               variant={isDangerous ? "destructive" : "default"}
               onClick={handleConfirm}
@@ -62,9 +55,9 @@ const AreYouSureDialog: React.FC<AreYouSureDialogProps> = ({
             <Button variant="outline" onClick={() => setOpen(false)}>
               {cancelText}
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </>
+        }
+      />
     </>
   );
 };

@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { BaseDialog } from "@/components/common/BaseDialog";
 import {
   Select,
   SelectContent,
@@ -50,33 +45,15 @@ export function AssignWorkerDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        style={{ padding: "10px" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <DialogHeader>
-          <DialogTitle>{t("assign_to_worker")}</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="assigned_to">{t("assigned_to")}</Label>
-            <Select value={selectedWorker} onValueChange={handleSelect}>
-              <SelectTrigger>
-                <SelectValue placeholder={t("select_option")} />
-              </SelectTrigger>
-              <SelectContent>
-                {users.map((u) => (
-                  <SelectItem key={u.value} value={u.value}>
-                    {u.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="flex justify-end gap-3">
+    <BaseDialog
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      title={t("assign_to_worker")}
+      className="sm:max-w-[425px] p-6"
+      // Note: BaseDialog wraps DialogContent. If onClick propagation stop is needed on content:
+      onClickContent={(e) => e.stopPropagation()}
+      footer={
+        <div className="flex justify-end gap-3 w-full">
           <Button variant="outline" onClick={handleCancel}>
             {t("cancel")}
           </Button>
@@ -84,7 +61,25 @@ export function AssignWorkerDialog({
             {t("assign")}
           </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <div className="grid gap-4 py-4">
+        <div className="space-y-2">
+          <Label htmlFor="assigned_to">{t("assigned_to")}</Label>
+          <Select value={selectedWorker} onValueChange={handleSelect}>
+            <SelectTrigger>
+              <SelectValue placeholder={t("select_option")} />
+            </SelectTrigger>
+            <SelectContent>
+              {users.map((u) => (
+                <SelectItem key={u.value} value={u.value}>
+                  {u.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    </BaseDialog>
   );
 }
