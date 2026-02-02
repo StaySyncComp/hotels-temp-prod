@@ -25,12 +25,12 @@ export const AiMessagesList = ({ messages, isLoading }: Props) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             className={`flex w-full ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
+              msg.sender === "user" ? "justify-start" : "justify-end"
             }`}
           >
             <div
               className={`flex max-w-[80%] md:max-w-[70%] gap-3 ${
-                msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                msg.sender === "user" ? "flex-row" : "flex-row-reverse"
               }`}
             >
               {/* Avatar Bubble */}
@@ -76,8 +76,8 @@ export const AiMessagesList = ({ messages, isLoading }: Props) => {
               <div
                 className={`relative px-5 py-3 rounded-2xl shadow-sm border text-sm leading-relaxed ${
                   msg.sender === "user"
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent rounded-tr-none shadow-blue-200"
-                    : "bg-white border-slate-100 text-slate-700 rounded-tl-none"
+                    ? "bg-blue-50 border-blue-100 text-blue-600 rounded-tl-none"
+                    : "bg-white border-slate-100 text-slate-700 rounded-tr-none"
                 }`}
               >
                 {msg.text}
@@ -92,7 +92,7 @@ export const AiMessagesList = ({ messages, isLoading }: Props) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex items-start gap-3"
+          className="flex items-start gap-3 justify-end "
         >
           <div className="w-10 h-10 rounded-full bg-white border border-slate-100 flex items-center justify-center shrink-0 shadow-sm">
             <svg
@@ -109,7 +109,7 @@ export const AiMessagesList = ({ messages, isLoading }: Props) => {
               />
             </svg>
           </div>
-          <div className="bg-white border border-slate-100 px-4 py-3 rounded-2xl rounded-tl-none flex items-center gap-1 shadow-sm">
+          <div className="bg-white border border-slate-100 px-4 py-3 rounded-2xl rounded-tr-none flex items-center gap-1 shadow-sm">
             <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
             <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
             <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></span>

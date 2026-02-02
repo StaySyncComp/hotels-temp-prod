@@ -100,7 +100,7 @@ export function AiChatWindow() {
 
   return (
     <div
-      className={`min-h-fit flex flex-col relative overflow-hidden transition-all duration-500 ease-in-out`}
+      className={`min-h-fit h-[80vh] justify-between  flex flex-col relative overflow-hidden transition-all duration-500 ease-in-out mt-2`}
     >
       {/* Background Ambience - Optional, but adds depth */}
       {/* {!hasMessages && (
@@ -111,10 +111,10 @@ export function AiChatWindow() {
       )} */}
 
       {!hasMessages ? (
-        <div className="w-full text-center h-[70vh] flex flex-col justify-between max-w-4xl mx-auto z-10">
+        <div className="w-full text-center flex flex-col justify-between max-w-4xl mx-auto z-10">
           {/* Welcome View */}
-          <div className="flex flex-col items-center justify-center flex-1">
-            <div className="relative scale-125 mb-8">
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative">
               <AiOrb />
             </div>
             <div className="text-white drop-shadow-md">
@@ -123,13 +123,6 @@ export function AiChatWindow() {
                 statusText="איך אוכל לעזור?"
               />
             </div>
-          </div>
-
-          <div className="max-w-3xl mx-auto w-full mb-10">
-            <SuggestedPrompts
-              prompts={suggestedPrompts}
-              onPromptClick={handlePromptClick}
-            />
           </div>
         </div>
       ) : (
@@ -145,8 +138,16 @@ export function AiChatWindow() {
 
       {/* Input Area */}
       <div
-        className={`w-full max-w-3xl mx-auto z-20 transition-all duration-500 ${hasMessages ? "pb-2" : "pb-10"}`}
+        className={`w-full max-w-3xl mx-auto z-20 transition-all duration-500 space-y-6`}
       >
+        {!hasMessages && (
+          <div className="max-w-3xl mx-auto w-full">
+            <SuggestedPrompts
+              prompts={suggestedPrompts}
+              onPromptClick={handlePromptClick}
+            />
+          </div>
+        )}
         <ChatInput
           onSend={handleSendMessage}
           onAttach={handleAttachment}

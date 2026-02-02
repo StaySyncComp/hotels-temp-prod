@@ -46,7 +46,7 @@ function Step1() {
             t("validation.password_min") || "הסיסמה חייבת להכיל לפחות 6 תווים",
         }),
       }),
-    [t]
+    [t],
   );
 
   const {
@@ -179,7 +179,7 @@ function Step1() {
             loading={isSubmitting}
             data-cy="login-submit"
             disabled={isSubmitting}
-            className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
+            className="w-full h-12 bg-primary text-white font-semibold shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:bg-primary/80"
           >
             {isSubmitting ? t("reports.loading") || "טוען..." : t("continue")}
           </Button>
