@@ -1,14 +1,22 @@
 import { useMemo, useState, useEffect } from "react";
 import { Call } from "@/types/api/calls";
+import { updateCall } from "@/features/calls/api";
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Share2, Maximize2, MessageCircle, X } from "lucide-react";
+import {
+  Share2,
+  Maximize2,
+  MessageCircle,
+  X,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRTL } from "@/hooks/useRtl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/types/api/user";
+import { useUser } from "@/features/auth/hooks/useUser";
 import {
   Dialog,
   DialogContent,
@@ -107,6 +115,31 @@ function CallStatsContent({
 }) {
   const { t } = useTranslation();
   const { getNameByLanguage, isRtl } = useRTL();
+  const { allUsers } = useUser();
+
+  const handleSmartShare = async () => {
+    const usersToPickFrom = allUsers && allUsers.length > 0 ? allUsers : users;
+    if (!usersToPickFrom || usersToPickFrom.length === 0) return;
+
+    const randomUser =
+      usersToPickFrom[Math.floor(Math.random() * usersToPickFrom.length)];
+
+    await updateCall({
+      id: String(call.id),
+      assignedToId: Number(randomUser.id),
+      status: "IN_PROGRESS",
+    });
+    window.location.reload();
+  };
+
+  const handleCloseCall = async () => {
+    if (!call?.id) return;
+    await updateCall({ id: String(call.id), status: "COMPLETED" });
+    // Force a reload of the window to reflect changes since we don't have a callback
+    // Or better, assume the user handles the refresh manually or the socket works.
+    // The previous implementation in ActionCell used a simple status update.
+    window.location.reload();
+  };
 
   return (
     <div
@@ -226,18 +259,35 @@ function CallStatsContent({
         </div>
       ) : (
         <div className="mt-auto pt-4 space-y-3">
-          <Button
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-2xl py-6 shadow-blue-100 shadow-xl border-none transition-all active:scale-[0.98] font-bold text-base"
-            size="lg"
-          >
-            <Share2 className="w-5 h-5 mx-2" />
-            {t("smart_share")}
-          </Button>
-          <div className="text-center">
-            <span className="text-[10px] text-slate-300 font-medium block opacity-80">
-              * {t("smart_share_disclaimer")}
-            </span>
-          </div>
+          {call.status === "IN_PROGRESS" && (
+            <div className="mt-auto pt-4">
+              <Button
+                onClick={handleCloseCall}
+                className="w-full bg-green-500 hover:bg-green-600 text-white rounded-2xl py-6 shadow-green-100 shadow-xl border-none transition-all active:scale-[0.98] font-bold text-base"
+                size="lg"
+              >
+                <CheckCircle2 className="w-5 h-5 mx-2" />
+                {t("close_call")}
+              </Button>
+            </div>
+          )}
+          {call.status !== "IN_PROGRESS" && call.status !== "COMPLETED" && (
+            <>
+              <Button
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-2xl py-6 shadow-blue-100 shadow-xl border-none transition-all active:scale-[0.98] font-bold text-base"
+                size="lg"
+                onClick={handleSmartShare}
+              >
+                <Share2 className="w-5 h-5 mx-2" />
+                {t("smart_share")}
+              </Button>
+              <div className="text-center">
+                <span className="text-[10px] text-slate-300 font-medium block opacity-80">
+                  * {t("smart_share_disclaimer")}
+                </span>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
@@ -384,28 +434,67 @@ function CircularTimer({ call }: { call: Call }) {
     }
   }, [call.status]);
 
-  // Use the calculated end time if closed, otherwise use live 'now'
+  /* Use the calculated end time if closed, otherwise use live 'now' */
   const effectiveNow =
     call.status === "COMPLETED" || call.status === "FAILED" ? endTime : now;
 
   const elapsedMinutes = Math.floor((effectiveNow - createdAt) / (1000 * 60));
 
   const isOverdue = elapsedMinutes > expectedMinutes;
+
   const timeLeft = isOverdue
     ? elapsedMinutes - expectedMinutes
     : Math.max(0, expectedMinutes - elapsedMinutes);
-  const percentage = isOverdue ? 1 : elapsedMinutes / expectedMinutes;
+
+  /* Logic for Completed Calls */
+  const isCompleted = call.status === "COMPLETED";
+
+  /* 
+     If completed:
+     - Always full circle (percentage = 1)
+     - Show total elapsed time
+     - Color: Green if on time, Red if overdue
+  */
+
+  const percentage = isCompleted
+    ? 1
+    : isOverdue
+      ? 1
+      : elapsedMinutes / expectedMinutes;
+
+  /* Colors */
+  let strokeColor = isOverdue ? "#ef4444" : "#203C87";
+  let textColor = isOverdue ? "text-red-600" : "text-[#203C87]";
+  let labelText = isOverdue ? t("time_exceeded") : t("minutes_left");
+  let subTextColor = isOverdue ? "text-red-400" : "text-blue-400";
+  let mainDisplayValue = isOverdue ? `+${timeLeft}` : timeLeft;
+  let bottomMessage = t("out_of_time", { time: expectedMinutes });
+
+  if (isCompleted) {
+    if (isOverdue) {
+      // Completed but late -> Red, show total time? Or show overload?
+      // User asked for "total time the mission took".
+      mainDisplayValue = elapsedMinutes;
+      labelText = t("minutes");
+      // Keep Red colors from default isOverdue logic
+    } else {
+      // Completed on time -> Green, show total time
+      strokeColor = "#10b981"; // Emerald-500
+      textColor = "text-emerald-600";
+      subTextColor = "text-emerald-400";
+      mainDisplayValue = elapsedMinutes;
+      labelText = t("minutes");
+      bottomMessage = t("completed_on_time");
+    }
+  }
 
   const radius = 75; // Increased radius to push the line closer to the edge
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffsetReverse = isOverdue
-    ? 0
-    : circumference * (1 - (1 - percentage));
 
-  const strokeColor = isOverdue ? "#ef4444" : "#203C87";
-  const textColor = isOverdue ? "text-red-600" : "text-[#203C87]";
-  const labelText = isOverdue ? t("time_exceeded") : t("minutes_left");
-  const subTextColor = isOverdue ? "text-red-400" : "text-blue-400";
+  // For completed, we want full circle (offset 0).
+  // For others, calculate based on percentage.
+  const strokeDashoffsetReverse =
+    isOverdue || isCompleted ? 0 : circumference * (1 - (1 - percentage));
 
   return (
     /* Reduced container size from w-48 to w-40 */
@@ -438,14 +527,14 @@ function CircularTimer({ call }: { call: Call }) {
       <div className="absolute flex flex-col items-center text-center">
         <div className="flex flex-col items-center">
           <span className={`text-4xl font-black ${textColor}`}>
-            {isOverdue ? `+${timeLeft}` : timeLeft}
+            {mainDisplayValue}
           </span>
           <span className={`text-sm font-bold ${subTextColor} -mt-1`}>
             {labelText}
           </span>
         </div>
         <span className="text-[10px] font-medium text-slate-300 mt-3 whitespace-nowrap">
-          {t("out_of_time", { time: expectedMinutes })}
+          {bottomMessage}
         </span>
       </div>
     </div>
