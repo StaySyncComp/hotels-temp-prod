@@ -17,8 +17,6 @@ export default function CallsPage() {
   return (
     <div className="flex gap-6 h-[calc(100vh-140px)]">
       <div className="flex-1 flex flex-col min-w-0">
-        <h1 className="heading mb-6">{t("calls")}</h1>
-
         <Tabs
           defaultValue="active"
           className="w-full flex-1 flex flex-col overflow-hidden"
