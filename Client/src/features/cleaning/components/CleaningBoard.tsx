@@ -122,6 +122,7 @@ export const CleaningBoard = ({
               "vacant_clean",
               "occupied_clean",
               "occupied_dirty",
+              "vacant_inspected",
               "do_not_disturb",
             ] as const
           ).map((status) => (
@@ -159,7 +160,6 @@ export const CleaningBoard = ({
               (u: User) => u.id === room.cleaningStatus?.assignedToId,
             )}
             onClick={setSelectedRoom}
-            onCreateCall={handleCreateCall}
           />
         ))}
 
@@ -178,6 +178,7 @@ export const CleaningBoard = ({
         users={allUsers}
         onStatusChange={handleStatusChange}
         onAssignUser={handleAssignUser}
+        onCreateCall={handleCreateCall}
       />
 
       {/* Add Call Dialog/Sheet */}

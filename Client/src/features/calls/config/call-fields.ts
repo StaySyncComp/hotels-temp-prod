@@ -21,7 +21,6 @@ export function getCallFields(
   // Convert statusMap to an array of options
 
   return [
-    { name: "description", type: "text", label: t("description") },
     {
       name: "locationId",
       type: "autocomplete",
@@ -40,6 +39,7 @@ export function getCallFields(
       type: "autocomplete",
       options: formattedUsers,
     },
+    { name: "description", type: "textarea", label: t("description") },
     {
       name: "status",
       label: t("status"),

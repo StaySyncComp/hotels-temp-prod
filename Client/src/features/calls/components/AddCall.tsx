@@ -48,7 +48,7 @@ export default function AddCall({
     callCategories,
     allUsers,
     statusOptions,
-  );
+  ).filter((f) => f.name !== "status");
 
   // Handle form submit
   const handleSubmit = async (data: z.infer<typeof callFormSchema>) => {
@@ -62,15 +62,20 @@ export default function AddCall({
       const departmentId = category?.departmentId;
       if (!departmentId) throw new Error(t("missing_department"));
 
+      const assignedToId = data.assignedToId
+        ? parseInt(data.assignedToId.toString())
+        : undefined;
+
+      // Auto-assign status based on assignment
+      const status = assignedToId ? "IN_PROGRESS" : "OPENED";
+
       const payload = {
         ...data,
         departmentId,
-        status: "OPENED" as const,
+        status: status as "OPENED" | "IN_PROGRESS",
         locationId: parseInt(data.locationId.toString()),
         callCategoryId: parseInt(data.callCategoryId.toString()),
-        assignedToId: data.assignedToId
-          ? parseInt(data.assignedToId.toString())
-          : undefined,
+        assignedToId,
       };
       await createCall(payload);
       setSuccess(true);
@@ -111,12 +116,16 @@ export default function AddCall({
         <CardContent>
           <DynamicForm
             mode="create"
+            headerKey="call"
             fields={fields}
             validationSchema={callFormSchema}
             onSubmit={handleSubmit}
-            defaultValues={
-              defaultLocationId ? { locationId: defaultLocationId } : undefined
-            }
+            defaultValues={{
+              status: "OPENED", // Default value to satisfy z.object schema
+              ...(defaultLocationId
+                ? { locationId: defaultLocationId.toString() }
+                : undefined),
+            }}
             extraButtons={
               onCancel && (
                 <Button type="button" variant="outline" onClick={onCancel}>

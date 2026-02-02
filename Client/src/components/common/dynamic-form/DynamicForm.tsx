@@ -21,6 +21,7 @@ type LanguageValue = { [lang: string]: string };
 type FieldType =
   | "text"
   | "email"
+  | "textarea"
   | "language"
   | "image"
   | "select"
@@ -111,6 +112,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     switch (field.type) {
       case "text":
       case "email":
+      case "textarea":
         return (
           <TextCase
             error={error}

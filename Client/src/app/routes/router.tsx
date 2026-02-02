@@ -165,6 +165,23 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: "/cleaning-management",
+        element: <CleaningManagement />,
+        handle: {
+          title: "cleaning_management",
+          documentTitle: "cleaning_management",
+          showInSidebar: true,
+          icon: RoomsIcon,
+        },
+      },
+      {
+        path: "/settings",
+        handle: {
+          documentTitle: "settings",
+        },
+        element: <Settings />,
+      },
+      {
         path: "/organization-settings",
         element: <OrganizationSettings />,
         handle: {

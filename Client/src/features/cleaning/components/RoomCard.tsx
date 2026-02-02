@@ -8,21 +8,18 @@ import {
   Circle,
   AlertCircle,
   User as UserIcon,
-  Phone,
   BedDouble,
   DoorOpen,
   Ban,
-  Plus,
+  CheckCheck,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 
 interface RoomCardProps {
   room: CleaningRoom;
   assignedUser?: User;
   onClick: (room: CleaningRoom) => void;
-  onCreateCall: (room: CleaningRoom) => void;
 }
 
 const statusColors: Record<CleaningStatus, string> = {
@@ -34,6 +31,8 @@ const statusColors: Record<CleaningStatus, string> = {
     "bg-blue-500/15 border-blue-500/30 text-blue-700 dark:text-blue-400",
   occupied_dirty:
     "bg-orange-500/15 border-orange-500/30 text-orange-700 dark:text-orange-400",
+  vacant_inspected:
+    "bg-purple-500/15 border-purple-500/30 text-purple-700 dark:text-purple-400",
   do_not_disturb:
     "bg-gray-500/15 border-gray-500/30 text-gray-700 dark:text-gray-400",
 };
@@ -42,16 +41,12 @@ const statusIcons: Record<CleaningStatus, any> = {
   vacant_clean: CheckCircle2,
   vacant_dirty: AlertCircle,
   occupied_clean: BedDouble,
-  occupied_dirty: DoorOpen, // Or any appropriate icon
+  occupied_dirty: DoorOpen,
+  vacant_inspected: CheckCheck,
   do_not_disturb: Ban,
 };
 
-export const RoomCard = ({
-  room,
-  assignedUser,
-  onClick,
-  onCreateCall,
-}: RoomCardProps) => {
+export const RoomCard = ({ room, assignedUser, onClick }: RoomCardProps) => {
   const { t } = useTranslation();
   const task = room.cleaningStatus!;
   const StatusIcon = statusIcons[task.status] || Circle;
@@ -66,7 +61,9 @@ export const RoomCard = ({
           ? "border-l-blue-500"
           : task.status === "occupied_dirty"
             ? "border-l-orange-500"
-            : "border-l-gray-400"; // DND
+            : task.status === "vacant_inspected"
+              ? "border-l-purple-500"
+              : "border-l-gray-400"; // DND
 
   return (
     <Card
@@ -129,22 +126,6 @@ export const RoomCard = ({
             />
           )}
         </div>
-      </div>
-
-      {/* Footer for Actions */}
-      <div className="bg-muted/30 px-4 py-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 text-xs gap-1 hover:bg-primary/10 hover:text-primary"
-          onClick={(e) => {
-            e.stopPropagation();
-            onCreateCall(room);
-          }}
-        >
-          <Plus className="w-3 h-3" />
-          {t("create_call")}
-        </Button>
       </div>
     </Card>
   );

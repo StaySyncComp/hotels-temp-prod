@@ -6,12 +6,13 @@ import { CallMessageAttachment } from "@/types/api/calls";
 interface UseSocketReturn {
   joinCallRoom: (callId: number) => void;
   leaveCallRoom: (callId: number) => void;
+  joinLocationRoom: (locationId: number) => void;
+  leaveLocationRoom: (locationId: number) => void;
   sendMessage: (
-    callId: number,
+    id: number,
     content: string,
     attachments?: CallMessageAttachment[],
   ) => void;
-  onMessage: (callback: (message: any) => void) => void;
 }
 
 export const useSocket = (): UseSocketReturn => {
@@ -45,36 +46,53 @@ export const useSocket = (): UseSocketReturn => {
     if (socketRef.current) socketRef.current.emit("leaveCallRoom", callId);
   }, []);
 
+  const joinLocationRoom = useCallback((locationId: number) => {
+    if (socketRef.current)
+      socketRef.current.emit("joinLocationRoom", locationId);
+  }, []);
+
+  const leaveLocationRoom = useCallback((locationId: number) => {
+    if (socketRef.current)
+      socketRef.current.emit("leaveLocationRoom", locationId);
+  }, []);
+
   const sendMessage = useCallback(
-    (
-      callId: number,
-      content: string,
-      attachments?: CallMessageAttachment[],
-    ) => {
+    (id: number, content: string, attachments?: CallMessageAttachment[]) => {
       console.log(attachments, "attachments");
 
       if (socketRef.current && user) {
-        socketRef.current.emit("call:sendMessage", {
-          callId,
-          userId: user.id,
-          organizationId: organization?.id,
-          content,
-          attachments,
-        });
+        socketRef.current.emit(
+          type === "call" ? "call:sendMessage" : "location:sendMessage",
+          {
+            [type === "call" ? "callId" : "locationId"]: id,
+            userId: user.id,
+            organizationId: organization?.id,
+            content,
+            attachments,
+          },
+        );
       }
     },
     [user],
   );
 
-  const onMessage = useCallback((callback: (message: any) => void) => {
-    if (socketRef.current) {
-      socketRef.current.on("call:message", callback);
-    }
-  }, []);
+  const onMessage = useCallback(
+    (callback: (message: any) => void, type: "call" | "location" = "call") => {
+      if (socketRef.current) {
+        socketRef.current.on(
+          type === "call" ? "call:message" : "location:message",
+          callback,
+        );
+      }
+    },
+    [],
+  );
 
   return {
     joinCallRoom,
     leaveCallRoom,
+    joinLocationRoom,
+    leaveLocationRoom,
     sendMessage,
     onMessage,
   };
