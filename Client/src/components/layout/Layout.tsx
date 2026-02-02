@@ -20,14 +20,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation();
   const title = `${organization?.name} - ${t(
     // @ts-ignore
-    currentRoute?.handle.documentTitle
+    currentRoute?.handle.documentTitle,
   )}`;
-  const items = [
-    { title: t("home"), url: "/", icon: Home },
-    { title: t("home"), url: "/", icon: Home },
-
-    // { title: t("items.doctors"), url: "/doctors", icon: IconStethoscope },
-  ];
   return (
     <>
       <Helmet>

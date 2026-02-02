@@ -1021,5 +1021,8 @@
   "current_status": "סטטוס נוכחי",
   "quick_actions": "פעולות מהירות",
   "create_room_request": "יצירת פנייה לחדר",
-  "june": "יוני"
+  "june": "יוני",
+  "all_areas": "כל האזורים",
+  "search_areas": "חפש אזורים...",
+  "unknown_area": "אזור לא ידוע"
 }
