@@ -89,6 +89,7 @@ export const router = createBrowserRouter([
         handle: {
           title: "home",
           documentTitle: "home",
+          navigationTitle: "home",
           icon: HomeIcon,
           showInSidebar: true,
         },
@@ -99,6 +100,7 @@ export const router = createBrowserRouter([
         handle: {
           title: "dashboard",
           documentTitle: "dashboard",
+          navigationTitle: "dashboard",
           icon: ReportsIcon,
           showInSidebar: true,
         },
@@ -109,6 +111,7 @@ export const router = createBrowserRouter([
           title: "calls",
           icon: CallsIcon,
           documentTitle: "calls",
+          navigationTitle: "calls",
           showInSidebar: true,
         },
         element: <Calls />,
@@ -117,6 +120,7 @@ export const router = createBrowserRouter([
         path: "/calls/add",
         handle: {
           documentTitle: "add_call",
+          navigationTitle: "add_call",
         },
         element: <AddCall />,
       },
@@ -124,6 +128,7 @@ export const router = createBrowserRouter([
         path: "/calls/:id",
         handle: {
           documentTitle: "call_details",
+          navigationTitle: "call_details",
         },
         element: <CallDetails />,
       },
@@ -139,6 +144,7 @@ export const router = createBrowserRouter([
         handle: {
           documentTitle: "employees",
           title: "employees",
+          navigationTitle: "employees",
           showInSidebar: true,
           icon: PeopleIcon,
         },
@@ -149,6 +155,7 @@ export const router = createBrowserRouter([
         handle: {
           title: "cleaning_management",
           documentTitle: "cleaning_management",
+          navigationTitle: "cleaning_management",
           showInSidebar: true,
           icon: RoomsIcon,
         },
@@ -176,6 +183,7 @@ export const router = createBrowserRouter([
         handle: {
           documentTitle: "organization_settings",
           title: "organization_settings",
+          navigationTitle: "organization_settings",
           showInSidebar: true,
           icon: SettingsIcon,
         },

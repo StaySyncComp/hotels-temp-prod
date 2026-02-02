@@ -118,7 +118,7 @@ export function Combobox({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-full min-w-[200px] justify-between h-auto min-h-[48px] px-4 py-3 text-sm font-medium rounded-xl bg-white/80 backdrop-blur-sm transition-all duration-200 ease-in-out",
+            "w-full min-w-[200px] border justify-between h-auto min-h-[44px] px-4 py-3 text-sm font-medium rounded-full bg-white transition-all duration-200 ease-in-out",
             open
               ? "border-blue-500 ring-2 ring-blue-500/20 shadow-lg"
               : "hover:border-blue-300 hover:bg-blue-50/50",

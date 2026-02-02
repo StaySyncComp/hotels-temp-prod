@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/button";
+import { SearchInput } from "@/components/common/SearchInput";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Bell,
-  Zap,
   HelpCircle,
-  Search,
   ChevronDown,
   User,
   Settings,
@@ -23,36 +20,42 @@ import {
 import { useTranslation } from "react-i18next";
 import LanguagePicker from "@/components/common/LanguagePicker";
 import { AuthContext } from "@/features/auth/context/auth-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useMatches } from "react-router-dom";
+
+interface RouteHandle {
+  navigationTitle?: string;
+  title?: string;
+  documentTitle?: string;
+  showInSidebar?: boolean;
+  icon?: React.ComponentType;
+}
 
 function Navigation() {
   const navigate = useNavigate();
+  const matches = useMatches();
   const { user, logout } = useContext(AuthContext);
   const { t } = useTranslation("sidebar");
   const { t: tCommon } = useTranslation("common");
   const [notificationCount] = useState(3);
 
+  // Get the navigation title from the current route's handle
+  const currentNavigationTitle = matches
+    .filter((match) => Boolean((match.handle as RouteHandle)?.navigationTitle))
+    .pop()?.handle as RouteHandle | undefined;
+
   return (
-    <header className="w-full bg-transparent border-b border-gray-200 h-16 flex items-center px-6 justify-between backdrop-blur-sm">
+    <header className="w-full bg-transparent border-b h-16 flex items-center px-6 justify-between backdrop-blur-sm">
       <div className="flex gap-4 flex-1 items-center max-w-2xl">
-        <div className="relative  bg-none">
-          {/* <Search className="absolute z-10 right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" /> */}
-        </div>
-        {/* <Button
-          variant="ghost"
-          className="flex gap-2 items-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg px-3 py-2 transition-all"
-        >
-          <Zap className="w-4 h-4" />
-          <span className="text-sm font-medium">{t("quickActions")}</span>
-        </Button> */}
+        {currentNavigationTitle?.navigationTitle && (
+          <h1 className="text-2xl font-semibold text-primary">
+            {t(currentNavigationTitle.navigationTitle)}
+          </h1>
+        )}
       </div>
 
       <div className="flex gap-4 items-center">
         <div className="flex gap-2">
-          <Input
-            className="w-[340px] h-11 bg-surface border-border focus:bg-white focus:border-blue-400 transition-all rounded-3xl"
-            placeholder={tCommon("search")}
-          />
+          <SearchInput placeholder={tCommon("search")} />
           <div className="h-8 w-px bg-gray-200" />
 
           <button className="relative p-2 text-muted-foreground hover:text-foreground hover:bg-gray-100 rounded-lg transition-all">
