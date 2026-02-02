@@ -5,10 +5,8 @@ import { OrganizationsContext } from "@/features/organization/context/organizati
 import { useRoutes } from "@/hooks/useRoutes";
 import { useTranslation } from "react-i18next";
 import { useRTL } from "@/hooks/useRtl";
-import { router } from "@/app/routes/router";
-import { Home } from "lucide-react";
-import { AppSidebar } from "./Sidebar/Sidebar";
-import Navigation from "./Topbar/Navigation";
+import { AppSidebar } from "./sidebar/Sidebar";
+import Navigation from "./topbar/Navigation";
 interface LayoutProps {
   children: React.ReactNode;
 }
