@@ -23,16 +23,18 @@ import {
   // Star,
   RefreshCw,
 } from "lucide-react";
-import { OrganizationsContext } from "@/contexts/OrganizationsContext";
-import { useReportsData } from "@/hooks/useReportsData";
+import { OrganizationsContext } from "@/features/organization/context/organization-context";
+import { useReportsData } from "@/features/reports/hooks/useReportsData";
 import jsPDF from "jspdf";
 import * as XLSX from "xlsx";
-import CustomReportBuilder from "./CustomReportBuilder";
-import GeneralData from "./GeneralData";
-import AIReccomendations from "./AIReccomendations";
-import ByDayReport from "./ByDayReport";
-import ByDepartmentReport from "./ByDepartmentReport";
-import StatCard from "../Home/components/StatCard";
+import CustomReportBuilder from "@/features/reports/components/CustomReportBuilder";
+import GeneralData from "@/features/reports/components/GeneralData";
+import AIReccomendations from "@/features/reports/components/AIReccomendations";
+import ByDayReport from "@/features/reports/components/ByDayReport";
+import ByDepartmentReport from "@/features/reports/components/ByDepartmentReport";
+import StatCard, {
+  StatCardProps,
+} from "@/features/dashboard/components/StatCard";
 
 export default function Reports() {
   const { t, i18n } = useTranslation();
@@ -45,12 +47,12 @@ export default function Reports() {
 
   // Disable browser scroll restoration
   useEffect(() => {
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
     }
     return () => {
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'auto';
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "auto";
       }
     };
   }, []);
@@ -58,10 +60,13 @@ export default function Reports() {
   // Store scroll position before tab change
   const handleTabChange = (newTab: string) => {
     // Store current scroll position immediately
-    const currentScroll = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    const currentScroll =
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop;
     scrollPositionRef.current = currentScroll;
     isTabChangingRef.current = true;
-    
+
     // Lock scroll position
     const lockScroll = () => {
       if (isTabChangingRef.current && scrollPositionRef.current > 0) {
@@ -72,12 +77,12 @@ export default function Reports() {
         }
       }
     };
-    
+
     // Lock scroll immediately
     lockScroll();
-    
+
     setActiveTab(newTab);
-    
+
     // Keep locking for a short period
     const lockInterval = setInterval(lockScroll, 10);
     setTimeout(() => {
@@ -89,18 +94,19 @@ export default function Reports() {
   // Restore scroll position after tab change
   useEffect(() => {
     if (!isTabChangingRef.current) return;
-    
+
     const savedPosition = scrollPositionRef.current;
     if (savedPosition === 0) return;
-    
+
     // Restore scroll position
     const restoreScroll = () => {
-      const currentScroll = window.scrollY || document.documentElement.scrollTop;
+      const currentScroll =
+        window.scrollY || document.documentElement.scrollTop;
       if (Math.abs(currentScroll - savedPosition) > 5) {
         window.scrollTo({
           top: savedPosition,
           left: 0,
-          behavior: 'instant' as ScrollBehavior,
+          behavior: "instant" as ScrollBehavior,
         });
         document.documentElement.scrollTop = savedPosition;
         if (document.body) {
@@ -115,7 +121,7 @@ export default function Reports() {
     for (let i = 0; i < 30; i++) {
       timers.push(setTimeout(restoreScroll, i * 16));
     }
-    
+
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         restoreScroll();
@@ -123,7 +129,7 @@ export default function Reports() {
     });
 
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
+      timers.forEach((timer) => clearTimeout(timer));
     };
   }, [activeTab]);
 
@@ -142,7 +148,11 @@ export default function Reports() {
       !urgentIssues.length &&
       !departmentPerformance.length
     ) {
-      alert(t("no_data_to_export") === "no_data_to_export" ? "אין נתונים לייצוא" : t("no_data_to_export"));
+      alert(
+        t("no_data_to_export") === "no_data_to_export"
+          ? "אין נתונים לייצוא"
+          : t("no_data_to_export"),
+      );
       return;
     }
 
@@ -159,7 +169,11 @@ export default function Reports() {
       }
     } catch (error) {
       console.error(`Error exporting to ${format}:`, error);
-      alert(t("export_error") === "export_error" ? `שגיאה בייצוא ל-${format.toUpperCase()}` : t("export_error"));
+      alert(
+        t("export_error") === "export_error"
+          ? `שגיאה בייצוא ל-${format.toUpperCase()}`
+          : t("export_error"),
+      );
     }
   };
 
@@ -306,7 +320,7 @@ export default function Reports() {
       wb,
       `${organization?.name || "reports"}_${
         new Date().toISOString().split("T")[0]
-      }.xlsx`
+      }.xlsx`,
     );
   };
 
@@ -330,7 +344,7 @@ export default function Reports() {
       } | ${new Date().toLocaleDateString()}`,
       pageWidth / 2,
       yPosition,
-      { align: "center" }
+      { align: "center" },
     );
     yPosition += 20;
 
@@ -397,7 +411,7 @@ export default function Reports() {
         pdf.text(
           `• ${issue.title} (${issue.location}) - ${issue.priority}`,
           25,
-          yPosition
+          yPosition,
         );
         yPosition += 8;
       });
@@ -432,7 +446,7 @@ export default function Reports() {
     pdf.save(
       `${organization?.name || "reports"}_${
         new Date().toISOString().split("T")[0]
-      }.pdf`
+      }.pdf`,
     );
   };
 
@@ -696,8 +710,8 @@ export default function Reports() {
                       issue.priority === "high"
                         ? "bg-red-50"
                         : issue.priority === "medium"
-                        ? "bg-orange-50"
-                        : "bg-yellow-50"
+                          ? "bg-orange-50"
+                          : "bg-yellow-50"
                     }`}
                   >
                     <div>
@@ -706,8 +720,8 @@ export default function Reports() {
                           issue.priority === "high"
                             ? "text-red-800"
                             : issue.priority === "medium"
-                            ? "text-orange-800"
-                            : "text-yellow-800"
+                              ? "text-orange-800"
+                              : "text-yellow-800"
                         }`}
                       >
                         {issue.title}
@@ -717,8 +731,8 @@ export default function Reports() {
                           issue.priority === "high"
                             ? "text-red-600"
                             : issue.priority === "medium"
-                            ? "text-orange-600"
-                            : "text-yellow-600"
+                              ? "text-orange-600"
+                              : "text-yellow-600"
                         }`}
                       >
                         {issue.location}
@@ -729,15 +743,15 @@ export default function Reports() {
                         issue.priority === "high"
                           ? "bg-red-100 text-red-700"
                           : issue.priority === "medium"
-                          ? "bg-orange-100 text-orange-700"
-                          : "bg-yellow-100 text-yellow-700"
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-yellow-100 text-yellow-700"
                       }`}
                     >
                       {issue.priority === "high"
                         ? t("high_priority")
                         : issue.priority === "medium"
-                        ? t("medium_priority")
-                        : t("low_priority")}
+                          ? t("medium_priority")
+                          : t("low_priority")}
                     </span>
                   </div>
                 ))
@@ -787,8 +801,8 @@ export default function Reports() {
                           dept.color === "green"
                             ? "bg-green-100"
                             : dept.color === "blue"
-                            ? "bg-blue-100"
-                            : "bg-purple-100"
+                              ? "bg-blue-100"
+                              : "bg-purple-100"
                         }`}
                       >
                         {index === 0 ? (
@@ -797,8 +811,8 @@ export default function Reports() {
                               dept.color === "green"
                                 ? "text-green-600"
                                 : dept.color === "blue"
-                                ? "text-blue-600"
-                                : "text-purple-600"
+                                  ? "text-blue-600"
+                                  : "text-purple-600"
                             }`}
                           />
                         ) : index === 1 ? (
@@ -807,8 +821,8 @@ export default function Reports() {
                               dept.color === "green"
                                 ? "text-green-600"
                                 : dept.color === "blue"
-                                ? "text-blue-600"
-                                : "text-purple-600"
+                                  ? "text-blue-600"
+                                  : "text-purple-600"
                             }`}
                           />
                         ) : (
@@ -817,8 +831,8 @@ export default function Reports() {
                               dept.color === "green"
                                 ? "text-green-600"
                                 : dept.color === "blue"
-                                ? "text-blue-600"
-                                : "text-purple-600"
+                                  ? "text-blue-600"
+                                  : "text-purple-600"
                             }`}
                           />
                         )}
@@ -826,7 +840,10 @@ export default function Reports() {
                       <div>
                         <p className="font-medium">{dept.name}</p>
                         <p className="text-sm text-gray-500">
-                          {dept.completionRate}% {t("completion_rate") === "completion_rate" ? "שיעור השלמה" : t("completion_rate")}
+                          {dept.completionRate}%{" "}
+                          {t("completion_rate") === "completion_rate"
+                            ? "שיעור השלמה"
+                            : t("completion_rate")}
                         </p>
                       </div>
                     </div>
@@ -835,8 +852,8 @@ export default function Reports() {
                         dept.color === "green"
                           ? "text-green-600"
                           : dept.color === "blue"
-                          ? "text-blue-600"
-                          : "text-purple-600"
+                            ? "text-blue-600"
+                            : "text-purple-600"
                       }`}
                     >
                       {dept.completionRate}%
@@ -846,7 +863,11 @@ export default function Reports() {
               ) : (
                 <div className="text-center py-8 text-gray-500">
                   <Building2 className="w-12 h-12 mb-2" />
-                  <p>{t("no_department_data") === "no_department_data" ? "אין נתוני מחלקות" : t("no_department_data")}</p>
+                  <p>
+                    {t("no_department_data") === "no_department_data"
+                      ? "אין נתוני מחלקות"
+                      : t("no_department_data")}
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -923,7 +944,10 @@ export default function Reports() {
             value={activeTab}
             onValueChange={(value) => {
               // Prevent any scroll reset
-              scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+              scrollPositionRef.current =
+                window.scrollY ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop;
               handleTabChange(value);
             }}
             className="space-y-6"
@@ -942,18 +966,27 @@ export default function Reports() {
                         e.preventDefault();
                         e.stopPropagation();
                         // Store scroll position immediately before state change
-                        scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+                        scrollPositionRef.current =
+                          window.scrollY ||
+                          document.documentElement.scrollTop ||
+                          document.body.scrollTop;
                         handleTabChange(tab.value);
                       }}
                       onMouseDown={(e) => {
                         e.preventDefault();
                         // Store scroll position on mouse down as well
-                        scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+                        scrollPositionRef.current =
+                          window.scrollY ||
+                          document.documentElement.scrollTop ||
+                          document.body.scrollTop;
                       }}
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
+                        if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+                          scrollPositionRef.current =
+                            window.scrollY ||
+                            document.documentElement.scrollTop ||
+                            document.body.scrollTop;
                           handleTabChange(tab.value);
                         }
                       }}
@@ -1025,36 +1058,36 @@ export default function Reports() {
             </div>
 
             {/* Tab Content */}
-            <div 
+            <div
               className="bg-surface/90 backdrop-blur-sm rounded-2xl shadow-lg border-0 p-6"
-              style={{ scrollMarginTop: '0px' }}
+              style={{ scrollMarginTop: "0px" }}
             >
               <TabsContent value="overview" className="mt-0 space-y-6">
-                <div style={{ scrollMarginTop: '0px' }}>
+                <div style={{ scrollMarginTop: "0px" }}>
                   <GeneralData />
                 </div>
               </TabsContent>
 
               <TabsContent value="custom" className="mt-0">
-                <div style={{ scrollMarginTop: '0px' }}>
+                <div style={{ scrollMarginTop: "0px" }}>
                   <CustomReportBuilder />
                 </div>
               </TabsContent>
 
               <TabsContent value="ai" className="mt-0">
-                <div style={{ scrollMarginTop: '0px' }}>
+                <div style={{ scrollMarginTop: "0px" }}>
                   <AIReccomendations />
                 </div>
               </TabsContent>
 
               <TabsContent value="by_day" className="mt-0">
-                <div style={{ scrollMarginTop: '0px' }}>
+                <div style={{ scrollMarginTop: "0px" }}>
                   <ByDayReport />
                 </div>
               </TabsContent>
 
               <TabsContent value="by_department" className="mt-0">
-                <div style={{ scrollMarginTop: '0px' }}>
+                <div style={{ scrollMarginTop: "0px" }}>
                   <ByDepartmentReport />
                 </div>
               </TabsContent>
@@ -1065,4 +1098,3 @@ export default function Reports() {
     </motion.div>
   );
 }
-

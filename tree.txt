@@ -1,0 +1,647 @@
+﻿hotels-temp-prod
++-- .agent
+|   \-- skills
+|       +-- connecting-backend
+|       |   \-- SKILL.md
+|       \-- creating-skills
+|           \-- SKILL.md
++-- Client
+|   +-- cypress
+|   |   +-- e2e
+|   |   |   \-- login.cy.js
+|   |   +-- fixtures
+|   |   |   \-- example.json
+|   |   \-- support
+|   |       +-- commands.ts
+|   |       \-- e2e.ts
+|   +-- dist
+|   |   +-- assets
+|   |   |   +-- appShowcaseSvg-9vl0s_47.svg
+|   |   |   +-- browser-BHhk6k9F.js
+|   |   |   +-- browser-ponyfill-CYAJEO2K.js
+|   |   |   +-- chatbotShowcaseSvg-CNykaFOs.svg
+|   |   |   +-- coverimage-Cffvq0cQ.png
+|   |   |   +-- fullLogo-BfZyCdFm.svg
+|   |   |   +-- html2canvas.esm-DtF4syFK.js
+|   |   |   +-- index-CCOAGnrX.css
+|   |   |   +-- index-KqI1n4at.js
+|   |   |   +-- index.es-BAQ7mbko.js
+|   |   |   +-- logo-B7daU-vW.svg
+|   |   |   +-- purify.es-BFmuJLeH.js
+|   |   |   \-- websiteShowcaseSvg-BkyAIqyA.svg
+|   |   +-- fonts
+|   |   |   +-- NotoSansHebrew
+|   |   |   |   +-- static
+|   |   |   |   |   +-- NotoSansHebrew-Black.ttf
+|   |   |   |   |   +-- NotoSansHebrew-Bold.ttf
+|   |   |   |   |   +-- NotoSansHebrew-ExtraBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew-ExtraLight.ttf
+|   |   |   |   |   +-- NotoSansHebrew-Light.ttf
+|   |   |   |   |   +-- NotoSansHebrew-Medium.ttf
+|   |   |   |   |   +-- NotoSansHebrew-Regular.ttf
+|   |   |   |   |   +-- NotoSansHebrew-SemiBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew-Thin.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-Black.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-Bold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-ExtraBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-ExtraLight.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-Light.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-Medium.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-Regular.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-SemiBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_Condensed-Thin.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-Black.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-Bold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-ExtraBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-ExtraLight.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-Light.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-Medium.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-Regular.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-SemiBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_ExtraCondensed-Thin.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-Black.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-Bold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-ExtraBold.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-ExtraLight.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-Light.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-Medium.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-Regular.ttf
+|   |   |   |   |   +-- NotoSansHebrew_SemiCondensed-SemiBold.ttf
+|   |   |   |   |   \-- NotoSansHebrew_SemiCondensed-Thin.ttf
+|   |   |   |   +-- NotoSansHebrew-Variable.ttf
+|   |   |   |   +-- OFL.txt
+|   |   |   |   \-- README.txt
+|   |   |   \-- Rubik
+|   |   |       +-- static
+|   |   |       |   +-- Rubik-Black.ttf
+|   |   |       |   +-- Rubik-BlackItalic.ttf
+|   |   |       |   +-- Rubik-Bold.ttf
+|   |   |       |   +-- Rubik-BoldItalic.ttf
+|   |   |       |   +-- Rubik-ExtraBold.ttf
+|   |   |       |   +-- Rubik-ExtraBoldItalic.ttf
+|   |   |       |   +-- Rubik-Italic.ttf
+|   |   |       |   +-- Rubik-Light.ttf
+|   |   |       |   +-- Rubik-LightItalic.ttf
+|   |   |       |   +-- Rubik-Medium.ttf
+|   |   |       |   +-- Rubik-MediumItalic.ttf
+|   |   |       |   +-- Rubik-Regular.ttf
+|   |   |       |   +-- Rubik-SemiBold.ttf
+|   |   |       |   \-- Rubik-SemiBoldItalic.ttf
+|   |   |       +-- OFL.txt
+|   |   |       +-- README.txt
+|   |   |       +-- Rubik-Italic-VariableFont_wght.ttf
+|   |   |       \-- Rubik-VariableFont_wght.ttf
+|   |   \-- index.html
+|   +-- public
+|   |   \-- fonts
+|   |       +-- NotoSansHebrew
+|   |       |   +-- static
+|   |       |   |   +-- NotoSansHebrew-Black.ttf
+|   |       |   |   +-- NotoSansHebrew-Bold.ttf
+|   |       |   |   +-- NotoSansHebrew-ExtraBold.ttf
+|   |       |   |   +-- NotoSansHebrew-ExtraLight.ttf
+|   |       |   |   +-- NotoSansHebrew-Light.ttf
+|   |       |   |   +-- NotoSansHebrew-Medium.ttf
+|   |       |   |   +-- NotoSansHebrew-Regular.ttf
+|   |       |   |   +-- NotoSansHebrew-SemiBold.ttf
+|   |       |   |   +-- NotoSansHebrew-Thin.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-Black.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-Bold.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-ExtraBold.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-ExtraLight.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-Light.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-Medium.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-Regular.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-SemiBold.ttf
+|   |       |   |   +-- NotoSansHebrew_Condensed-Thin.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-Black.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-Bold.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-ExtraBold.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-ExtraLight.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-Light.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-Medium.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-Regular.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-SemiBold.ttf
+|   |       |   |   +-- NotoSansHebrew_ExtraCondensed-Thin.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-Black.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-Bold.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-ExtraBold.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-ExtraLight.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-Light.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-Medium.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-Regular.ttf
+|   |       |   |   +-- NotoSansHebrew_SemiCondensed-SemiBold.ttf
+|   |       |   |   \-- NotoSansHebrew_SemiCondensed-Thin.ttf
+|   |       |   +-- NotoSansHebrew-Variable.ttf
+|   |       |   +-- OFL.txt
+|   |       |   \-- README.txt
+|   |       \-- Rubik
+|   |           +-- static
+|   |           |   +-- Rubik-Black.ttf
+|   |           |   +-- Rubik-BlackItalic.ttf
+|   |           |   +-- Rubik-Bold.ttf
+|   |           |   +-- Rubik-BoldItalic.ttf
+|   |           |   +-- Rubik-ExtraBold.ttf
+|   |           |   +-- Rubik-ExtraBoldItalic.ttf
+|   |           |   +-- Rubik-Italic.ttf
+|   |           |   +-- Rubik-Light.ttf
+|   |           |   +-- Rubik-LightItalic.ttf
+|   |           |   +-- Rubik-Medium.ttf
+|   |           |   +-- Rubik-MediumItalic.ttf
+|   |           |   +-- Rubik-Regular.ttf
+|   |           |   +-- Rubik-SemiBold.ttf
+|   |           |   \-- Rubik-SemiBoldItalic.ttf
+|   |           +-- OFL.txt
+|   |           +-- README.txt
+|   |           +-- Rubik-Italic-VariableFont_wght.ttf
+|   |           \-- Rubik-VariableFont_wght.ttf
+|   +-- src
+|   |   +-- app
+|   |   |   +-- providers
+|   |   |   |   +-- AuthProvider.tsx
+|   |   |   |   \-- OrganizationsProvider.tsx
+|   |   |   +-- routes
+|   |   |   |   +-- router.tsx
+|   |   |   |   \-- routesUtils.ts
+|   |   |   +-- styles
+|   |   |   |   \-- accessibility.css
+|   |   |   \-- main.tsx
+|   |   +-- assets
+|   |   |   +-- animations
+|   |   |   |   +-- lottie
+|   |   |   |   |   +-- AppNotifications.json
+|   |   |   |   |   +-- AppShowcase.json
+|   |   |   |   |   +-- Chatbot.json
+|   |   |   |   |   +-- coverimage-test.png
+|   |   |   |   |   +-- coverimage.png
+|   |   |   |   |   +-- coverimage1.png
+|   |   |   |   |   +-- coverimage2.png
+|   |   |   |   |   +-- HeroAnimation.json
+|   |   |   |   |   +-- HeroMobile.json
+|   |   |   |   |   +-- LanguageShowcase.json
+|   |   |   |   |   +-- OnlineChatbot.json
+|   |   |   |   |   +-- SuggestionShowcase.json
+|   |   |   |   |   \-- WebAnalytics.json
+|   |   |   |   +-- Animation - 1746365848521.json
+|   |   |   |   \-- Animation - 1746366123961.json
+|   |   |   +-- icons
+|   |   |   |   +-- Flags
+|   |   |   |   |   +-- IsraelFlag.tsx
+|   |   |   |   |   +-- SaudiFlag.tsx
+|   |   |   |   |   \-- USAFlag.tsx
+|   |   |   |   +-- AccessibilityIcon.tsx
+|   |   |   |   +-- CallsIcon.tsx
+|   |   |   |   +-- chatbotIcon.png
+|   |   |   |   +-- DepartmentsIcon.tsx
+|   |   |   |   +-- GlobeIcon.tsx
+|   |   |   |   +-- HomeIcon.tsx
+|   |   |   |   +-- mail-send-envelope--envelope-email-message-unopened-sealed-close.svg
+|   |   |   |   +-- PeopleIcon.tsx
+|   |   |   |   +-- ReportsIcon.tsx
+|   |   |   |   +-- RoomsIcon.tsx
+|   |   |   |   \-- SettingsIcon.tsx
+|   |   |   +-- styles
+|   |   |   |   \-- index.css
+|   |   |   +-- appShowcaseSvg.svg
+|   |   |   +-- chatbotShowcaseSvg.svg
+|   |   |   +-- fullLogo.svg
+|   |   |   +-- logo.svg
+|   |   |   \-- websiteShowcaseSvg.svg
+|   |   +-- components
+|   |   |   +-- common
+|   |   |   |   +-- accessibility
+|   |   |   |   |   +-- AccessibilityLauncher.tsx
+|   |   |   |   |   \-- AccessibilityMenu.tsx
+|   |   |   |   +-- advanced-search
+|   |   |   |   |   +-- AdvancedSearchButton.tsx
+|   |   |   |   |   +-- AdvancedSearchDialog.tsx
+|   |   |   |   |   +-- AdvancedSearchForm.tsx
+|   |   |   |   |   \-- AdvancedSearchModal.tsx
+|   |   |   |   +-- data-table
+|   |   |   |   |   +-- data-table-body
+|   |   |   |   |   |   +-- data-table-body-detailed-view.tsx
+|   |   |   |   |   |   +-- data-table-body-empty.tsx
+|   |   |   |   |   |   +-- data-table-body-row-component.tsx
+|   |   |   |   |   |   +-- data-table-body-row-expanded.tsx
+|   |   |   |   |   |   \-- data-table-body.tsx
+|   |   |   |   |   +-- dialogs
+|   |   |   |   |   |   +-- AreYouSureDialog.tsx
+|   |   |   |   |   |   \-- Backdrop.tsx
+|   |   |   |   |   +-- dropdowns
+|   |   |   |   |   |   \-- DepartmentsDropdown.tsx
+|   |   |   |   |   +-- Combobox.tsx
+|   |   |   |   |   +-- data-table-add-button.tsx
+|   |   |   |   |   +-- data-table-context.tsx
+|   |   |   |   |   +-- data-table-header.tsx
+|   |   |   |   |   +-- data-table-loading.tsx
+|   |   |   |   |   +-- data-table-pagination-controls.tsx
+|   |   |   |   |   +-- data-table-search.tsx
+|   |   |   |   |   +-- index.tsx
+|   |   |   |   |   +-- multi-select.tsx
+|   |   |   |   |   +-- Pagination.tsx
+|   |   |   |   |   \-- StatusBadge.tsx
+|   |   |   |   +-- dynamic-form
+|   |   |   |   |   +-- AutocompleteCase.tsx
+|   |   |   |   |   +-- CheckBoxCase.tsx
+|   |   |   |   |   +-- DateCase.tsx
+|   |   |   |   |   +-- DynamicForm.tsx
+|   |   |   |   |   +-- IconSelect.tsx
+|   |   |   |   |   +-- ImageCase.tsx
+|   |   |   |   |   +-- MultiCheckBox.tsx
+|   |   |   |   |   +-- MultiTime.tsx
+|   |   |   |   |   +-- NumberCase.tsx
+|   |   |   |   |   \-- TextCase.tsx
+|   |   |   |   +-- icons
+|   |   |   |   |   \-- ColoredIcon.tsx
+|   |   |   |   +-- table-actions
+|   |   |   |   |   +-- AdvancedSearchButton.tsx
+|   |   |   |   |   +-- ColumnVisibilityButton.tsx
+|   |   |   |   |   +-- ExportButton.tsx
+|   |   |   |   |   +-- ExportButtonWrapper.tsx
+|   |   |   |   |   +-- TableButton.tsx
+|   |   |   |   |   \-- TableHeaderActions.tsx
+|   |   |   |   +-- AnimatedWrapper.tsx
+|   |   |   |   +-- FilePreview.tsx
+|   |   |   |   +-- ImageUpload.tsx
+|   |   |   |   +-- LanguageInput.tsx
+|   |   |   |   +-- LanguagePicker.tsx
+|   |   |   |   +-- LanguageSelector.tsx
+|   |   |   |   +-- LottieAnimation.tsx
+|   |   |   |   +-- PrivateRoute.tsx
+|   |   |   |   \-- SelectField.tsx
+|   |   |   +-- layout
+|   |   |   |   +-- Public
+|   |   |   |   |   \-- Layout.tsx
+|   |   |   |   +-- sidebar
+|   |   |   |   |   +-- NavRoutes.tsx
+|   |   |   |   |   +-- NewUser.tsx
+|   |   |   |   |   +-- sidebar-footer.tsx
+|   |   |   |   |   +-- sidebar-header.tsx
+|   |   |   |   |   \-- Sidebar.tsx
+|   |   |   |   +-- topbar
+|   |   |   |   |   +-- Navigation.tsx
+|   |   |   |   |   +-- Topbar.tsx
+|   |   |   |   |   \-- WebSearch.tsx
+|   |   |   |   +-- Breadcrumbs.tsx
+|   |   |   |   \-- Layout.tsx
+|   |   |   \-- ui
+|   |   |       +-- backgrounds
+|   |   |       |   \-- AroraBackground.tsx
+|   |   |       +-- alert-dialog.tsx
+|   |   |       +-- avatar.tsx
+|   |   |       +-- badge.tsx
+|   |   |       +-- breadcrumb.tsx
+|   |   |       +-- button.tsx
+|   |   |       +-- calendar.tsx
+|   |   |       +-- card.tsx
+|   |   |       +-- checkbox.tsx
+|   |   |       +-- collapsible.tsx
+|   |   |       +-- color-picker.tsx
+|   |   |       +-- combobox.tsx
+|   |   |       +-- command.tsx
+|   |   |       +-- date-picker.tsx
+|   |   |       +-- dialog.tsx
+|   |   |       +-- drawer.tsx
+|   |   |       +-- dropdown-menu.tsx
+|   |   |       +-- form.tsx
+|   |   |       +-- Input.tsx
+|   |   |       +-- label.tsx
+|   |   |       +-- popover.tsx
+|   |   |       +-- progress.tsx
+|   |   |       +-- radio-group.tsx
+|   |   |       +-- scroll-area.tsx
+|   |   |       +-- select.tsx
+|   |   |       +-- separator.tsx
+|   |   |       +-- sheet.tsx
+|   |   |       +-- sidebar.tsx
+|   |   |       +-- skeleton.tsx
+|   |   |       +-- sonner.tsx
+|   |   |       +-- table.tsx
+|   |   |       +-- tabs.tsx
+|   |   |       +-- textarea.tsx
+|   |   |       +-- toast.tsx
+|   |   |       +-- toaster.tsx
+|   |   |       +-- tooltip.tsx
+|   |   |       \-- TypingBubble.tsx
+|   |   +-- features
+|   |   |   +-- auth
+|   |   |   |   +-- api
+|   |   |   |   |   +-- checkEmail.ts
+|   |   |   |   |   +-- index.ts
+|   |   |   |   |   \-- login.ts
+|   |   |   |   +-- components
+|   |   |   |   |   +-- LoginFooter.tsx
+|   |   |   |   |   +-- Step1.tsx
+|   |   |   |   |   \-- Step2.tsx
+|   |   |   |   +-- context
+|   |   |   |   |   \-- auth-context.tsx
+|   |   |   |   \-- hooks
+|   |   |   |       +-- useAuth.ts
+|   |   |   |       \-- useUser.ts
+|   |   |   +-- calls
+|   |   |   |   +-- api
+|   |   |   |   |   +-- categories
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- index.ts
+|   |   |   |   |   \-- recurring.ts
+|   |   |   |   +-- components
+|   |   |   |   |   +-- calls-table
+|   |   |   |   |   |   +-- Actions
+|   |   |   |   |   |   |   +-- ActionCell.tsx
+|   |   |   |   |   |   |   \-- AssignWorkerDialog.tsx
+|   |   |   |   |   |   +-- CallChat
+|   |   |   |   |   |   |   +-- CallChat.tsx
+|   |   |   |   |   |   |   +-- MessageInput.tsx
+|   |   |   |   |   |   |   +-- MessageItem.tsx
+|   |   |   |   |   |   |   \-- StatusAlert.tsx
+|   |   |   |   |   |   +-- CallBI.tsx
+|   |   |   |   |   |   +-- CallsExpanded.tsx
+|   |   |   |   |   |   +-- ChatPanel.tsx
+|   |   |   |   |   |   +-- DetailsPanel.tsx
+|   |   |   |   |   |   +-- ExpectedTimer.tsx
+|   |   |   |   |   |   +-- StatusBadge.tsx
+|   |   |   |   |   |   \-- Test.tsx
+|   |   |   |   |   +-- Tabs
+|   |   |   |   |   |   +-- CallTable.tsx
+|   |   |   |   |   |   \-- RecurringCallTable.tsx
+|   |   |   |   |   +-- AddCall.tsx
+|   |   |   |   |   +-- CallDetails.tsx
+|   |   |   |   |   +-- CallProgress.tsx
+|   |   |   |   |   \-- SideStatsCard.tsx
+|   |   |   |   +-- config
+|   |   |   |   |   +-- call-columns.tsx
+|   |   |   |   |   +-- call-fields.ts
+|   |   |   |   |   +-- call-settings-columns.tsx
+|   |   |   |   |   +-- call-settings-fields.tsx
+|   |   |   |   |   +-- recurring-call-columns.tsx
+|   |   |   |   |   \-- recurring-call-fields.ts
+|   |   |   |   \-- schemas
+|   |   |   |       +-- call-form-schema.ts
+|   |   |   |       +-- call-settings-schema.ts
+|   |   |   |       \-- recurring-call-form-schema.ts
+|   |   |   +-- cleaning
+|   |   |   |   +-- api
+|   |   |   |   |   \-- index.ts
+|   |   |   |   +-- components
+|   |   |   |   |   +-- CleaningBoard.tsx
+|   |   |   |   |   +-- CleaningDetailsDrawer.tsx
+|   |   |   |   |   \-- RoomCard.tsx
+|   |   |   |   \-- types.ts
+|   |   |   +-- dashboard
+|   |   |   |   \-- components
+|   |   |   |       +-- CallsHeatmap.tsx
+|   |   |   |       +-- RecentCalls.tsx
+|   |   |   |       \-- StatCard.tsx
+|   |   |   +-- guest
+|   |   |   |   +-- api
+|   |   |   |   |   +-- microservice
+|   |   |   |   |   |   +-- ai.ts
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   \-- index.tsx
+|   |   |   |   +-- components
+|   |   |   |   |   +-- Guest
+|   |   |   |   |   |   +-- GuestChatRecommendations.tsx
+|   |   |   |   |   |   +-- GuestChatSkeleton.tsx
+|   |   |   |   |   |   \-- GuestChatWindow.tsx
+|   |   |   |   |   +-- ChatBotLauncher.tsx
+|   |   |   |   |   +-- ChatHeader.tsx
+|   |   |   |   |   +-- ChatWindow.tsx
+|   |   |   |   |   +-- InputControls.tsx
+|   |   |   |   |   \-- MessagesList.tsx
+|   |   |   |   \-- hooks
+|   |   |   |       +-- useChat.ts
+|   |   |   |       \-- useGuest.ts
+|   |   |   +-- landing
+|   |   |   |   \-- components
+|   |   |   |       +-- AICapabilities.tsx
+|   |   |   |       +-- AiFeatures.tsx
+|   |   |   |       +-- Carousel.tsx
+|   |   |   |       +-- Cta.tsx
+|   |   |   |       +-- CTASection.tsx
+|   |   |   |       +-- EfficiencyBenefits.tsx
+|   |   |   |       +-- Features.tsx
+|   |   |   |       +-- FeatureSection.tsx
+|   |   |   |       +-- Footer.tsx
+|   |   |   |       +-- Header.tsx
+|   |   |   |       +-- Hero.tsx
+|   |   |   |       +-- HeroSection.tsx
+|   |   |   |       +-- MobileShowcase.tsx
+|   |   |   |       +-- PreviousHeroSection.tsx
+|   |   |   |       +-- Statistics.tsx
+|   |   |   |       +-- StatsSection.tsx
+|   |   |   |       +-- TestimonialsSection.tsx
+|   |   |   |       +-- VideoShowcaseSection.tsx
+|   |   |   |       \-- WorkerManagement.tsx
+|   |   |   +-- organization
+|   |   |   |   +-- api
+|   |   |   |   |   +-- areas
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- core
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- departments
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- icons
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- locations
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- permissions
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   +-- roles
+|   |   |   |   |   |   \-- index.ts
+|   |   |   |   |   \-- users
+|   |   |   |   |       +-- fetchAllUsers.ts
+|   |   |   |   |       +-- fetchUser.ts
+|   |   |   |   |       +-- index.ts
+|   |   |   |   |       \-- updateUser.ts
+|   |   |   |   +-- components
+|   |   |   |   |   +-- ai-chat-settings
+|   |   |   |   |   |   \-- index.tsx
+|   |   |   |   |   +-- call-settings
+|   |   |   |   |   |   \-- index.tsx
+|   |   |   |   |   +-- create-organization
+|   |   |   |   |   |   +-- CreateOrganizationForm.tsx
+|   |   |   |   |   |   \-- CreateOrganizationSuccess.tsx
+|   |   |   |   |   +-- Departments
+|   |   |   |   |   |   +-- DepartmentUsers
+|   |   |   |   |   |   |   \-- index.tsx
+|   |   |   |   |   |   +-- DepartmentsSideMenu.tsx
+|   |   |   |   |   |   \-- index.tsx
+|   |   |   |   |   +-- GeneralSettings
+|   |   |   |   |   |   +-- components
+|   |   |   |   |   |   |   +-- ThemePlaceholder.tsx
+|   |   |   |   |   |   |   \-- ThemeSelector.tsx
+|   |   |   |   |   |   \-- index.tsx
+|   |   |   |   |   +-- Locations
+|   |   |   |   |   |   +-- Areas
+|   |   |   |   |   |   |   +-- AddArea.tsx
+|   |   |   |   |   |   |   +-- AreaItem.tsx
+|   |   |   |   |   |   |   \-- AreasList.tsx
+|   |   |   |   |   |   +-- Areas.tsx
+|   |   |   |   |   |   +-- index.tsx
+|   |   |   |   |   |   \-- LocationsTable.tsx
+|   |   |   |   |   +-- Roles
+|   |   |   |   |   |   +-- Permissions
+|   |   |   |   |   |   |   +-- Permissions.tsx
+|   |   |   |   |   |   |   +-- PermissionsCard.tsx
+|   |   |   |   |   |   |   \-- PermissionScopeSelector.tsx
+|   |   |   |   |   |   +-- index.tsx
+|   |   |   |   |   |   +-- OldPermissions.tsx
+|   |   |   |   |   |   \-- RoleList.tsx
+|   |   |   |   |   \-- SettingsBreadcrumbs.tsx
+|   |   |   |   +-- context
+|   |   |   |   |   \-- organization-context.tsx
+|   |   |   |   +-- hooks
+|   |   |   |   |   +-- useAreas.ts
+|   |   |   |   |   +-- useCallCategories.ts
+|   |   |   |   |   +-- useCalls.ts
+|   |   |   |   |   +-- useDepartments.ts
+|   |   |   |   |   +-- useIcons.ts
+|   |   |   |   |   +-- useLocations.ts
+|   |   |   |   |   +-- useOrganization.ts
+|   |   |   |   |   +-- useOrganizationCore.ts
+|   |   |   |   |   +-- usePermissions.ts
+|   |   |   |   |   \-- useRoles.ts
+|   |   |   |   \-- schemas
+|   |   |   |       +-- departments
+|   |   |   |       |   \-- departmentsColumns.tsx
+|   |   |   |       +-- roles
+|   |   |   |       |   \-- rolesColumns.tsx
+|   |   |   |       \-- users
+|   |   |   |           +-- usersColumns.tsx
+|   |   |   |           \-- usersFields.ts
+|   |   |   +-- reports
+|   |   |   |   +-- api
+|   |   |   |   |   \-- index.ts
+|   |   |   |   +-- components
+|   |   |   |   |   +-- AIReccomendations.tsx
+|   |   |   |   |   +-- ByDayReport.tsx
+|   |   |   |   |   +-- ByDepartmentReport.tsx
+|   |   |   |   |   +-- CostAnalysis.tsx
+|   |   |   |   |   +-- CustomReportBuilder.tsx
+|   |   |   |   |   +-- GeneralData.tsx
+|   |   |   |   |   +-- PredictiveAnalytics.tsx
+|   |   |   |   |   \-- TrendAnalysis.tsx
+|   |   |   |   \-- hooks
+|   |   |   |       \-- useReportsData.ts
+|   |   |   \-- settings
+|   |   |       \-- components
+|   |   |           \-- Tabs
+|   |   |               +-- AccountSettings
+|   |   |               |   +-- AccountInformationFrom.tsx
+|   |   |               |   +-- AccountPasswordFrom.tsx
+|   |   |               |   \-- index.tsx
+|   |   |               \-- OrganizationSettings
+|   |   |                   +-- OrganizationSettings.tsx
+|   |   |                   +-- OrganizationSettingsForm.tsx
+|   |   |                   \-- OrganizationSettingsOrgSelect.tsx
+|   |   +-- hooks
+|   |   |   +-- table
+|   |   |   |   +-- useDataTableActions.ts
+|   |   |   |   +-- useDataTableFetch.ts
+|   |   |   |   +-- useTableCRUD.ts
+|   |   |   |   \-- useTableWebSocket.ts
+|   |   |   +-- use-mobile.tsx
+|   |   |   +-- use-toast.ts
+|   |   |   +-- useDebounce.ts
+|   |   |   +-- useLocalizedMap.ts
+|   |   |   +-- useRoutes.tsx
+|   |   |   +-- useRtl.ts
+|   |   |   \-- useSocket.ts
+|   |   +-- i18n
+|   |   |   +-- index.ts
+|   |   |   +-- languages.tsx
+|   |   |   \-- localTranslations.ts
+|   |   +-- lib
+|   |   |   +-- api-utils
+|   |   |   |   +-- apiFactory.ts
+|   |   |   |   \-- hasScopedAccess.tsx
+|   |   |   +-- utils
+|   |   |   |   +-- data-table
+|   |   |   |   |   \-- formatOptions.ts
+|   |   |   |   +-- hooks
+|   |   |   |   |   \-- UseOrganizationUtils.ts
+|   |   |   |   \-- params.ts
+|   |   |   +-- api-client.ts
+|   |   |   +-- chatWithGemini.ts
+|   |   |   +-- configs.ts
+|   |   |   +-- crypto-js.ts
+|   |   |   +-- dateUtils.ts
+|   |   |   +-- formUtils.ts
+|   |   |   +-- i18n.tsx
+|   |   |   +-- iconUtils.ts
+|   |   |   +-- supabase.ts
+|   |   |   +-- themeUtils.ts
+|   |   |   \-- utils.ts
+|   |   +-- pages
+|   |   |   +-- AccessibilityStatement
+|   |   |   |   \-- AccessibilityStatement.tsx
+|   |   |   +-- Calls
+|   |   |   |   \-- index.tsx
+|   |   |   +-- CleaningManagement
+|   |   |   |   \-- index.tsx
+|   |   |   +-- Contact
+|   |   |   |   \-- index.tsx
+|   |   |   +-- CreateOrganization
+|   |   |   |   \-- index.tsx
+|   |   |   +-- Employees
+|   |   |   |   \-- index.tsx
+|   |   |   +-- errors
+|   |   |   |   +-- NotFoundPage.tsx
+|   |   |   |   \-- UnauthorizedPage.tsx
+|   |   |   +-- Guest
+|   |   |   |   \-- index.tsx
+|   |   |   +-- Home
+|   |   |   |   \-- index.tsx
+|   |   |   +-- HomePage
+|   |   |   |   \-- index.tsx
+|   |   |   +-- LandingPage
+|   |   |   |   \-- index.tsx
+|   |   |   +-- Login
+|   |   |   |   \-- index.tsx
+|   |   |   +-- OrganizationSettings
+|   |   |   |   \-- index.tsx
+|   |   |   +-- Reports
+|   |   |   |   \-- index.tsx
+|   |   |   \-- Settings
+|   |   |       \-- index.tsx
+|   |   +-- types
+|   |   |   +-- api
+|   |   |   |   +-- ai.types.ts
+|   |   |   |   +-- api.types.ts
+|   |   |   |   +-- areas.type.ts
+|   |   |   |   +-- auth.ts
+|   |   |   |   +-- calls.ts
+|   |   |   |   +-- common.ts
+|   |   |   |   +-- departments.ts
+|   |   |   |   +-- locations.ts
+|   |   |   |   +-- organization.ts
+|   |   |   |   +-- roles.ts
+|   |   |   |   \-- user.ts
+|   |   |   +-- login
+|   |   |   |   \-- login.ts
+|   |   |   +-- theme
+|   |   |   |   \-- index.ts
+|   |   |   +-- ui
+|   |   |   |   +-- chat.types.ts
+|   |   |   |   \-- data-table-types.ts
+|   |   |   \-- advanced-search.ts
+|   |   \-- vite-env.d.ts
+|   +-- .env
+|   +-- .gitignore
+|   +-- components.json
+|   +-- cursor.rules
+|   +-- cypress.config.js
+|   +-- eslint.config.js
+|   +-- index.html
+|   +-- logo.png
+|   +-- package-lock.json
+|   +-- package.json
+|   +-- postcss.config.js
+|   +-- README.md
+|   +-- tailwind.config.js
+|   +-- tsconfig.app.json
+|   +-- tsconfig.json
+|   +-- tsconfig.node.json
+|   +-- vercel.json
+|   \-- vite.config.ts
+\-- generate_tree.ps1

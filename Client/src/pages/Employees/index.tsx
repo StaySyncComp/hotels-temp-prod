@@ -2,9 +2,9 @@ import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import DataTable from "@/components/ui/completed/data-table";
-import DynamicForm from "@/components/forms/DynamicForm/DynamicForm";
-import { OrganizationsContext } from "@/contexts/OrganizationsContext";
+import DataTable from "@/components/common/data-table";
+import DynamicForm from "@/components/common/dynamic-form/DynamicForm";
+import { OrganizationsContext } from "@/features/organization/context/organization-context";
 import { TableAction } from "@/types/ui/data-table-types";
 import { User } from "@/types/api/user";
 import {
@@ -12,13 +12,13 @@ import {
   deleteUser,
   fetchUsersParams,
   adminUpdateUser,
-} from "@/api/users";
+} from "@/features/organization/api/users";
 import { handleImageChange } from "@/lib/formUtils";
 import { Button } from "@/components/ui/button";
-import { getUserFormFields } from "@/components/forms/users/usersFields";
-import { getUsersColumns } from "@/components/forms/users/usersColumns";
+import { getUserFormFields } from "@/features/organization/schemas/users/usersFields";
+import { getUsersColumns } from "@/features/organization/schemas/users/usersColumns";
 import { useLocalizedMap } from "@/hooks/useLocalizedMap";
-import TableHeaderActions from "@/components/table-actions/TableHeaderActions";
+import TableHeaderActions from "@/components/common/table-actions/TableHeaderActions";
 
 function Employees() {
   const { t, i18n } = useTranslation();
@@ -53,7 +53,7 @@ function Employees() {
     roles,
     departments,
     t,
-    i18n.language as "he" | "en" | "ar"
+    i18n.language as "he" | "en" | "ar",
   );
   const advancedFields = fields
     .filter((f) => allowedTypes.includes(f.type))
@@ -107,7 +107,7 @@ function Employees() {
             roles,
             departments,
             t,
-            i18n.language as "he" | "en" | "ar"
+            i18n.language as "he" | "en" | "ar",
           );
           return (
             <div style={{ zIndex: 50, position: "relative" }}>

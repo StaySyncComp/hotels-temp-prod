@@ -15,8 +15,11 @@ i18n
       supportedLngs: ["en", "he", "ar"],
       nonExplicitSupportedLngs: true,
       backend: {
-        loadPath:
-          "https://qipcgolampmdkhplcnbk.supabase.co/storage/v1/object/public/Images/Translations/{{lng}}.json",
+        // Hosted translations (commented out for now)
+        // loadPath: "https://qipcgolampmdkhplcnbk.supabase.co/storage/v1/object/public/Images/Translations/{{lng}}.json",
+
+        // Using local public folder
+        loadPath: "/locales/{{lng}}.json",
       },
       detection: {
         order: ["localStorage", "navigator"],
@@ -30,7 +33,7 @@ i18n
     () => {
       const supported = ["en", "he", "ar"] as const;
       const resolved = (i18n.resolvedLanguage || i18n.language || "").split(
-        "-"
+        "-",
       )[0];
       if (
         !resolved ||
@@ -44,7 +47,13 @@ i18n
           console.log(e);
         }
       }
-    }
+    },
   );
+
+i18n.on("languageChanged", (lng) => {
+  const isRtl = lng === "he" || lng === "ar";
+  document.documentElement.dir = isRtl ? "rtl" : "ltr";
+  document.documentElement.lang = lng;
+});
 
 export default i18n;

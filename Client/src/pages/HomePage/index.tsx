@@ -1,18 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import StatsSection from "./components/StatsSection";
-import FeaturePillars from "./components/FeatureSection";
-import AICapabilities from "./components/AICapabilities";
-import CTASection from "./components/CTASection";
-import HeroSection from "./components/HeroSection";
-import LanguagePicker from "@/components/LanguagePicker";
+import StatsSection from "@/features/landing/components/StatsSection";
+import FeaturePillars from "@/features/landing/components/FeatureSection";
+import AICapabilities from "@/features/landing/components/AICapabilities";
+import CTASection from "@/features/landing/components/CTASection";
+import HeroSection from "@/features/landing/components/HeroSection";
+import LanguagePicker from "@/components/common/LanguagePicker";
 import { Link } from "react-router-dom";
 import logo from "@/assets/fullLogo.svg";
 import { useTranslation } from "react-i18next";
 import { GetDirection } from "@/lib/i18n";
-import VideoShowcaseSection from "./components/VideoShowcaseSection";
-import MobileShowcase from "./components/MobileShowcase";
-import ContactPage from "../ContactPage.tsx";
+import VideoShowcaseSection from "@/features/landing/components/VideoShowcaseSection";
+import MobileShowcase from "@/features/landing/components/MobileShowcase";
+
 export default function Homepage() {
   const { t } = useTranslation();
   const direction = GetDirection();

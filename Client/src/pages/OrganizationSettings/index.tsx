@@ -2,16 +2,17 @@ import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-import CallSettingsTable from "./CallSettings";
+import CallSettings from "@/features/organization/components/call-settings";
 import { GetDirection } from "@/lib/i18n";
-import Locations from "@/pages/OrganizationSettings/Locations";
+
+import GeneralSettings from "@/features/organization/components/GeneralSettings";
+import Departments from "@/features/organization/components/Departments";
+import Roles from "@/features/organization/components/Roles";
+import Locations from "@/features/organization/components/Locations";
+import AiChat from "@/features/organization/components/ai-chat-settings";
 import { useTranslation } from "react-i18next";
-import GeneralSettings from "./GeneralSettings";
-import SettingsBreadcrumbs from "./SettingsBreadcrumbs";
-import Roles from "./Roles";
-import DepartmentsList from "./Departments";
-import { useHasScopedAccess } from "@/api/utils/hasScopedAccess";
-import AiChatSettings from "./AiChat";
+import SettingsBreadcrumbs from "@/features/organization/components/SettingsBreadcrumbs";
+import { useHasScopedAccess } from "@/lib/api-utils/hasScopedAccess";
 
 function OrganizationSettings() {
   const { t } = useTranslation();
@@ -144,17 +145,17 @@ function OrganizationSettings() {
             <GeneralSettings />
           </TabsContent>
           <TabsContent value="ai">
-            <AiChatSettings />
+            <AiChat />
           </TabsContent>
           {canAccessDepartments && (
             <TabsContent value="departments">
-              <DepartmentsList />
+              <Departments />
             </TabsContent>
           )}
 
           {canAccessCalls && (
             <TabsContent value="calls">
-              <CallSettingsTable />
+              <CallSettings />
             </TabsContent>
           )}
 

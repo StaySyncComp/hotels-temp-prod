@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CleaningBoard } from "./CleaningBoard";
-import { CleaningRoom } from "./types";
-import { fetchLocations } from "@/api/locations";
-import { fetchAllCleaningStates, initializeMockData } from "@/api/cleaning";
+import { CleaningBoard } from "@/features/cleaning/components/CleaningBoard";
+import { CleaningRoom } from "@/features/cleaning/types";
+import { fetchLocations } from "@/features/organization/api/locations";
+import {
+  fetchAllCleaningStates,
+  initializeMockData,
+} from "@/features/cleaning/api";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
+import { useOrganization } from "@/features/organization/hooks/useOrganization";
+import { useLocations } from "@/features/organization/hooks/useLocations";
 
 export default function CleaningManagement() {
+  const { locations } = useLocations();
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<CleaningRoom[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,10 +28,7 @@ export default function CleaningManagement() {
       // We will try to fetch, if empty, maybe trigger init?
       // Let's fetch both parallel.
 
-      const [locResponse, statesResponse] = await Promise.all([
-        fetchLocations(),
-        fetchAllCleaningStates(),
-      ]);
+      const [statesResponse] = await Promise.all([fetchAllCleaningStates()]);
 
       let states = (statesResponse as any).data || [];
 
@@ -36,11 +39,11 @@ export default function CleaningManagement() {
         states = (newStatesRes as any).data || [];
       }
 
-      if (locResponse?.data) {
-        console.log("Fetched locations:", locResponse.data);
+      if (locations) {
+        console.log("Fetched locations:", locations);
         console.log("Fetched states:", states);
 
-        const mergedData = locResponse.data.map((location: any) => {
+        const mergedData = locations.map((location: any) => {
           // Find matching state
           const state = Array.isArray(states)
             ? states.find((s: any) => s.locationId === location.id)

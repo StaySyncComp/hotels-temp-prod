@@ -1,7 +1,8 @@
 import { useEffect, useRef, useCallback, useContext } from "react";
 import { io, Socket } from "socket.io-client";
-import { OrganizationsContext } from "@/contexts/OrganizationsContext";
-import { useAuth } from "./useAuth";
+import { OrganizationsContext } from "@/features/organization/context/organization-context";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { CallMessageAttachment } from "@/types/api/calls";
 interface UseSocketReturn {
   joinCallRoom: (callId: number) => void;
   leaveCallRoom: (callId: number) => void;
@@ -10,12 +11,7 @@ interface UseSocketReturn {
   sendMessage: (
     id: number,
     content: string,
-    attachments?: any[],
-    type?: "call" | "location"
-  ) => void;
-  onMessage: (
-    callback: (message: any) => void,
-    type?: "call" | "location"
+    attachments?: CallMessageAttachment[],
   ) => void;
 }
 
@@ -33,7 +29,7 @@ export const useSocket = (): UseSocketReturn => {
         auth: {
           organizationId: String(organization?.id),
         },
-      }
+      },
     );
 
     // Cleanup on unmount
@@ -61,12 +57,7 @@ export const useSocket = (): UseSocketReturn => {
   }, []);
 
   const sendMessage = useCallback(
-    (
-      id: number,
-      content: string,
-      attachments?: any[],
-      type: "call" | "location" = "call"
-    ) => {
+    (id: number, content: string, attachments?: CallMessageAttachment[]) => {
       console.log(attachments, "attachments");
 
       if (socketRef.current && user) {
@@ -78,11 +69,11 @@ export const useSocket = (): UseSocketReturn => {
             organizationId: organization?.id,
             content,
             attachments,
-          }
+          },
         );
       }
     },
-    [user, organization]
+    [user],
   );
 
   const onMessage = useCallback(
@@ -90,11 +81,11 @@ export const useSocket = (): UseSocketReturn => {
       if (socketRef.current) {
         socketRef.current.on(
           type === "call" ? "call:message" : "location:message",
-          callback
+          callback,
         );
       }
     },
-    []
+    [],
   );
 
   return {
@@ -148,7 +139,7 @@ export const useDynamicSocket = ({
           ...auth,
         },
         ...options,
-      }
+      },
     );
 
     return () => {

@@ -2,7 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AuroraBackground } from "@/components/backgrounds/AroraBackground";
+import { AuroraBackground } from "@/components/ui/backgrounds/AroraBackground";
 import { Button } from "@/components/ui/button";
 
 export default function NotFoundPage() {

@@ -4,12 +4,14 @@ import { useTranslation } from "react-i18next";
 // import { Button } from "@/components/ui/button";
 // import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { PhoneCall, Clock, AlertCircle, Timer } from "lucide-react";
-import { createApiService } from "@/api/utils/apiFactory";
+import { createApiService } from "@/lib/api-utils/apiFactory";
 import { Call } from "@/types/api/calls";
 import { useEffect, useState } from "react";
-import StatCard, { StatCardProps } from "./components/StatCard";
-import RecentCalls from "./components/RecentCalls";
-import CallsHeatmap from "./components/CallsHeatmap";
+import StatCard, {
+  StatCardProps,
+} from "@/features/dashboard/components/StatCard";
+import RecentCalls from "@/features/dashboard/components/RecentCalls";
+import CallsHeatmap from "@/features/dashboard/components/CallsHeatmap";
 
 const callsApi = createApiService<Call>("/calls", { includeOrgId: true });
 const usersApi = createApiService("/users", { includeOrgId: true });
@@ -22,8 +24,6 @@ export default function Home() {
   const [recentCalls, setRecentCalls] = useState<Call[]>([]);
   const [urgentCalls, setUrgentCalls] = useState<number>(0);
   const [_, setEmployeesCount] = useState<number>(0);
-  // @ts-ignore
-  const [employees, setEmployees] = useState<any[]>([]);
   const [avgResponseTime, setAvgResponseTime] = useState<number>(0);
   const [slaComplianceRate, setSlaComplianceRate] = useState<number>(0);
 
@@ -37,7 +37,7 @@ export default function Home() {
       const remaining = mins % 60;
       return remaining
         ? `${hours} ${t(hours === 1 ? "hour" : "hours")} ${remaining} ${t(
-            "minutes"
+            "minutes",
           )}`
         : `${hours} ${t(hours === 1 ? "hour" : "hours")}`;
     }
@@ -50,7 +50,6 @@ export default function Home() {
         const response = await usersApi.fetchAll({});
         // @ts-ignore
         const employeesData = response.data?.data || [];
-        setEmployees(employeesData);
         setEmployeesCount(employeesData.length);
       } catch (err) {
         console.error("Error fetching employees", err);
@@ -73,7 +72,7 @@ export default function Home() {
           // Active calls (OPENED or IN_PROGRESS)
           const active = calls.filter(
             // @ts-ignore
-            (c) => c.status === "OPENED" || c.status === "IN_PROGRESS"
+            (c) => c.status === "OPENED" || c.status === "IN_PROGRESS",
           );
           console.log("Active calls:", active);
           setActiveCalls(active.length);
@@ -92,7 +91,7 @@ export default function Home() {
           // Calculate average response time for completed calls
           const completedCalls = calls.filter(
             // @ts-ignore
-            (c) => c.status === "COMPLETED" && c.createdAt && c.closedAt
+            (c) => c.status === "COMPLETED" && c.createdAt && c.closedAt,
           );
           if (completedCalls.length > 0) {
             // @ts-ignore
@@ -102,14 +101,14 @@ export default function Home() {
               return sum + (end - start);
             }, 0);
             setAvgResponseTime(
-              Math.round(totalResponseTime / (completedCalls.length * 60000))
+              Math.round(totalResponseTime / (completedCalls.length * 60000)),
             );
           }
 
           // Calculate SLA compliance rate
           const callsWithCategory = calls.filter(
             // @ts-ignore
-            (call) => call.callCategory?.expectedTime
+            (call) => call.callCategory?.expectedTime,
           );
           if (callsWithCategory.length > 0) {
             // @ts-ignore
@@ -123,8 +122,8 @@ export default function Home() {
             });
             setSlaComplianceRate(
               Math.round(
-                (compliantCalls.length / callsWithCategory.length) * 100
-              )
+                (compliantCalls.length / callsWithCategory.length) * 100,
+              ),
             );
           }
 
@@ -168,8 +167,8 @@ export default function Home() {
         slaComplianceRate >= 90
           ? "green"
           : slaComplianceRate >= 75
-          ? "orange"
-          : "red",
+            ? "orange"
+            : "red",
     },
   ];
 

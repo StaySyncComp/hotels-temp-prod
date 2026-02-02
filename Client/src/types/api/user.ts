@@ -3,6 +3,7 @@ import { Role } from "./roles";
 export interface OrganizationRole {
   role: Role;
   departmentId: number;
+  organizationId: number;
 }
 export interface User {
   id: number;

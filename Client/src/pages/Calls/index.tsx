@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GetTextDirection } from "@/lib/i18n";
-import CallTable from "./Tabs/CallTable";
-import RecurringCallTable from "./Tabs/RecurringCallTable";
+import CallTable from "@/features/calls/components/Tabs/CallTable";
+import RecurringCallTable from "@/features/calls/components/Tabs/RecurringCallTable";
 import { useState } from "react";
 import { Call } from "@/types/api/calls";
-import { SideStatsCard } from "./SideStatsCard";
-import { useUser } from "@/hooks/useUser";
+import { SideStatsCard } from "@/features/calls/components/SideStatsCard";
+import { useUser } from "@/features/auth/hooks/useUser";
 
 export default function CallsPage() {
   const { t } = useTranslation();
@@ -33,19 +33,22 @@ export default function CallsPage() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="active" className="mt-6 flex-1 overflow-hidden flex flex-col">
+          <TabsContent value="active" className="mt-6 flex-1 flex flex-col">
             <CallTable selectedCall={selectedCall} onSelect={setSelectedCall} />
           </TabsContent>
-          <TabsContent value="recurring" className="mt-6 flex-1 overflow-hidden flex flex-col">
+          <TabsContent
+            value="recurring"
+            className="mt-6 flex-1 overflow-hidden flex flex-col"
+          >
             <RecurringCallTable />
           </TabsContent>
         </Tabs>
       </div>
 
-      <SideStatsCard 
-        call={selectedCall} 
-        users={allUsers} 
-        className="w-[350px] flex-shrink-0 h-full overflow-hidden" 
+      <SideStatsCard
+        call={selectedCall}
+        users={allUsers}
+        className="w-[350px] flex-shrink-0 h-full overflow-hidden"
       />
     </div>
   );
