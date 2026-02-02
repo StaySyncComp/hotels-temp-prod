@@ -1,3 +1,4 @@
+import { useMemo, useState, useEffect } from "react";
 import { Call } from "@/types/api/calls";
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -353,8 +354,41 @@ function CircularTimer({ call }: { call: Call }) {
 
   const expectedMinutes = call.callCategory?.expectedTime || 48;
   const createdAt = new Date(call.createdAt).getTime();
-  const now = Date.now();
-  const elapsedMinutes = Math.floor((now - createdAt) / (1000 * 60));
+
+  const endTime = useMemo(() => {
+    const isClosed = call.status === "COMPLETED" || call.status === "FAILED";
+    if (isClosed && call.CallStatusHistory?.length) {
+      // Find the latest status change to the current closed status
+      const closureEvent = [...call.CallStatusHistory]
+        .filter((h) => h.toStatus === call.status)
+        .sort(
+          (a, b) =>
+            new Date(b.changedAt).getTime() - new Date(a.changedAt).getTime(),
+        )[0];
+
+      if (closureEvent) {
+        return new Date(closureEvent.changedAt).getTime();
+      }
+    }
+    // If open or no history found, use current time
+    return isClosed ? Date.now() : Date.now();
+  }, [call.status, call.CallStatusHistory, call.createdAt]); // Added dependencies
+
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    // Only tick if not closed
+    if (call.status !== "COMPLETED" && call.status !== "FAILED") {
+      const interval = setInterval(() => setNow(Date.now()), 60000); // Update every minute
+      return () => clearInterval(interval);
+    }
+  }, [call.status]);
+
+  // Use the calculated end time if closed, otherwise use live 'now'
+  const effectiveNow =
+    call.status === "COMPLETED" || call.status === "FAILED" ? endTime : now;
+
+  const elapsedMinutes = Math.floor((effectiveNow - createdAt) / (1000 * 60));
 
   const isOverdue = elapsedMinutes > expectedMinutes;
   const timeLeft = isOverdue

@@ -8,7 +8,9 @@ const locationsApi = createApiService<Location>("/locations", {
 });
 
 export const fetchLocations = async (): Promise<MutationResponse<Location[]>> =>
-  locationsApi.fetchAll({}, true) as Promise<MutationResponse<Location[]>>;
+  locationsApi.customRequest("get", "/locations/all", {
+    includeOrgId: true,
+  }) as Promise<MutationResponse<Location[]>>;
 
 export const fetchLocationsParams = async (
   params: ApiQueryParams,

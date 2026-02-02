@@ -1,11 +1,10 @@
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetFooter,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { CleaningRoom, CleaningStatus } from "../types";
 import { User } from "@/types/api/user";
 import { RoomChat } from "@/components/room-card/RoomChat/RoomChat";
@@ -17,11 +16,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
-import { MapPin, Clock, Phone } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  Phone,
+  X,
+  User as UserIcon,
+  Calendar,
+  CheckCircle2,
+  AlertCircle,
+  FileText,
+  Mail,
+  MoreVertical,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+
+const getName = (name: any, lang: string) => {
+  if (!name) return "";
+  if (typeof name === "string") return name;
+  return name[lang] || name["en"] || "";
+};
 
 interface CleaningDetailsDrawerProps {
   isOpen: boolean;
@@ -47,155 +66,251 @@ export const CleaningDetailsDrawer = ({
   if (!room || !room.cleaningStatus) return null;
 
   const task = room.cleaningStatus;
+  const isVacant = task.status.startsWith("vacant");
+  const occupationStatus = isVacant ? t("vacant") : t("occupied");
+  const occupationBadgeColor = isVacant
+    ? "bg-green-100 text-green-700 hover:bg-green-100"
+    : "bg-red-100 text-red-700 hover:bg-red-100";
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="sm:max-w-md md:max-w-lg overflow-y-auto w-full flex flex-col">
-        <SheetHeader className="space-y-4 pb-6">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
-              {room.roomNumber}
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-[90vw] w-[1400px] h-[90vh] p-0 gap-0 overflow-hidden bg-[#F8F9FB] rounded-2xl flex flex-col border-none shadow-2xl">
+        {/* 1. Header Section */}
+        <div className="bg-[#EFF4FF] px-8 py-5 shrink-0 flex items-center justify-between">
+          {/* Room Title & Status (Right Side in RTL) */}
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <DialogTitle className="text-3xl font-black text-[#1E293B] tracking-tight leading-none">
+                {getName(room.name, i18n.language)}
+              </DialogTitle>
+              <div className="text-sm text-[#64748B] font-medium flex items-center gap-2 justify-end mt-1.5">
+                <span>
+                  {t("floor")} {getName(room.area?.name, i18n.language)}
+                </span>
+                <span className="text-[#CBD5E1]">|</span>
+                <span>
+                  {t("room")} {room.roomNumber}
+                </span>
+              </div>
             </div>
-            <div>
-              <SheetTitle className="text-2xl">
-                {room.name[i18n.language as "en" | "he" | "ar"]}
-              </SheetTitle>
-              <SheetDescription className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5" />
-                {t("floor")} 3 • {t("wing")} A
-              </SheetDescription>
+            <Badge
+              variant="default"
+              className={cn(
+                "px-3 py-1 text-sm font-bold shadow-none rounded-full border-none",
+                isVacant
+                  ? "bg-[#D1FAE5] text-[#065F46] hover:bg-[#D1FAE5]"
+                  : "bg-[#FF8A8A] text-white hover:bg-[#FF8A8A]",
+              )}
+            >
+              {occupationStatus}
+            </Badge>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <DialogClose asChild onClick={onClose}>
+              <Button
+                variant="ghost"
+                className="gap-2 text-slate-500 hover:bg-white/50 hover:text-slate-900 border-none font-medium h-9 px-2"
+              >
+                <X className="w-5 h-5" />
+                <span className="text-base">{t("close")}</span>
+              </Button>
+            </DialogClose>
+          </div>
+        </div>
+
+        {/* 2. Information Bar */}
+        <div className="bg-[#EFF4FF] px-8 pb-8 pt-2 border-b border-white/50 shrink-0 flex items-center justify-between z-10 relative">
+          {/* Left Side: Guest Info (Visually Left, End in RTL flow if row-reverse? No, natural flow) 
+               We need Metrics on the Right (Start) and Guest on the Left (End).
+               So Flex container `justify-between`.
+               Item 1: Metrics (Start/Right).
+               Item 2: Guest (End/Left).
+           */}
+
+          {/* Metrics Group */}
+          <div className="flex bg-[#EFF4FF] items-center text-sm gap-0">
+            {/* Status */}
+            <div className="flex flex-col items-center px-6 border-l border-[#CBD5E1]">
+              <span className="font-bold text-lg text-[#1E293B] leading-tight">
+                {t("clean")}
+              </span>
+              <span className="text-[#64748B] text-xs font-normal">
+                {t("cleaning_status")}
+              </span>
+            </div>
+            {/* Open Requests */}
+            <div className="flex flex-col items-center px-6 border-l border-[#CBD5E1]">
+              <span className="font-bold text-lg text-[#1E293B] leading-tight">
+                1
+              </span>
+              <span className="text-[#64748B] text-xs font-normal">
+                {t("open_requests")}
+              </span>
+            </div>
+            {/* Closed Requests */}
+            <div className="flex flex-col items-center px-6 border-l border-[#CBD5E1]">
+              <span className="font-bold text-lg text-[#1E293B] leading-tight">
+                16
+              </span>
+              <span className="text-[#64748B] text-xs font-normal">
+                {t("closed_requests")}
+              </span>
+            </div>
+            {/* Check In */}
+            <div className="flex flex-col items-center px-6 border-l border-[#CBD5E1]">
+              <span className="font-bold text-lg text-[#1E293B] leading-tight">
+                {/* Hardcoded 19 June for match or dynamic */}19 {t("june")}
+              </span>
+              <span className="text-[#64748B] text-xs font-normal">
+                {t("check_in")}
+              </span>
+            </div>
+            {/* Check Out */}
+            <div className="flex flex-col items-center px-6">
+              <span className="font-bold text-lg text-[#1E293B] leading-tight">
+                24 {t("june")}
+              </span>
+              <span className="text-[#64748B] text-xs font-normal">
+                {t("check_out")}
+              </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground uppercase">
-                {t("status")}
-              </label>
-              <Select
-                value={task.status}
-                onValueChange={(val) =>
-                  onStatusChange(room.id, val as CleaningStatus)
-                }
-              >
-                <SelectTrigger
-                  className={
-                    task.status === "vacant_clean"
-                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
-                      : task.status === "vacant_dirty"
-                        ? "bg-red-500/10 border-red-500/20 text-red-700"
-                        : task.status === "occupied_clean"
-                          ? "bg-blue-500/10 border-blue-500/20 text-blue-700"
-                          : task.status === "occupied_dirty"
-                            ? "bg-orange-500/10 border-orange-500/20 text-orange-700"
-                            : task.status === "vacant_inspected"
-                              ? "bg-purple-500/10 border-purple-500/20 text-purple-700"
-                              : "bg-background"
+          {/* Guest Info Group (Left Side) */}
+          <div className="flex items-center gap-8 pl-2">
+            <div className="h-10 w-px bg-[#94A3B8]" /> {/* Major Separator */}
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <span className="block text-xs text-[#64748B] font-medium">
+                  {t("occupied_by")}
+                </span>
+                <span className="block font-bold text-[#1E293B] text-base">
+                  ישראל ישראלי
+                </span>
+              </div>
+              <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center text-[#94A3B8] shadow-sm">
+                <UserIcon className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-[#475569] text-sm font-medium">
+              <span>052-5381648</span>
+              <Phone className="w-4 h-4 text-[#94A3B8]" />
+            </div>
+            <div className="flex items-center gap-2 text-[#475569] text-sm font-medium">
+              <span>israel@example.com</span>
+              <Mail className="w-4 h-4 text-[#94A3B8]" />
+            </div>
+            <div className="flex items-center gap-2 text-[#475569] text-sm font-medium">
+              <span>2</span>
+              {/* Users Icon */}
+              <div className="flex -space-x-1">
+                <UserIcon className="w-4 h-4 text-[#94A3B8]" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Main Content Grid */}
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_350px] overflow-hidden">
+          {/* Left: Chat (White bg) */}
+          <div className="bg-white flex flex-col h-full border-r overflow-hidden relative">
+            <RoomChat
+              locationId={room.id}
+              roomName={getName(room.name, i18n.language)}
+              className="h-full border-none shadow-none"
+            />
+          </div>
+
+          {/* Right: Management (Grayish bg) */}
+          <div className="bg-[#F8F9FB] p-6 flex flex-col gap-6 overflow-y-auto">
+            {/* Status Card */}
+            <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                {t("status_management")}
+              </h3>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-slate-400">
+                  {t("current_status")}
+                </label>
+                <Select
+                  value={task.status}
+                  onValueChange={(val) =>
+                    onStatusChange(room.id, val as CleaningStatus)
                   }
                 >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="vacant_dirty">
-                    {t("vacant_dirty")}
-                  </SelectItem>
-                  <SelectItem value="vacant_clean">
-                    {t("vacant_clean")}
-                  </SelectItem>
-                  <SelectItem value="vacant_inspected">
-                    {t("vacant_inspected")}
-                  </SelectItem>
-                  <SelectItem value="occupied_clean">
-                    {t("occupied_clean")}
-                  </SelectItem>
-                  <SelectItem value="occupied_dirty">
-                    {t("occupied_dirty")}
-                  </SelectItem>
-                  <SelectItem value="do_not_disturb">
-                    {t("do_not_disturb")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground uppercase">
-                {t("assigned_to")}
-              </label>
-              <Select
-                value={task.assignedToId?.toString() || "unassigned"}
-                onValueChange={(val) =>
-                  val !== "unassigned" && onAssignUser(room.id, parseInt(val))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={t("select_cleaner")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="unassigned">{t("unassigned")}</SelectItem>
-                  {users.map((u) => (
-                    <SelectItem key={u.id} value={u.id.toString()}>
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-5 w-5">
-                          <AvatarImage src={u.logo || undefined} />
-                          <AvatarFallback className="text-[9px]">
-                            {u.name.substring(0, 2)}
-                          </AvatarFallback>
-                        </Avatar>
-                        {u.name}
-                      </div>
+                  <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-200">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="vacant_dirty">
+                      {t("vacant_dirty")}
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                    <SelectItem value="vacant_clean">
+                      {t("vacant_clean")}
+                    </SelectItem>
+                    <SelectItem value="vacant_inspected">
+                      {t("vacant_inspected")}
+                    </SelectItem>
+                    <SelectItem value="occupied_clean">
+                      {t("occupied_clean")}
+                    </SelectItem>
+                    <SelectItem value="occupied_dirty">
+                      {t("occupied_dirty")}
+                    </SelectItem>
+                    <SelectItem value="do_not_disturb">
+                      {t("do_not_disturb")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-slate-400">
+                  {t("assigned_staff")}
+                </label>
+                <Select
+                  value={task.assignedToId?.toString() || "unassigned"}
+                  onValueChange={(val) =>
+                    val !== "unassigned" && onAssignUser(room.id, parseInt(val))
+                  }
+                >
+                  <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-200">
+                    <SelectValue placeholder={t("select_cleaner")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="unassigned">
+                      {t("unassigned")}
+                    </SelectItem>
+                    {users.map((u) => (
+                      <SelectItem key={u.id} value={u.id.toString()}>
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6">
+                            <AvatarImage src={u.logo || undefined} />
+                            <AvatarFallback className="text-[10px]">
+                              {u.name.substring(0, 2)}
+                            </AvatarFallback>
+                          </Avatar>
+                          {u.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-        </SheetHeader>
 
-        <Separator />
+            {/* Actions Card */}
+            <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-orange-500" />
+                {t("quick_actions")}
+              </h3>
 
-        <div className="flex-1 overflow-y-auto py-6 space-y-6">
-          {/* Timeline / History Mock */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold flex items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" />
-              {t("recent_activity")}
-            </h4>
-
-            {task.history && task.history.length > 0 ? (
-              <div className="relative pl-6 space-y-6 before:absolute before:left-[9px] before:top-2 before:h-full before:w-[2px] before:bg-muted">
-                {task.history.map((item: any, index: number) => (
-                  <div key={index} className="relative">
-                    <div className="absolute -left-6 bg-primary h-5 w-5 rounded-full border-4 border-background flex items-center justify-center">
-                      <i className="w-2 h-2 rounded-full bg-white" />
-                    </div>
-                    <p className="text-sm font-medium">
-                      {item.action}{" "}
-                      <span className="text-muted-foreground font-normal">
-                        {t("by")} {item.performerName}
-                      </span>
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(item.timestamp).toLocaleTimeString()}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-sm text-muted-foreground italic py-4">
-                {t("no_recent_activity")}
-              </div>
-            )}
-          </div>
-
-          <Separator className="my-6" />
-
-          {/* Quick Actions */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 gap-2">
               <Button
-                variant="outline"
-                className="h-auto py-4 flex flex-col gap-2 items-center justify-center border-dashed hover:bg-primary/5 hover:border-primary/50"
+                className="w-full h-12 justify-start gap-3 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-primary shadow-none"
                 onClick={() => {
                   if (room) {
                     onCreateCall(room);
@@ -203,31 +318,25 @@ export const CleaningDetailsDrawer = ({
                   }
                 }}
               >
-                <Phone className="w-5 h-5 text-primary" />
-                <span className="text-xs font-semibold text-primary">
-                  {t("create_call_for_room")}
-                </span>
+                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                  <FileText className="w-4 h-4" />
+                </div>
+                {t("create_room_request")}
               </Button>
             </div>
 
-            {/* Room Chat */}
-            {room && (
-              <div className="mt-4">
-                <RoomChat
-                  locationId={room.id}
-                  roomName={room.name[i18n.language as "en" | "he" | "ar"]}
-                />
-              </div>
-            )}
+            {/* Footer Button (Bottom of column) */}
+            <div className="mt-auto">
+              <Button
+                className="w-full h-12 text-lg font-bold shadow-lg shadow-blue-500/20"
+                onClick={onClose}
+              >
+                {t("done")}
+              </Button>
+            </div>
           </div>
         </div>
-
-        <SheetFooter className="pt-6 border-t">
-          <Button className="w-full" size="lg" onClick={onClose}>
-            {t("done")}
-          </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 };

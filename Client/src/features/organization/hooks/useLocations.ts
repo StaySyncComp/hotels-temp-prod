@@ -5,13 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useLocations() {
   const fetchLocationsQuery = useQuery<MutationResponse<Location[]>, Error>({
-    queryKey: ["calls"],
+    queryKey: ["locations"],
     queryFn: fetchLocations,
     retry: false,
   });
 
   return {
-    locations: fetchLocationsQuery.data || [],
+    locations: fetchLocationsQuery.data?.data || [],
     isLocationsLoading: fetchLocationsQuery.isLoading,
     fetchCallsManually: fetchLocationsQuery.refetch,
   };

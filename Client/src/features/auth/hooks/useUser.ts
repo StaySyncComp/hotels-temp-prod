@@ -26,7 +26,7 @@ export function useUser() {
   });
 
   return {
-    allUsers: allUsersQuery.data || [],
+    allUsers: allUsersQuery.data?.data || [],
     isAllUsersLoading: allUsersQuery.isLoading,
     fetchUsersManually: allUsersQuery.refetch,
     updateUser: updateUserMutation.mutateAsync,
