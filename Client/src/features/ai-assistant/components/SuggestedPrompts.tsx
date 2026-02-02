@@ -14,7 +14,7 @@ interface SuggestedPromptsProps {
 export const SuggestedPrompts = memo<SuggestedPromptsProps>(
   ({ prompts, onPromptClick }) => {
     return (
-      <div className="flex flex-wrap gap-3 justify-center mt-8 px-4">
+      <div className="flex flex-wrap gap-3 justify-center px-4">
         {prompts.map((text, i) => (
           <button
             key={i}

@@ -1,5 +1,6 @@
 import { ArrowUpIcon } from "lucide-react";
 import { useState, KeyboardEvent, memo } from "react";
+import { AiOrb } from "./AiOrb";
 
 interface ChatInputProps {
   onSend?: (message: string) => void;
@@ -32,14 +33,15 @@ export const ChatInput = memo<ChatInputProps>(
     };
 
     return (
-      <div className="relative mt-8 w-full px-4">
+      <div className="relative w-full px-4">
         <div
           className="bg-white rounded-[24px] border border-slate-100 
                       shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] 
                       transition-shadow duration-300 p-3 flex flex-col gap-2 relative z-10"
         >
           <div className="flex items-center gap-2 min-h-[50px] px-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 opacity-80" />
+            {/* <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 opacity-80" /> */}
+            <AiOrb className="size-8" />
             {/* Text Input */}
             <input
               type="text"
