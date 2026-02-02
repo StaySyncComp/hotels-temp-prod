@@ -8,7 +8,7 @@ import { CommandDialogDemo } from "./WebSearch";
 function Topbar() {
   const { organization } = useContext(OrganizationsContext);
   return (
-    <header className="flex h-16 shrink-0 items-center justify-start gap-2 border-b bg-surface absolute w-screen z-50">
+    <header className="flex h-16 shrink-0 items-center justify-start gap-2 border-b bg-transparent absolute w-screen z-50">
       <div className="flex items-center gap-2 px-4 w-full child:w-1/3">
         <div className="flex gap-4 items-center">
           <div className="flex aspect-square size-10 items-center justify-center rounded-md text-sidebar-primary-foreground ">

@@ -11,7 +11,7 @@ export function SidebarHeader() {
 
   return (
     <SidebarHeaderComponent className="flex justify-center py-2 items-center h-16">
-      <div className=" w-4/5 flex items-center h-12 flex-col justify-center border-b">
+      <div className=" w-4/5 flex items-center h-12 flex-col justify-center">
         {/* Wrapper to keep layout from jumping */}
         <div className="relative w-full flex justify-center items-center overflow-hidden">
           <AnimatePresence mode="wait" initial={false}>
@@ -20,7 +20,7 @@ export function SidebarHeader() {
                 key="logo-compact"
                 src={LogoCompact}
                 alt="Logo"
-                className="object-contain w-7 h-7"
+                className="object-contain size-12"
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}

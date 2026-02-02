@@ -10,8 +10,6 @@ import { useIcons } from "./useIcons";
  * This provides a unified API for organization, departments, and call categories
  */
 export function useOrganization() {
-  console.log("asdsadsadsadasd");
-
   const organizationCore = useOrganizationCore();
   const organizationLoaded = !!organizationCore?.organization?.id;
 

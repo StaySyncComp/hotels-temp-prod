@@ -21,8 +21,6 @@ import { AdvancedSearchModal } from "@/components/common/advanced-search/Advance
 import { AdvancedSearchFieldConfig } from "@/types/advanced-search";
 import { ExportButtonWrapper } from "@/components/common/table-actions/ExportButtonWrapper";
 import { ColumnVisibilityButton } from "@/components/common/table-actions/ColumnVisibilityButton";
-import { User } from "@/types/api/user";
-import { ActionCell } from "@/features/calls/components/calls-table/Actions/ActionCell";
 
 interface CallTableProps {
   selectedCall: Call | null;

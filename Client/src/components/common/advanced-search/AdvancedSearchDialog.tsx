@@ -18,9 +18,9 @@ export const AdvancedSearchDialog: React.FC<AdvancedSearchDialogProps> = ({
     open={open}
     onOpenChange={onOpenChange}
     title={title}
-    className="max-w-3xl w-full p-8"
+    className="max-w-3xl w-full"
     contentStyle={{ maxHeight: "70vh", minWidth: 600, overflowY: "auto" }}
   >
-    <div className="pt-2 pb-2 px-1">{children}</div>
+    {children}
   </BaseDialog>
 );

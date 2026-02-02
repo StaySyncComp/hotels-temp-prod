@@ -45,7 +45,7 @@ export function BaseDialog({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={cn(
-          "bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-slate-800",
+          "bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-slate-800 p-0 gap-0 overflow-hidden",
           className,
         )}
         style={contentStyle}
@@ -63,8 +63,12 @@ export function BaseDialog({
             )}
           </DialogHeader>
         )}
-        {children}
-        {footer && <DialogFooter>{footer}</DialogFooter>}
+        <div className="p-6">{children}</div>
+        {footer && (
+          <div className="p-4 border-t border-zinc-100 dark:border-zinc-800">
+            <DialogFooter>{footer}</DialogFooter>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

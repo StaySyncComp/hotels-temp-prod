@@ -26,8 +26,7 @@ export function useUser() {
   });
 
   return {
-    // @ts-ignore
-    allUsers: allUsersQuery.data?.data || [],
+    allUsers: allUsersQuery.data || [],
     isAllUsersLoading: allUsersQuery.isLoading,
     fetchUsersManually: allUsersQuery.refetch,
     updateUser: updateUserMutation.mutateAsync,

@@ -33,14 +33,10 @@ function Navigation() {
   const [notificationCount] = useState(3);
 
   return (
-    <header className="w-full bg-sidebar border-b border-gray-200 h-16 flex items-center px-6 justify-between backdrop-blur-sm">
+    <header className="w-full bg-transparent border-b border-gray-200 h-16 flex items-center px-6 justify-between backdrop-blur-sm">
       <div className="flex gap-4 flex-1 items-center max-w-2xl">
-        <div className="relative flex-1">
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            className="w-full h-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 transition-all rounded-lg"
-            placeholder={tCommon("search")}
-          />
+        <div className="relative  bg-none">
+          {/* <Search className="absolute z-10 right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" /> */}
         </div>
         {/* <Button
           variant="ghost"
@@ -53,6 +49,12 @@ function Navigation() {
 
       <div className="flex gap-4 items-center">
         <div className="flex gap-2">
+          <Input
+            className="w-[340px] h-11 bg-surface border-border focus:bg-white focus:border-blue-400 transition-all rounded-3xl"
+            placeholder={tCommon("search")}
+          />
+          <div className="h-8 w-px bg-gray-200" />
+
           <button className="relative p-2 text-muted-foreground hover:text-foreground hover:bg-gray-100 rounded-lg transition-all">
             <Bell className="w-5 h-5" />
             {notificationCount > 0 && (

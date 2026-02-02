@@ -49,21 +49,21 @@ export function AssignWorkerDialog({
       open={isOpen}
       onOpenChange={onOpenChange}
       title={t("assign_to_worker")}
-      className="sm:max-w-[425px] p-6"
+      className="sm:max-w-[425px]"
       // Note: BaseDialog wraps DialogContent. If onClick propagation stop is needed on content:
       onClickContent={(e) => e.stopPropagation()}
       footer={
-        <div className="flex justify-end gap-3 w-full">
+        <>
           <Button variant="outline" onClick={handleCancel}>
             {t("cancel")}
           </Button>
           <Button onClick={handleAssign} disabled={!selectedWorker}>
             {t("assign")}
           </Button>
-        </div>
+        </>
       }
     >
-      <div className="grid gap-4 py-4">
+      <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="assigned_to">{t("assigned_to")}</Label>
           <Select value={selectedWorker} onValueChange={handleSelect}>

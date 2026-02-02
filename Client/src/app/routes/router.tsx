@@ -27,6 +27,8 @@ import AccessibilityStatement from "@/pages/AccessibilityStatement/Accessibility
 import PublicLayout from "@/components/layout/Public/Layout";
 import RoomsIcon from "@/assets/icons/RoomsIcon";
 import CleaningManagement from "@/pages/CleaningManagement";
+import AiChatPage from "@/features/ai-assistant/pages/AiChatPage";
+import { Sparkles } from "lucide-react";
 
 export const router = createBrowserRouter([
   {
@@ -125,6 +127,33 @@ export const router = createBrowserRouter([
         },
         element: <CallDetails />,
       },
+
+      {
+        path: "/settings",
+        handle: { documentTitle: "settings" },
+        element: <Settings />,
+      },
+      {
+        path: "/cleaning-management",
+        element: <CleaningManagement />,
+        handle: {
+          title: "room_management",
+          documentTitle: "room_management",
+          showInSidebar: true,
+          icon: RoomsIcon,
+        },
+      },
+      {
+        path: "/ai-assistant",
+        element: <AiChatPage />,
+        handle: {
+          title: "ai_assistant",
+          documentTitle: "ai_assistant",
+          showInSidebar: true,
+          icon: Sparkles,
+        },
+      },
+
       {
         path: "/employees",
         element: <Employees />,
@@ -136,13 +165,6 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: "/settings",
-        handle: {
-          documentTitle: "settings",
-        },
-        element: <Settings />,
-      },
-      {
         path: "/organization-settings",
         element: <OrganizationSettings />,
         handle: {
@@ -150,16 +172,6 @@ export const router = createBrowserRouter([
           title: "organization_settings",
           showInSidebar: true,
           icon: SettingsIcon,
-        },
-      },
-      {
-        path: "/cleaning-management",
-        element: <CleaningManagement />,
-        handle: {
-          title: "cleaning_management",
-          documentTitle: "cleaning_management",
-          showInSidebar: true,
-          icon: RoomsIcon,
         },
       },
     ],

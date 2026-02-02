@@ -16,6 +16,7 @@ import { Location } from "@/types/api/locations";
 import i18n from "@/i18n";
 import { useCallback, useState } from "react";
 import TableHeaderActions from "@/components/common/table-actions/TableHeaderActions";
+import ChatBotLinkButtons from "./Table/ChatBotLinkButtons";
 
 interface LocationsTableProps {
   areaId: number;
@@ -44,9 +45,7 @@ const LocationsTable = ({ areaId }: LocationsTableProps) => {
     { type: "edit", label: t("edit") },
     { type: "delete", label: t("delete") },
     {
-      // @ts-ignore
       placement: "external",
-      // @ts-ignore
       component: (row) => <ChatBotLinkButtons location={row.original} />,
     },
   ];

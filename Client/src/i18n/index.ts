@@ -15,8 +15,11 @@ i18n
       supportedLngs: ["en", "he", "ar"],
       nonExplicitSupportedLngs: true,
       backend: {
-        loadPath:
-          "https://qipcgolampmdkhplcnbk.supabase.co/storage/v1/object/public/Images/Translations/{{lng}}.json",
+        // Hosted translations (commented out for now)
+        // loadPath: "https://qipcgolampmdkhplcnbk.supabase.co/storage/v1/object/public/Images/Translations/{{lng}}.json",
+
+        // Using local public folder
+        loadPath: "/locales/{{lng}}.json",
       },
       detection: {
         order: ["localStorage", "navigator"],
