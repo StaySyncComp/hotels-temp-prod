@@ -67,8 +67,6 @@ function Employees() {
 
   return (
     <div className="space-y-6">
-      <h1 className="heading">{t("employees")}</h1>
-
       <DataTable<User>
         fetchData={fetchUsersParams}
         addData={createUser}
