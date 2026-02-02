@@ -19,7 +19,7 @@ i18n
         // loadPath: "https://qipcgolampmdkhplcnbk.supabase.co/storage/v1/object/public/Images/Translations/{{lng}}.json",
 
         // Using local public folder
-        loadPath: "/locales/{{lng}}.json",
+        loadPath: "/locales/{{lng}}.json?v=" + new Date().getTime(),
       },
       detection: {
         order: ["localStorage", "navigator"],

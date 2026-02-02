@@ -2,22 +2,22 @@ import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
 import { MessageSquare } from "lucide-react";
-import { api } from "@/api";
-import { MessageItem } from "@/components/calls-table/CallChat/MessageItem";
+import api from "@/lib/api-client";
+import { MessageItem } from "@/features/calls/components/calls-table/CallChat/MessageItem";
 import {
   useRoomChatCombinedItems,
   useRoomMessageHandling,
 } from "@/hooks/useRoomChat";
-import { shouldGroupMessage } from "@/hooks/useChat";
+import { shouldGroupMessage } from "@/features/guest/hooks/useChat";
 import { Message } from "@/types/ui/chat.types";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/button";
 import { Paperclip, Send, Smile } from "lucide-react";
-import { OrganizationsContext } from "@/contexts/OrganizationsContext";
+import { OrganizationsContext } from "@/features/organization/context/organization-context";
 import { useContext } from "react";
 import { deleteImage, getImage, uploadImage } from "@/lib/supabase";
-import { FilePreview } from "@/components/miscellaneous/Files/FilePreview";
+import { FilePreview } from "@/components/common/FilePreview";
 
 interface RoomChatProps {
   locationId: number;

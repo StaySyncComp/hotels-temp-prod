@@ -2,34 +2,28 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CleaningBoard } from "@/features/cleaning/components/CleaningBoard";
 import { CleaningRoom } from "@/features/cleaning/types";
-import { fetchLocations } from "@/features/organization/api/locations";
+// import { fetchLocations } from "@/features/organization/api/locations";
 import {
   fetchAllCleaningStates,
   initializeMockData,
 } from "@/features/cleaning/api";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
-import { useOrganization } from "@/features/organization/hooks/useOrganization";
+// import { useOrganization } from "@/features/organization/hooks/useOrganization";
 import { useLocations } from "@/features/organization/hooks/useLocations";
 
 export default function CleaningManagement() {
-  const { locations } = useLocations();
+  const { locations, isLocationsLoading } = useLocations();
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<CleaningRoom[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [cleaningStates, setCleaningStates] = useState<any[]>([]);
+  const [isStatesLoading, setIsStatesLoading] = useState(true);
 
-  // Fetch data
-  const loadData = async () => {
-    setIsLoading(true);
+  // Fetch cleaning states
+  const fetchStates = async () => {
+    setIsStatesLoading(true);
     try {
-      // First, ensure backend has data (optional safety check/init)
-      // await initializeMockData();
-      // Ideally this init is done once or by admin.
-      // We will try to fetch, if empty, maybe trigger init?
-      // Let's fetch both parallel.
-
-      const [statesResponse] = await Promise.all([fetchAllCleaningStates()]);
-
+      const statesResponse = await fetchAllCleaningStates();
       let states = (statesResponse as any).data || [];
 
       // If no states exist, try initializing and fetch again
@@ -39,47 +33,62 @@ export default function CleaningManagement() {
         states = (newStatesRes as any).data || [];
       }
 
-      if (locations) {
-        console.log("Fetched locations:", locations);
-        console.log("Fetched states:", states);
-
-        const mergedData = locations.map((location: any) => {
-          // Find matching state
-          const state = Array.isArray(states)
-            ? states.find((s: any) => s.locationId === location.id)
-            : null;
-          // Default if not found (should be found after init)
-          const cleaningStatus = state || {
-            id: 0,
-            locationId: location.id,
-            status: "dirty",
-            priority: "normal",
-            history: [],
-          };
-
-          return {
-            ...location,
-            cleaningStatus,
-          };
-        });
-
-        console.log("Merged data:", mergedData);
-        setRooms(mergedData);
-      }
+      setCleaningStates(states);
     } catch (error) {
-      console.error("Failed to load cleaning data", error);
+      console.error("Failed to load cleaning states", error);
     } finally {
-      setIsLoading(false);
+      setIsStatesLoading(false);
     }
   };
 
   useEffect(() => {
-    loadData();
+    fetchStates();
   }, []);
 
+  // Merge locations and states whenever either changes
+  useEffect(() => {
+    console.log("CleaningManagement effect running");
+    console.log("Locations from hook:", locations);
+    console.log("States from local state:", cleaningStates);
+
+    if (locations && Array.isArray(locations)) {
+      console.log("Merging data...", locations.length, cleaningStates.length);
+
+      const mergedData = locations.map((location: any) => {
+        // Find matching state
+        const state = Array.isArray(cleaningStates)
+          ? cleaningStates.find((s: any) => s.locationId === location.id)
+          : null;
+
+        // Default if not found
+        const cleaningStatus = state || {
+          id: 0,
+          locationId: location.id,
+          status: "vacant_dirty", // Default safe status
+          priority: "normal",
+          history: [],
+        };
+
+        return {
+          ...location,
+          cleaningStatus,
+        };
+      });
+
+      console.log("Merged Rooms result:", mergedData);
+      setRooms(mergedData);
+    } else {
+      console.warn("Locations is not an array or is null:", locations);
+    }
+  }, [locations, cleaningStates]);
+
+  const handleRefresh = () => {
+    fetchStates();
+  };
+
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col min-h-full p-6 space-y-6">
+      <div className="flex items-center justify-between shrink-0">
         <div>
           <h1 className="text-3xl font-black font-display tracking-tight text-foreground">
             {t("cleaning_management")}
@@ -93,24 +102,24 @@ export default function CleaningManagement() {
           <Button
             variant="outline"
             size="icon"
-            onClick={loadData}
-            disabled={isLoading}
+            onClick={handleRefresh}
+            disabled={isStatesLoading || isLocationsLoading}
           >
             <RefreshCcw
-              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+              className={`w-4 h-4 ${isStatesLoading || isLocationsLoading ? "animate-spin" : ""}`}
             />
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20">
+          <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
             {t("auto_assign")}
           </Button>
         </div>
       </div>
 
-      <div className="flex-1 min-h-0">
+      <div className="flex-1">
         <CleaningBoard
           rooms={rooms}
-          isLoading={isLoading}
-          onRefresh={loadData}
+          isLoading={isStatesLoading || isLocationsLoading}
+          onRefresh={handleRefresh}
         />
       </div>
     </div>

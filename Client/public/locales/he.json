@@ -1007,5 +1007,19 @@
   "vacant_inspected": "פנוי ונבדק",
   "occupied_clean": "תפוס ונקי",
   "occupied_dirty": "תפוס ומלוכלך",
-  "create_call_for_room": "צור קריאה לחדר"
+  "create_call_for_room": "צור קריאה לחדר",
+  "vacant": "פנוי",
+  "occupied": "תפוס",
+  "assigned_staff": "צוות משויך",
+  "cleaning_status": "סטטוס ניקיון",
+  "open_requests": "קריאות פתוחות",
+  "closed_requests": "קריאות שנסגרו",
+  "check_in": "צֶ'ק אִין",
+  "check_out": "צֶ'ק אַאוּט",
+  "occupied_by": "תפוס על ידי",
+  "status_management": "ניהול סטטוס",
+  "current_status": "סטטוס נוכחי",
+  "quick_actions": "פעולות מהירות",
+  "create_room_request": "יצירת פנייה לחדר",
+  "june": "יוני"
 }

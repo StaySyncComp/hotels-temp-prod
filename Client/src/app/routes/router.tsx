@@ -134,27 +134,6 @@ export const router = createBrowserRouter([
         element: <Settings />,
       },
       {
-        path: "/cleaning-management",
-        element: <CleaningManagement />,
-        handle: {
-          title: "room_management",
-          documentTitle: "room_management",
-          showInSidebar: true,
-          icon: RoomsIcon,
-        },
-      },
-      {
-        path: "/ai-assistant",
-        element: <AiChatPage />,
-        handle: {
-          title: "ai_assistant",
-          documentTitle: "ai_assistant",
-          showInSidebar: true,
-          icon: Sparkles,
-        },
-      },
-
-      {
         path: "/employees",
         element: <Employees />,
         handle: {
@@ -180,6 +159,16 @@ export const router = createBrowserRouter([
           documentTitle: "settings",
         },
         element: <Settings />,
+      },
+      {
+        path: "/ai-assistant",
+        element: <AiChatPage />,
+        handle: {
+          title: "ai_assistant",
+          documentTitle: "ai_assistant",
+          showInSidebar: true,
+          icon: Sparkles,
+        },
       },
       {
         path: "/organization-settings",
