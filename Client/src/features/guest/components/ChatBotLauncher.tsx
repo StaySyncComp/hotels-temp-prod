@@ -2,6 +2,7 @@ import UserLogo from "@/assets/icons/chatbotIcon.png";
 import { useState } from "react";
 import ChatWindow from "./ChatWindow";
 import { AnimatePresence } from "framer-motion";
+import { AiOrb } from "@/features/ai-assistant/components/AiOrb";
 
 export default function ChatbotLauncher() {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,8 @@ export default function ChatbotLauncher() {
         onClick={() => setOpen((prev) => !prev)}
         className="w-10 h-10 shadow-lg rounded-full flex items-center justify-center"
       >
-        <img src={UserLogo} alt="Chatbot" className="w-10 h-10" />
+        {/* <img src={UserLogo} alt="Chatbot" className="w-10 h-10" /> */}
+        <AiOrb className="size-12" />
       </button>
 
       <AnimatePresence mode="wait">
