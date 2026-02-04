@@ -24,6 +24,7 @@ import NotFoundPage from "@/pages/errors/NotFoundPage";
 import Homepage from "@/pages/HomePage";
 import AccessibilityLauncher from "@/components/common/accessibility/AccessibilityLauncher";
 import AccessibilityStatement from "@/pages/AccessibilityStatement/AccessibilityStatement";
+import PrivacyPolicy from "@/pages/PrivacyPolicy/PrivacyPolicy";
 import PublicLayout from "@/components/layout/Public/Layout";
 import RoomsIcon from "@/assets/icons/RoomsIcon";
 import CleaningManagement from "@/pages/CleaningManagement";
@@ -64,6 +65,11 @@ export const router = createBrowserRouter([
         path: "/accessibility-statement",
         element: <AccessibilityStatement />,
         handle: { documentTitle: "accessibility_statement" },
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+        handle: { documentTitle: "privacy_policy" },
       },
       {
         path: "*",

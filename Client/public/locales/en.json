@@ -771,7 +771,8 @@
     "chat": "Personal Assistant",
     "create_organization": "Creating an organization",
     "unauthorized": "Access Denied",
-    "not_found": "Ops - Page not found"
+    "not_found": "Ops - Page not found",
+    "privacy_policy": "Privacy Policy"
   },
   "hero_badge": "Manage your hotel with AI",
   "hero_title_part1": "Management and operation",
@@ -979,5 +980,42 @@
   "june": "June",
   "all_areas": "All Areas",
   "search_areas": "Search areas...",
-  "unknown_area": "Unknown Area"
+  "unknown_area": "Unknown Area",
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: {{date}}",
+    "intro": "Introduction",
+    "introText": "At Bloom (StaySync), we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our mobile application (the 'App'). Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site or the application.",
+    "collection": "Collection of Your Information",
+    "collectionText": "We may collect information about you in a variety of ways. The information we may collect on the Site and the App includes:",
+    "personalData": "Personal Data",
+    "personalDataText": "Personally identifiable information, such as your name, shipping address, email address, and telephone number, and demographic information, such as your age, gender, hometown, and interests, that you voluntarily give to us when you register with the Site or App or when you choose to participate in various activities related to the Site and App.",
+    "derivativeData": "Derivative Data",
+    "derivativeDataText": "Information our servers automatically collect when you access the Site or App, such as your IP address, your browser type, your operating system, your access times, and the pages you have viewed directly before and after accessing the Site or App.",
+    "use": "Use of Your Information",
+    "useText": "Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site or App to:",
+    "useList": {
+      "1": "Create and manage your account.",
+      "2": "Compile anonymous statistical data and analysis for use internally or with third parties.",
+      "3": "Email you regarding your account or order.",
+      "4": "Enable user-to-user communications.",
+      "5": "Fulfill and manage purchases, orders, payments, and other transactions related to the Site and App.",
+      "6": "Generate a personal profile about you to make future visits to the Site and App more personalized.",
+      "7": "Increase the efficiency and operation of the Site and App.",
+      "8": "Monitor and analyze usage and trends to improve your experience with the Site and App.",
+      "9": "Notify you of updates to the Site and App.",
+      "10": "Offer new products, services, and/or recommendations to you."
+    },
+    "disclosure": "Disclosure of Your Information",
+    "disclosureText": "We may share information we have collected about you in certain situations. Your information may be disclosed as follows:",
+    "law": "By Law or to Protect Rights",
+    "lawText": "If we believe the release of information about you is necessary to respond to legal process, to investigate or remedy potential violations of our policies, or to protect the rights, property, and safety of others, we may share your information as permitted or required by any applicable law, rule, or regulation.",
+    "security": "Security of Your Information",
+    "securityText": "We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.",
+    "children": "Policy for Children",
+    "childrenText": "We do not knowingly solicit information from or market to children under the age of 13. If you become aware of any data we have collected from children under age 13, please contact us using the contact information provided below.",
+    "contact": "Contact Us",
+    "contactText": "If you have questions or comments about this Privacy Policy, please contact us at:",
+    "contactEmail": "privacy@staysync.com"
+  }
 }
